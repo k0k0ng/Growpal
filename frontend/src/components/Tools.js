@@ -41,6 +41,13 @@ export default function Tools(){
     
     const { toolID } = useParams();
 
+    
+    if(toolID){
+        console.log("Not epty");
+    }else{
+        console.log("empty");
+    }
+
     useEffect(() => {
         setEditMode(prevValue => prevValue = false)
         getToolDetails(toolID);
