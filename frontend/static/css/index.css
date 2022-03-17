@@ -2,6 +2,8 @@ html,
 body {
   margin: 0;
   padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 #main {
@@ -18,4 +20,78 @@ body {
 
 #loginDiv {
   border: 1px solid green;
+}
+
+#custom-select-parent {
+  position: relative;
+}
+
+#custom-select select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Add some styling */
+
+  display: block;
+  font-family: "Montserrat Alternates";
+  font-size: 14px;
+  font-weight: 400;
+  width: 240px;
+  height: 50px;
+  float: right;
+  padding: 0px 24px;
+  line-height: 1.75;
+  color: #f3f4ed;
+  border-radius: 25px;
+  border: none;
+  background-color: #434743;
+  background-image: none;
+  -ms-word-break: normal;
+  word-break: normal;
+}
+
+#custom-select select option {
+  cursor: pointer;
+  padding: 20px;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+#custom-select:after {
+  content: "<>";
+  font: 17px "Consolas", monospace;
+  color: #f3f4ed;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+
+  /*Adjust for position however you want*/
+  left: 195px;
+  top: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #999;
+  /*left line */
+
+  position: absolute;
+  pointer-events: none;
+}
+
+#custom-select :hover {
+  cursor: pointer;
+}
+
+#custom-select select :hover {
+  background-color: #c76d6d;
+}
+
+#custom-select select option :hover {
+  background-color: #c76d6d !important;
+  cursor: pointer;
+}
+
+#custom-select :focus {
+  outline: none;
 }

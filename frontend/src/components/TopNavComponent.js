@@ -1,39 +1,36 @@
 import React, {useState} from 'react';
-// import { Grid, Button, ButtonGroup, TextField, Container, makeStyles} from "@material-ui/core"
 import { Link, useNavigate } from "react-router-dom"
 
-import AppBar from '@material-ui/core/AppBar';
-import Box from '@material-ui/core/Box';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
-import Container from '@material-ui/core/Container';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
-import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles } from '@material-ui/core';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import MenuItem from '@mui/material/MenuItem';
+import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
+import AppBar from '@mui/material/AppBar';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import Box from '@mui/material/Box';
 
-const useStyle = makeStyles({
-    logoStyles: {
-        color: "#fff",
-        fontSize: 28,
-        fontFamily: 'Arvo',
-        textTransform: "none"
-    },
-    navContainer: {
-        backgroundColor: '#546263'
-    },
-    buttonMarginRight: {
-        marginInlineEnd: 20
-    },
-    FontMontserrat: {
-        fontFamily: 'Montserrat Alternates',
-        textTransform: "none"
-    },
-})
+
+const logoStyles = {
+    color: "#fff",
+    fontSize: 28,
+    fontFamily: 'Arvo',
+    textTransform: "none"
+}
+
+const navContainer = {
+    backgroundColor: '#546263'
+}
+
+const FontMontserrat = {
+    fontFamily: 'Montserrat Alternates',
+    textTransform: "none"
+}
+
 const pages = [
     {id:1, page_name:'Admin', page_url:'/admin-dashboard'},
     {id:2, page_name:'Create Tool', page_url:'/create-tool'},
@@ -42,7 +39,6 @@ const pages = [
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function TopNavComponent () {
-    const classes = useStyle();
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -68,12 +64,12 @@ export default function TopNavComponent () {
         return(
             <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Remy Sharp" src="/static/images/2.jpg" />
-                </IconButton>
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                        <Avatar alt="Remy Sharp" src="/static/images/2.jpg" />
+                    </IconButton>
                 </Tooltip>
                 <Menu
-                    sx={{ mt: '45px' }}
+                    sx={{ mt: '45px', position: 'absolute' }}
                     id="menu-appbar"
                     anchorEl={anchorElUser}
                     anchorOrigin={{
@@ -88,11 +84,11 @@ export default function TopNavComponent () {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                 >
-                {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                        <Typography align="center">{setting}</Typography>
-                    </MenuItem>
-                ))}
+                    {settings.map((setting) => (
+                        <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                            <Typography align="center">{setting}</Typography>
+                        </MenuItem>
+                    ))}
                 </Menu>
             </Box>
         );
@@ -107,23 +103,26 @@ export default function TopNavComponent () {
                             color: 'white',
                             borderRadius: 25,
                             backgroundColor: "#c06115",
-                            padding: "10px 30px",
-                            marginRight: 20
+                            padding: "7px 35px",
+                            marginRight: 20,
+                            fontFamily: 'Montserrat Alternates',
+                            textTransform: "none"
                         }} 
                         to="/" 
                         component={Link}
-                        className={classes.FontMontserrat}
                     >
                         Sign Up
                     </Button>
+
                     <Button 
                         style={{
-                            color: 'white'
+                            color: 'white',
+                            fontFamily: 'Montserrat Alternates',
+                            textTransform: "none"
                         }} 
                         to="/" 
                         component={Link}
                         variant={'text'}
-                        className={classes.FontMontserrat}
                     >
                         Sign In
                     </Button>
@@ -159,28 +158,27 @@ export default function TopNavComponent () {
                         }}
 
                     >
-                            <MenuItem onClick={handleCloseNavMenu}>
-                                <Button 
-                                    variant='text' 
-                                    to="/sign-up"
-                                    component={Link}
-                                >
-                                    Sign Up
-                                </Button>
-                            </MenuItem>
+                        <MenuItem onClick={handleCloseNavMenu}>
+                            <Button 
+                                variant='text' 
+                                to="/sign-up"
+                                component={Link}
+                                style={FontMontserrat}
+                            >
+                                Sign Up
+                            </Button>
+                        </MenuItem>
 
-                            <MenuItem onClick={handleCloseNavMenu}>
-                                <Button 
-                                    variant='text' 
-                                    to="/login"
-                                    component={Link}
-                                >
-                                    Login
-                                </Button>
-                            </MenuItem>
-
-                            
-                        
+                        <MenuItem onClick={handleCloseNavMenu}>
+                            <Button 
+                                variant='text' 
+                                to="/login"
+                                component={Link}
+                                style={FontMontserrat}
+                            >
+                                Login
+                            </Button>
+                        </MenuItem>
                     </Menu>
                 </Box>
             </div>
@@ -201,90 +199,27 @@ export default function TopNavComponent () {
     //     setToolID( prevValue => prevValue = e.target.value);
     // }
 
-    return (
-        <AppBar position="static">
-            <Container 
-                className={classes.navContainer}
-                maxWidth="xl"
-            >
-                <Toolbar disableGutters>
+    return (    
+        <AppBar position="static" style={navContainer}>
+                <Toolbar>
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex' } }}>
                         <Button
                             to="/"
                             component={Link}
                             variant="text"
                             sx={{ mr: 2 }}
-                            className={classes.logoStyles}
+                            style={logoStyles}
                         >
                             Growpal
                         </Button>
                     </Box>
-                    
-
-                    {/* <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size='medium'
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit"
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            open={Boolean(anchorElNav)}
-                            onClose={handleCloseNavMenu}
-                            sx={{
-                                display: { xs: 'block', md: 'none' },
-                            }}
-                        >
-                            {pages.map((page) => (
-                                <MenuItem key={page.page_name} onClick={handleCloseNavMenu}>
-                                    <Button 
-                                        variant='text' 
-                                        to={page.page_url} 
-                                        component={Link}
-                                    >
-                                        {page.page_name}
-                                    </Button>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
-
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
-                            <Button
-                                key={page.page_name}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                                to={page.page_url} 
-                                component={Link}
-                            >
-                                {page.page_name}
-                            </Button>
-                        ))}
-                    </Box> */}
 
                     { isLoggedIn ? LoggedInButtons() : LoggedOutButtons() }
-                      
                 </Toolbar>
-            </Container>
         </AppBar>
+
         // <Container
-        //     className={classes.navContainer}
+        //     style={navContainer}
         //     maxWidth="xl"
         //     disableGutters={true}
         // >

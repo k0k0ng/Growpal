@@ -1,11 +1,11 @@
 import React from "react";
 import { render } from "react-dom";
-import HomePage from "./HomePage";
+import RoutingPage from "./RoutingPage";
 
 export default function App () {
     return (
         <div>
-            <HomePage />
+            <RoutingPage />
         </div>
     );
 }
