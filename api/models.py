@@ -1,4 +1,6 @@
+from tkinter import CASCADE
 from django.db import models
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     name        = models.CharField(max_length=100)
@@ -19,3 +21,9 @@ class Tool(models.Model):
 
     def __str__(self):
         return self.title
+
+class UserAdditionalAttributes(models.Model):
+    user_ID         = models.OneToOneField(User, on_delete=models.CASCADE)
+    tool_ID         = models.ManyToManyField(Tool, blank=True)
+    profile_image   = models.ImageField(blank=True, null=True)
+    created_at      = models.DateTimeField(auto_now_add=True)

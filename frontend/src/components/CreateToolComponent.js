@@ -13,13 +13,12 @@ import { styled } from '@mui/material/styles';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-
-const Input = styled('input')({
-    display: 'none',
-});
-
 export default function CreateToolComponent () {
     const navigate = useNavigate(); 
+
+    const Input = styled('input')({
+        display: 'none',
+    });
 
     const [title, setTitle] = useState(() => {
         return "";
@@ -49,11 +48,6 @@ export default function CreateToolComponent () {
     function _handleLinkChange(e) {
         setUrl( prevValue => prevValue = e.target.value);
     }
-
-    function _handleShowImage(e) {
-        console.log(image)
-    }
-
 
     const _handleSaveButtonPressed = async () => {
         let formField = new FormData()
@@ -114,9 +108,6 @@ export default function CreateToolComponent () {
                 </Grid>
                 <Grid item xs={12} align="center">
                     <Button variant="contained" color="primary" onClick={_handleSaveButtonPressed}>
-                        Save
-                    </Button>
-                    <Button variant="contained" color="primary" onClick={_handleShowImage}>
                         Save
                     </Button>
                 </Grid>

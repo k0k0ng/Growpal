@@ -29,7 +29,7 @@ export default function ToolInfoComponent(){
         id: 0,
         title: "Sample Title",
         description: "Sample descruotion",
-        img: "Sample image source",
+        img: null,
         url: "Sample url"
     });
 
@@ -152,7 +152,7 @@ export default function ToolInfoComponent(){
             <Grid item xs={12}><Typography variant='h4' align='center'>Tool Info</Typography></Grid>
             <Grid item xs={12} align='center'><Typography variant='body2'>Title: {title}</Typography></Grid>
             <Grid item xs={12} align='center'><Typography variant='body2'>Description: {description}</Typography></Grid>
-            <Grid item xs={12} align='center'><Typography variant='body2'>Image Source: {img}</Typography></Grid>
+            <Grid item xs={12} align='center'><img alt="Tool Image" src={ '/static' + img } /></Grid>
             <Grid item xs={12} align='center'><Button color='primary' href={"https://"+url}>{url}</Button></Grid>
             <Grid item xs={12} align='center'><Button color='default' size='small' variant='contained' onClick={_toEditMode}>Edit Tool</Button></Grid>
         </Grid>

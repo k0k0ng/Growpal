@@ -108,7 +108,7 @@ export default function TopNavComponent () {
                             fontFamily: 'Montserrat Alternates',
                             textTransform: "none"
                         }} 
-                        to="/" 
+                        to="/register" 
                         component={Link}
                     >
                         Sign Up
@@ -120,7 +120,7 @@ export default function TopNavComponent () {
                             fontFamily: 'Montserrat Alternates',
                             textTransform: "none"
                         }} 
-                        to="/" 
+                        to="/login" 
                         component={Link}
                         variant={'text'}
                     >

@@ -9,5 +9,6 @@ urlpatterns = [
     path('view-categories', ViewCategories.as_view()),
     path('create-tool', views.addTool, name='add-tool'),
     path('get-tool', GetTool.as_view()),
-    path('update-tool', UpdateTool.as_view())
+    path('update-tool', UpdateTool.as_view()),
+    path('register-account-credentials', views.register, name='register-account')
 ]
