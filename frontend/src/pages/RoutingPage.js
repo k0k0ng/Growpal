@@ -9,6 +9,7 @@ import HomePage from './user/HomePage';
 
 import LoginPage from './auth/LoginPage';
 import RegisterPage from './auth/RegisterPage';
+import ActivateAccount from './auth/ActivateAccount';
 
 export default function RoutingPage() {
     return (
@@ -26,6 +27,7 @@ export default function RoutingPage() {
                 {/* Auth Pages */}
                 <Route path='/login' element={<LoginPage />} />
                 <Route path='/register' element={<RegisterPage />} />
+                <Route path='/activate/:uid/:token' element={<ActivateAccount />} />
             </Routes>
         </Router>
     ); 
