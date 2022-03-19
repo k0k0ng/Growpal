@@ -65,7 +65,7 @@ export default function ToolInfoComponent(){
         fetch('/api/get-tool'+'?toolID='+ID).then((response) => response.json()).then((data) => {
             // setTitle( prevValue => prevValue = data.title);
             // setDescription( prevValue => prevValue = data.description);
-            // setImg( prevValue => prevValue = data.img_src);
+            // setImg( prevValue => prevValue = data.image);
             // setUrl( prevValue => prevValue = data.url);
             console.log(data);
             setState(prevState =>{
@@ -73,7 +73,7 @@ export default function ToolInfoComponent(){
                     id: data.id,
                     title: data.title,
                     description: data.description,
-                    img: data.img_src,
+                    img: data.image,
                     url: data.url
                 }
             })
@@ -139,7 +139,7 @@ export default function ToolInfoComponent(){
                 id: id,
                 title: title,
                 description: description,
-                img_src: img,
+                image: img,
                 url: url
             }),
         };

@@ -7,95 +7,118 @@ import {
     TextField,
     FormHelperText,
     FormControl,
-} from "@material-ui/core"
+} from "@material-ui/core";
+import { styled } from '@mui/material/styles';
 
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
+
+
+const Input = styled('input')({
+    display: 'none',
+});
 
 export default function CreateToolComponent () {
-
     const navigate = useNavigate(); 
 
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [img, setImg] = useState("");
-    const [url, setUrl] = useState("");
+    const [title, setTitle] = useState(() => {
+        return "";
+    });
+    const [description, setDescription] = useState(() => {
+        return "";
+    });
+    const [image, setImage] = useState(() => {
+        return null;
+    });
+    const [url, setUrl] = useState(() => {
+        return "";
+    });
 
     function _handleTitleChange(e) {
-        setTitle(e.target.value);
+        setTitle( prevValue => prevValue = e.target.value);
     }
 
     function _handleDescriptionChange(e) {
-        setDescription(e.target.value);
+        setDescription( prevValue => prevValue = e.target.value);
     }
 
     function _handleImageSourceChange(e) {
-        setImg(e.target.value);
+        setImage( prevValue => prevValue = e.target.files[0]);
     }
 
     function _handleLinkChange(e) {
-        setUrl(e.target.value);
+        setUrl( prevValue => prevValue = e.target.value);
     }
 
-    function _handleSaveButtonPressed() {
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                title: title,
-                description: description,
-                img_src: img,
-                url: url
-            }),
-        };
-        fetch('/api/create-tools', requestOptions).then((response) => 
-        response.json()).then((data) => navigate("/view-tool/"+data.id));
+    const _handleSaveButtonPressed = async () => {
+        let formField = new FormData()
+        formField.append('title',title)
+        formField.append('description',description)
+        formField.append('url',url)
+
+        if(image !== null) {
+            formField.append('image', image)
+        }
+
+        await axios({
+            method: 'post',
+            url:'/api/create-tool',
+            data: formField,
+            xsrfCookieName: 'csrftoken',
+            xsrfHeaderName: 'X-CSRFTOKEN',
+        }).then(response=>{
+            navigate("/view-tool/"+response.data.id)
+        });
     }
 
 
     return (
-    <div>
-    <TopNavComponent />
-    <Grid container spacing={1}>
-        <Grid item xs={12} align="center">
-            <Typography compenent="h4" variant="h4">
-                Create Tool    
-            </Typography>
-        </Grid>
-        <Grid item xs={12} align="center">
-            <FormControl component="fieldset">
-                <FormHelperText>
-                    Fill in all the forms.
-                </FormHelperText>
-                <TextField id="title" label="Title" variant="outlined" onChange={_handleTitleChange} />
-            </FormControl>
-        </Grid>
-        <Grid item xs={12} align="center">
-            <FormControl component="fieldset">
-                <TextField id="description" label="Description" variant="outlined" onChange={_handleDescriptionChange} />
-            </FormControl>
-        </Grid>
-        <Grid item xs={12} align="center">
-            <FormControl component="fieldset">
-                <TextField id="img_src" label="Image Source" variant="outlined" onChange={_handleImageSourceChange} />
-            </FormControl>
-        </Grid>
-        <Grid item xs={12} align="center">
-            <FormControl component="fieldset">
-                <TextField id="url" label="Link" variant="outlined" onChange={_handleLinkChange} />
-            </FormControl>
-        </Grid>
-        <Grid item xs={12} align="center">
-            <Button variant="contained" color="primary" onClick={_handleSaveButtonPressed}>
-                Save
-            </Button>
-        </Grid>
-        <Grid item xs={12} align="center">
-            <Button variant="contained" color="default" to="/" component={Link}>
-                Home
-            </Button>
-        </Grid>
-    </Grid>
-    </div>
+        <div>
+            <TopNavComponent />
+            <Grid container spacing={1}>
+                <Grid item xs={12} align="center">
+                    <Typography compenent="h4" variant="h4">
+                        Create Tool    
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} align="center">
+                    <FormControl component="fieldset">
+                        <FormHelperText>
+                            Fill in all the forms.
+                        </FormHelperText>
+                        <TextField id="title" label="Title" variant="outlined" onChange={_handleTitleChange} />
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} align="center">
+                    <FormControl component="fieldset">
+                        <TextField id="description" label="Description" variant="outlined" onChange={_handleDescriptionChange} />
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} align="center">
+                    <label htmlFor="contained-button-file">
+                        <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={_handleImageSourceChange} />
+                        <Button variant="contained" color='primary' component="span">
+                            Upload
+                        </Button>
+                    </label>
+                </Grid>
+                <Grid item xs={12} align="center">
+                    <FormControl component="fieldset">
+                        <TextField id="url" label="Link" variant="outlined" onChange={_handleLinkChange} />
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} align="center">
+                    <Button variant="contained" color="primary" onClick={_handleSaveButtonPressed}>
+                        Save
+                    </Button>
+                </Grid>
+                <Grid item xs={12} align="center">
+                    <Button variant="contained" color="default" to="/" component={Link}>
+                        Home
+                    </Button>
+                </Grid>
+            </Grid>
+        </div>
     );
     
 }
