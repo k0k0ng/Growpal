@@ -1,9 +1,10 @@
-from django.shortcuts import render
 from rest_framework import generics, status
 from .serializers import UpdateToolSerializer, ToolSerializer, CategorySerializer, CreateToolSerializer
 from .models import Category, Tool
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from rest_framework.decorators import api_view
 
 # Create your views here.
 class CreateToolsAPIView(generics.CreateAPIView):
@@ -23,18 +24,15 @@ class ViewCategories(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-class CreateToolView(APIView):
-    def post(self, request, format=None):
-        serializer = CreateToolSerializer(data=request.data)
-        if serializer.is_valid():
-            title = serializer.data.get('title')
-            description = serializer.data.get('description')
-            image = serializer.data.get('image')
-            url = serializer.data.get('url')
-            tool = Tool(title=title, description=description, image=image, url=url)
-            tool.save()
-            return Response(ToolSerializer(tool).data, status=status.HTTP_201_CREATED)
-        return Response({'Bad Request': 'Informations sent is not valid.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+@api_view(['POST'])
+def addTool(request):
+    serilizer = CreateToolSerializer(data=request.data)
+    if serilizer.is_valid():
+        serilizer.save()
+        tool = Tool.objects.last()
+        return Response(ToolSerializer(tool).data, status=status.HTTP_201_CREATED)
+    return Response({'Bad Request': 'Informations sent is not valid.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
 class GetTool(APIView):

@@ -50,6 +50,11 @@ export default function CreateToolComponent () {
         setUrl( prevValue => prevValue = e.target.value);
     }
 
+    function _handleShowImage(e) {
+        console.log(image)
+    }
+
+
     const _handleSaveButtonPressed = async () => {
         let formField = new FormData()
         formField.append('title',title)
@@ -61,7 +66,7 @@ export default function CreateToolComponent () {
         }
 
         await axios({
-            method: 'post',
+            method: 'POST',
             url:'/api/create-tool',
             data: formField,
             xsrfCookieName: 'csrftoken',
@@ -109,6 +114,9 @@ export default function CreateToolComponent () {
                 </Grid>
                 <Grid item xs={12} align="center">
                     <Button variant="contained" color="primary" onClick={_handleSaveButtonPressed}>
+                        Save
+                    </Button>
+                    <Button variant="contained" color="primary" onClick={_handleShowImage}>
                         Save
                     </Button>
                 </Grid>

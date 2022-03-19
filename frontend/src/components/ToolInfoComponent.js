@@ -42,10 +42,8 @@ export default function ToolInfoComponent(){
     const { toolID } = useParams();
 
     
-    if(toolID){
-        console.log("Not epty");
-    }else{
-        console.log("empty");
+    if(!toolID){
+        console.log("Tool ID is empty!");
     }
 
     useEffect(() => {
@@ -63,11 +61,6 @@ export default function ToolInfoComponent(){
 
     function getToolDetails(ID){
         fetch('/api/get-tool'+'?toolID='+ID).then((response) => response.json()).then((data) => {
-            // setTitle( prevValue => prevValue = data.title);
-            // setDescription( prevValue => prevValue = data.description);
-            // setImg( prevValue => prevValue = data.image);
-            // setUrl( prevValue => prevValue = data.url);
-            console.log(data);
             setState(prevState =>{
                 return {
                     id: data.id,

@@ -6,7 +6,6 @@ export default function LoginPage () {
 
     return (
     <div>
-        <TopNavComponent />
         <div id="loginDiv">
             <Typography variant="h5" align="center">This is the Login Page</Typography>
         </div>
