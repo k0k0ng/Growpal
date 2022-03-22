@@ -9,15 +9,6 @@ export default function ActivateAccount () {
     const { uid, token } = useParams();
     
     const activeClick = (e) => {
-       
-        // Axios.post('/auth/users/activation/', { uid: uid, token: token })
-        //     .then(() => {
-        //         navigate('/login')
-        //     })
-        //     .catch(err => {
-        //         alert(err.response.data);
-        //     })
-
         Axios({
             method: 'POST',
             url:'/auth/users/activation/',

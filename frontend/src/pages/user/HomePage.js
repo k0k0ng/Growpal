@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import TopNavComponent from '../../components/TopNavComponent';
 import FooterComponent from '../../components/FooterComponent';
@@ -17,11 +17,35 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { CardActionArea } from '@mui/material';
+
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import SearchIcon from '@mui/icons-material/Search';
 import MailIcon from '@mui/icons-material/Mail';
+
+import { styled } from '@mui/material/styles';
+import CardHeader from '@mui/material/CardHeader';
+import CardActions from '@mui/material/CardActions';
+import Collapse from '@mui/material/Collapse';
+import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import Chip from '@mui/material/Chip';
+
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
+import AuthContext from '../../context/AuthContext';
 
 
 const PrimaryColoredHeading = {
@@ -256,10 +280,33 @@ const categories = [
 
 
 export default function HomePage() {
+    const {user} = useContext(AuthContext);
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
+
     const [activeCategory, setActiveCategory] = useState(() => {
         return "All Tools";
     });
 
+    const [allTools, setAllTools] = useState(() => {
+        return [];
+    })
+
+    useEffect(() => {
+        getToolS();
+    },[]);
+
+    function getToolS(){
+        fetch('/api/get-tools').then((response) => response.json()).then((data) => {
+            setAllTools(data)
+        });
+        console.log(allTools)
+        console.log("------------------")
+    }
+    console.log(allTools)
     const [filter, setFilter] = useState();
     const [order, setOrder] = useState();
     
@@ -299,6 +346,22 @@ export default function HomePage() {
             </Container>
         );
     };
+
+
+    const _HandleBookmarkButtonPressed = (e) => {
+        fetch('/api/add-to-bookmark',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                tool_ID: e,
+                user_Email: user.email,
+            })
+        }).then((response) => response.json()).then((data) => {
+            console.log("Nakabalik------------------------")
+        });
+    }
 
     return (
         <div>
@@ -367,7 +430,7 @@ export default function HomePage() {
                         spacing={4}
                         justifyContent='center'
                     >
-                        <Grid item md={5} >
+                        <Grid item md={7} >
                             <Paper
                                 component="form"
                                 sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%' }}
@@ -385,7 +448,7 @@ export default function HomePage() {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid item md='auto'>
+                        {/* <Grid item md='auto'>
                             <div id="custom-select-parent">
                                 <div id="custom-select">
                                     <select onChange={handleFilterChange}>
@@ -411,7 +474,7 @@ export default function HomePage() {
                                     </select>
                                 </div>
                             </div>
-                        </Grid>
+                        </Grid> */}
                         
                     </Grid>
                 </Box>
@@ -453,186 +516,45 @@ export default function HomePage() {
                             xs={7}
                         >
                             <Grid container spacing={4}>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
-                                <Grid item  md={2.3}>
-                                    <Box 
-                                        component='div'
-                                        height="260px"
-                                        style={{
-                                            border: '1px solid #f3f4ed',
-                                            backgroundColor: '#546263',
-                                            borderRadius: '25px'
-                                        }}
-                                    >
-                                    </Box>
-                                </Grid>
+
+                                {allTools.map((tool) => (
+                                    <Grid item key={tool.id} md={2.3}>
+                                        <Card sx={{ maxWidth: 345, backgroundColor:'#546263', color:'#f3f4ed', border:'1px solid #f3f4ed', borderRadius:3 }} elevation={0}>
+                                            <CardHeader
+                                                avatar={
+                                                    <IconButton aria-label="settings" sx={{ marginLeft:'12px', marginTop:'-3px' , padding:'0px', borderRadius:'0px'}}>
+                                                        <BookmarkBorderOutlinedIcon sx={{fontSize:'35px', padding:'0px', color:'#434743'}}  />
+                                                    </IconButton>
+                                                }
+                                                sx={{
+                                                    position:'absolute',
+                                                    padding:'0px',
+                                                    zIndex:'1999'
+                                                }}
+                                                onClick={() => _HandleBookmarkButtonPressed(tool.id)}
+                                            />
+                                            <CardActionArea sx={{ minHeight:260, padding:'40px 20px 0px 20px' }} onClick={() => console.log(tool.title)}>
+                                                <img alt="Tool Image" src={ '/static' + tool.image } style={{ marginLeft:'50%', height:'100px', transform:'translate(-50%,0px)' }} />
+                                                <CardContent sx={{marginBottom:'20px'}}>
+                                                    <Typography gutterBottom variant="h6" component="div" align='center' fontFamily='Montserrat Alternates' sx={{ lineHeight:'26px' }}>
+                                                        { tool.title }
+                                                    </Typography>
+                                                    <Typography variant="body2" fontFamily='Montserrat Alternates' noWrap>
+                                                        { tool.description }
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardContent>
+                                                    {tool.categories.map((tool_category) => (
+                                                        <Chip key={tool_category.id} label={tool_category.name} sx={{marginRight:'5px', color:'#fff'}} />
+                                                    ))} 
+                                                    {/* <Chip label="Editing" />
+                                                    <Chip label="Arts" /> */}
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </Card>
+                                    </Grid>
+                                ))}
+                                
                             </Grid>
                         </Grid>
                     </Grid>
@@ -709,7 +631,7 @@ export default function HomePage() {
                                 <Typography 
                                     variant='h1'
                                     component='h2' 
-                                    noWrap 
+                                    noWrap
                                     style={{  
                                         textAlign:'end',
                                         fontFamily: 'Montserrat Alternates',

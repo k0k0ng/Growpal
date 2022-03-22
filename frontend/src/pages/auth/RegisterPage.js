@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import TopNavComponent from '../../components/TopNavComponent';
 import { 
     Button,
     Grid,
@@ -8,17 +7,11 @@ import {
     FormHelperText,
     FormControl,
 } from "@material-ui/core";
-import { styled } from '@mui/material/styles';
 
 import { Link, useNavigate } from "react-router-dom";
-import Axios from 'axios';
 
 export default function RegisterPage () {
     const navigate = useNavigate(); 
-
-    const Input = styled('input')({
-        display: 'none',
-    });
 
     const [email, setEmail] = useState(() => {
         return "";
@@ -74,32 +67,16 @@ export default function RegisterPage () {
         .then((response) => {
             if (response.ok){
                 console.log("Sucess update.");
+                navigate('/login')
             }else{
                 console.log("Failed update.");
             }
         });
-
-        // let formField = new FormData()
-        // formField.append('email',email)
-        // formField.append('username',username)
-        // formField.append('password1',password1)
-        // formField.append('password2',password2)
-
-        // await Axios({
-        //     method: 'POST',
-        //     url:'/api/register-account-credentials',
-        //     data: formField,
-        //     xsrfCookieName: 'csrftoken',
-        //     xsrfHeaderName: 'X-CSRFTOKEN',
-        // }).then(response=>{
-        //     navigate("/view-tool/"+response.data.id)
-        // });
     }
 
 
     return (
         <div>
-            <TopNavComponent />
             <Grid container spacing={1} style={{ marginTop:"100px" }}>
                 <Grid item xs={12} align="center">
                     <Typography compenent="h4" variant="h4">
@@ -131,7 +108,7 @@ export default function RegisterPage () {
                 </Grid>
                 <Grid item xs={12} align="center">
                     <FormControl component="fieldset">
-                        <TextField id="password2" label="Repeat Password" variant="outlined" required onChange={_handleRePasswordChange} />
+                        <TextField id="password2" label="Confirm Password" variant="outlined" required onChange={_handleRePasswordChange} />
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} align="center">

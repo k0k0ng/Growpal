@@ -17,6 +17,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+from datetime import timedelta
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -39,8 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     'djoser',
+
     'api.apps.ApiConfig',
     'frontend.apps.FrontendConfig',
 ]
@@ -142,6 +146,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'frontend/static/images')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# Setting dault user model
+AUTH_USER_MODEL = 'api.UserAccount'
+
+
 # Permissions:
 # AllowAny
 # IsAuthenticated
@@ -151,13 +159,44 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
 
 
-# Setting dault user model
-AUTH_USER_MODEL = 'api.UserAccount'
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=90),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+
+    'ALGORITHM': 'HS256',
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
 
 # Djoser configuration
 DJOSER = {
@@ -168,6 +207,7 @@ DJOSER = {
     'SEND_CONFIRMATION_EMAIL': True,
     'SET_PASSWORD_RETYPE': True,
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
     'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
@@ -178,11 +218,6 @@ DJOSER = {
     },
 }
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-}
 
 SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('JWT',),

@@ -1,12 +1,15 @@
+from queue import Empty
 from rest_framework import generics, status
 from rest_framework.permissions import IsAdminUser
-from .serializers import UpdateToolSerializer, ToolSerializer, CategorySerializer, CreateToolSerializer
-from .models import Category, Tool
+from .serializers import UpdateToolSerializer, ToolSerializer, CategorySerializer, CreateToolSerializer, AllToolSerializer, UserAccountInfoSerializer
+from .models import Category, Tool, UserAccount
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 
 from rest_framework.decorators import api_view
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 # Create your views here.
 class CreateToolsAPIView(generics.CreateAPIView):
@@ -29,6 +32,35 @@ class ViewCategories(generics.ListAPIView):
     permission_classes = [IsAdminUser]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token['email'] = user.email
+        token['first_name'] = user.first_name
+        token['last_name'] = user.last_name
+        token['is_staff'] = user.is_staff
+        token['is_superuser'] = user.is_staff
+
+        return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+
+class GetAllTools(APIView):
+    def get(self, request, format=None):
+        queryset = Tool.objects.all()
+        tools = []
+        if queryset.exists():
+            for tool in queryset.iterator():
+                tools.append(AllToolSerializer(tool).data)
+
+            return Response(tools, status=status.HTTP_200_OK)
+        else:
+            return Response({'No Content': 'Request returns empty.'}, status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['POST'])
@@ -88,6 +120,35 @@ class UpdateTool(APIView):
             return Response({'Tool Not Found': 'Invalid Room Code'}, status=status.HTTP_404_NOT_FOUND)
         return Response({'Bad Request': 'Code parameter not found in request.'}, status=status.HTTP_400_BAD_REQUEST)
 
+
+class BookmarkedTool(APIView):
+    def post(self, request, format=None):
+
+        print(request.data['tool_ID'])
+        tool = Tool.objects.get(pk=request.data['tool_ID'])
+        user = UserAccount.objects.get(email=request.data['user_Email'])
+
+        print(user)
+    
+        user.bookmarked_tool.add(tool)
+        user.save()
+
+
+        return Response({'Success': 'Adding tool to bookmark success.'}, status=status.HTTP_200_OK)
+        #     return Response({'Tool Not Found': 'Invalid Room Code'}, status=status.HTTP_404_NOT_FOUND)
+        # return Response({'Bad Request': 'Code parameter not found in request.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserAccountInfo(APIView):
+    def get(self, request, format=None):
+        print(";-------------------------------------------")
+        user = UserAccount.objects.get(email=request.data['email'])
+        print(user)
+        print(";-------------------------------------------")
+        if user[0].exists():
+            return Response(UserAccountInfoSerializer(user[0]).data, status=status.HTTP_200_OK)
+        else:
+            return Response({'No Content': 'Request returns empty.'}, status=status.HTTP_204_NO_CONTENT)
 
 
 """ Concrete View Classes

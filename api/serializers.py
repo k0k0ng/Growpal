@@ -6,6 +6,10 @@ from djoser.serializers import UserCreateSerializer
 # from django.contrib.auth import get_user_model
 # User = get_user_model
 
+
+
+
+
 class ToolSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tool
@@ -15,13 +19,22 @@ class ToolSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'category_name', 'created_at')
+        fields = ('id', 'name', 'created_at')
 
 
 class CreateToolSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tool
         fields = ('title', 'description', 'image', 'url')
+
+
+class AllToolSerializer(serializers.ModelSerializer):
+    categories = CategorySerializer(read_only=True, many=True)
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = Tool
+        fields = '__all__'
 
 
 class UpdateToolSerializer(serializers.ModelSerializer):
@@ -42,4 +55,13 @@ class UserCreateSerializer(UserCreateSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'name', 'password')
+
+
+class UserAccountInfoSerializer(serializers.ModelSerializer):
+    bookmarked_tool = ToolSerializer(read_only=True, many=True)
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = Tool
+        fields = '__all__'
 

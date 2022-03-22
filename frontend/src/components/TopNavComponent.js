@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { Link, useNavigate } from "react-router-dom"
+import AuthContext from '../context/AuthContext';
 
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -39,6 +40,8 @@ const pages = [
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function TopNavComponent () {
+    const navigate = useNavigate()
+    const {authTokens, setAuthTokens, setUser} = useContext(AuthContext);
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -57,7 +60,16 @@ export default function TopNavComponent () {
         setAnchorElUser(null);
     };
 
-    const isLoggedIn = false;
+    const handleLogoutUserMenu = () => {
+        setAnchorElUser(null);
+        setAuthTokens(null)
+        setUser(null)
+        localStorage.removeItem('authTokens')
+        console.log("Logout Success")
+        navigate('/')
+    };
+
+    const isLoggedIn = authTokens? true : false;
 
 
     function LoggedInButtons (){
@@ -84,11 +96,20 @@ export default function TopNavComponent () {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                 >
-                    {settings.map((setting) => (
-                        <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                            <Typography align="center">{setting}</Typography>
-                        </MenuItem>
-                    ))}
+                    
+                    <MenuItem onClick={handleCloseUserMenu}>
+                        <Typography align="center">Profile</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={handleCloseUserMenu}>
+                        <Typography align="center">Account</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={handleCloseUserMenu}>
+                        <Typography align="center">Dashboard</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={handleLogoutUserMenu}>
+                        <Typography align="center">Logout</Typography>
+                    </MenuItem>
+                    
                 </Menu>
             </Box>
         );
