@@ -6,6 +6,8 @@ from djoser.serializers import UserCreateSerializer
 
 
 class ToolSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    
     class Meta:
         model = Tool
         fields = ('id', 'title', 'description', 'image', 'url', 'created_at')

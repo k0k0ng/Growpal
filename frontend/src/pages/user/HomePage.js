@@ -282,8 +282,12 @@ const categories = [
 
 export default function HomePage() {
     const {user, userBookmark ,setUserBookmark} = useContext(AuthContext);
-    const [expanded, setExpanded] = useState(false);
-    const [refresher, setRefresher] = useState(true);
+    const [expanded, setExpanded] = useState(() => { return false; });
+    const [refresher, setRefresher] = useState(() => { return true; });
+    const [activeCategory, setActiveCategory] = useState(() => { return "All Tools"; });
+    let [allTools, setAllTools] = useState(() => { return []; });
+
+    let [searchedKey, setSearchedKey] = useState(() => { return ""; });
     let BookmarkedTools = [];
 
     if(userBookmark){
@@ -299,22 +303,41 @@ export default function HomePage() {
             BookmarkedTools.push(item.title)
         })
     }, [userBookmark])
+    
+    useEffect(() => {
+        getToolS();
+    },[]);
+
+    const _SearchedKeyChange = (event) => {
+        setSearchedKey(event.target.value);         
+    }
+
+    useEffect(() => {
+        if(searchedKey === '') getToolS();
+        fetch('/api/get-searched-tool', {
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                keyword: searchedKey
+            })
+        }).then((response) =>
+                response.json()
+        ).then((data) => {
+            setAllTools(data);
+        }).catch(err => {
+            // console.log(err);
+        });
+    },[searchedKey]);
+
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
-    const [activeCategory, setActiveCategory] = useState(() => {
-        return "All Tools";
-    });
+    
 
-    const [allTools, setAllTools] = useState(() => {
-        return [];
-    })
-
-    useEffect(() => {
-        getToolS();
-    },[]);
 
     function getToolS(){
         fetch('/api/get-tools').then((response) => response.json()).then((data) => {
@@ -494,7 +517,8 @@ export default function HomePage() {
                                 <InputBase
                                     sx={{ ml: 1, flex: 1 }}
                                     placeholder="Search Tool"
-                                    inputProps={{ 'aria-label': 'search google maps' }}
+                                    inputProps={{ 'aria-label': 'search tool' }}
+                                    onChange={_SearchedKeyChange}
                                 />
                             </Paper>
                         </Grid>
