@@ -48,24 +48,23 @@ export default function LoginPage () {
 
         let data = await response.json()
         
+        
         if(response.status === 200){
             setAuthTokens(data)
             setUser(jwt_decode(data.access))
             localStorage.setItem('authTokens', JSON.stringify(data))
-            console.log('To Send Email----------------')
-            console.log(email)
 
-            fetch('/api/get-user-info/', {
-                method:'GET',
+            let another_response = await fetch('/api/get-user-bookmarked-tools', {
+                method:'POST',
                 headers:{
                     'Content-Type':'application/json'
                 },
                 body:JSON.stringify({
                     email: email
                 })
-            }).then((response) => response.json()).then((data) => { console.log("asdasdasdasdasasd") });
-            console.log('To Send Email----------------')
-            console.log('Go home----------------')
+            });
+
+            let account_details = await another_response.json()
             navigate('/')
         }else{
             alert('Something went wrong!')

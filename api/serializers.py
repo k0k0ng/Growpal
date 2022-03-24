@@ -1,13 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Category, Tool
+from .models import Category, Tool, UserAccount
 
 from djoser.serializers import UserCreateSerializer
-# from django.contrib.auth import get_user_model
-# User = get_user_model
-
-
-
 
 
 class ToolSerializer(serializers.ModelSerializer):
@@ -59,9 +54,8 @@ class UserCreateSerializer(UserCreateSerializer):
 
 class UserAccountInfoSerializer(serializers.ModelSerializer):
     bookmarked_tool = ToolSerializer(read_only=True, many=True)
-    id = serializers.IntegerField()
 
     class Meta:
-        model = Tool
-        fields = '__all__'
+        model = UserAccount
+        fields = ('email', 'bookmarked_tool')
 

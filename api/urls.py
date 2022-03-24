@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UpdateTool, ViewTools, CreateCategoryAPIView, ViewCategories, CreateToolsAPIView, GetTool, MyTokenObtainPairView, GetAllTools, BookmarkedTool, UserAccountInfo
+from .views import UpdateTool, ViewToolsAPIView, CreateCategoryAPIView, ViewCategoriesAPIView, CreateToolsAPIView, GetTool, MyTokenObtainPairView, GetAllTools, BookmarkedTool, GetUserBookmarkedTools
 from .import views
 
 from rest_framework_simplejwt.views import (
@@ -13,10 +13,10 @@ urlpatterns = [
     # Extends to API View
     path('create-tools-api', CreateToolsAPIView.as_view()),
     path('create-categories-api', CreateCategoryAPIView.as_view()),
-    path('view-tools', ViewTools.as_view()),
-    path('view-categories', ViewCategories.as_view()),
+    path('view-tools', ViewToolsAPIView.as_view()),
+    path('view-categories', ViewCategoriesAPIView.as_view()),
     
-    path('get-user-info', UserAccountInfo.as_view()),
+    path('get-user-bookmarked-tools', GetUserBookmarkedTools.as_view()),
     path('register-account-credentials', views.register, name='register-account'),
 
 

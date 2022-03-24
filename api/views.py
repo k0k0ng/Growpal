@@ -17,7 +17,7 @@ class CreateToolsAPIView(generics.CreateAPIView):
     queryset = Tool.objects.all()
     serializer_class = ToolSerializer
 
-class ViewTools(generics.ListAPIView):
+class ViewToolsAPIView(generics.ListAPIView):
     permission_classes = [IsAdminUser]
     queryset = Tool.objects.all()
     serializer_class = ToolSerializer
@@ -28,7 +28,7 @@ class CreateCategoryAPIView(generics.CreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-class ViewCategories(generics.ListAPIView):
+class ViewCategoriesAPIView(generics.ListAPIView):
     permission_classes = [IsAdminUser]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -124,29 +124,28 @@ class UpdateTool(APIView):
 class BookmarkedTool(APIView):
     def post(self, request, format=None):
 
-        print(request.data['tool_ID'])
         tool = Tool.objects.get(pk=request.data['tool_ID'])
         user = UserAccount.objects.get(email=request.data['user_Email'])
 
-        print(user)
-    
+        if not tool: return Response({'Tool Not Found': 'Something went wrong!'}, status=status.HTTP_404_NOT_FOUND)
+
+        if not user: return Response({'Unidentified User Email': 'Something went wrong!'}, status=status.HTTP_404_NOT_FOUND)
+
+        if tool in user.bookmarked_tool.all():
+            user.bookmarked_tool.remove(tool)
+            return Response({'Success': 'Removing tool to bookmark success.'}, status=status.HTTP_200_OK)
+
         user.bookmarked_tool.add(tool)
-        user.save()
+        user.save()        
+
+        return Response({'Success': 'Adding tool to bookmark success.'}, status=status.HTTP_201_CREATED)
 
 
-        return Response({'Success': 'Adding tool to bookmark success.'}, status=status.HTTP_200_OK)
-        #     return Response({'Tool Not Found': 'Invalid Room Code'}, status=status.HTTP_404_NOT_FOUND)
-        # return Response({'Bad Request': 'Code parameter not found in request.'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class UserAccountInfo(APIView):
-    def get(self, request, format=None):
-        print(";-------------------------------------------")
+class GetUserBookmarkedTools(APIView):
+    def post(self, request, format=None):
         user = UserAccount.objects.get(email=request.data['email'])
-        print(user)
-        print(";-------------------------------------------")
-        if user[0].exists():
-            return Response(UserAccountInfoSerializer(user[0]).data, status=status.HTTP_200_OK)
+        if user:
+            return Response(UserAccountInfoSerializer(user).data, status=status.HTTP_200_OK)
         else:
             return Response({'No Content': 'Request returns empty.'}, status=status.HTTP_204_NO_CONTENT)
 

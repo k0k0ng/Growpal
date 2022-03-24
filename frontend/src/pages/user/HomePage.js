@@ -32,6 +32,7 @@ import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import Chip from '@mui/material/Chip';
 
 const ExpandMore = styled((props) => {
@@ -280,8 +281,24 @@ const categories = [
 
 
 export default function HomePage() {
-    const {user} = useContext(AuthContext);
-    const [expanded, setExpanded] = React.useState(false);
+    const {user, userBookmark ,setUserBookmark} = useContext(AuthContext);
+    const [expanded, setExpanded] = useState(false);
+    const [refresher, setRefresher] = useState(true);
+    let BookmarkedTools = [];
+
+    if(userBookmark){
+        userBookmark.forEach((tool) =>{
+            BookmarkedTools.push(tool.title)
+        })
+    }
+
+    useEffect(()=> {
+        if(!userBookmark) return;
+        BookmarkedTools = [];
+        userBookmark.map((item) => {
+            BookmarkedTools.push(item.title)
+        })
+    }, [userBookmark])
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -303,10 +320,9 @@ export default function HomePage() {
         fetch('/api/get-tools').then((response) => response.json()).then((data) => {
             setAllTools(data)
         });
-        console.log(allTools)
-        console.log("------------------")
     }
-    console.log(allTools)
+
+
     const [filter, setFilter] = useState();
     const [order, setOrder] = useState();
     
@@ -348,20 +364,65 @@ export default function HomePage() {
     };
 
 
-    const _HandleBookmarkButtonPressed = (e) => {
-        if(user){
-            fetch('/api/add-to-bookmark',{
+    const _HandleAddBookmarkButtonPressed = (toolID) => {
+        if(!user){
+            alert("Please login.")
+            return
+        }
+
+        fetch('/api/add-to-bookmark',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                tool_ID: toolID,
+                user_Email: user.email,
+            })
+        }).then((response) => {
+
+            if(response.status === 404) return;
+
+            fetch('/api/get-user-bookmarked-tools',{
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json'
                 },
                 body:JSON.stringify({
-                    tool_ID: e,
-                    user_Email: user.email,
+                    email: user.email
                 })
             }).then((response) => response.json()).then((data) => {
-                console.log("Nakabalik------------------------")
+                setUserBookmark(data.bookmarked_tool)
             });
+
+            if(response.status === 201){
+                console.log("Adding Success ----------------------")
+                
+            } 
+
+            if(response.status === 200){
+                console.log("Removing Success ----------------------")
+            }          
+            
+            setRefresher(!refresher)
+            console.log("Refresh Success ----------------------")
+            console.log(BookmarkedTools) 
+            console.log("BookmarkedTools Up ----------------------")
+            
+        });
+    }
+
+    
+
+    const BookmarkIconToShow = (props) => {
+        if (props.isBookmarked) {
+            return (
+                <BookmarkIcon sx={{fontSize:'35px', padding:'0px', color:'#434743'}}  />          
+            )
+        }else{
+            return (
+                <BookmarkBorderOutlinedIcon sx={{fontSize:'35px', padding:'0px', color:'#434743'}}  />
+            )
         }
     }
 
@@ -522,10 +583,11 @@ export default function HomePage() {
                                 {allTools.map((tool) => (
                                     <Grid item key={tool.id} md={2.3}>
                                         <Card sx={{ maxWidth: 345, backgroundColor:'#546263', color:'#f3f4ed', border:'1px solid #f3f4ed', borderRadius:3 }} elevation={0}>
+                                            
                                             <CardHeader
                                                 avatar={
                                                     <IconButton aria-label="settings" sx={{ marginLeft:'12px', marginTop:'-3px' , padding:'0px', borderRadius:'0px'}}>
-                                                        <BookmarkBorderOutlinedIcon sx={{fontSize:'35px', padding:'0px', color:'#434743'}}  />
+                                                        <BookmarkIconToShow isBookmarked={ BookmarkedTools.includes(tool.title) ? true : false } />
                                                     </IconButton>
                                                 }
                                                 sx={{
@@ -533,8 +595,9 @@ export default function HomePage() {
                                                     padding:'0px',
                                                     zIndex:'1999'
                                                 }}
-                                                onClick={() => _HandleBookmarkButtonPressed(tool.id)}
+                                                onClick={() => _HandleAddBookmarkButtonPressed (tool.id, tool.title)}
                                             />
+
                                             <CardActionArea sx={{ minHeight:260, padding:'40px 20px 0px 20px' }} onClick={() => console.log(tool.title)}>
                                                 <img alt="Tool Image" src={ '/static' + tool.image } style={{ marginLeft:'50%', height:'100px', transform:'translate(-50%,0px)' }} />
                                                 <CardContent sx={{marginBottom:'20px'}}>

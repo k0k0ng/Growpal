@@ -11,16 +11,39 @@ export default AuthContext;
 export const AuthProvider = ({children}) => {
     let [authTokens, setAuthTokens] = useState(() => localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
     let [user, setUser] = useState(() => localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null)
+    let [userBookmark, setUserBookmark] = useState(() => { return []; })
     let [loading, setLoading] = useState(() => { return true; })
+    
 
     const navigate = useNavigate()
 
     let logoutUser = () => {
-        setAuthTokens(null)
         setUser(null)
+        setAuthTokens(null)
+        setUserBookmark(null)
         localStorage.removeItem('authTokens')
-        //navigate('/login')
+        // navigate('/login')
     }
+
+    useEffect(()=> {
+        if(!user) return;
+
+        fetch('/api/get-user-bookmarked-tools',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                email: user.email
+            })
+        }).then((response) => response.json()).then((data) => {
+            setUserBookmark(data.bookmarked_tool)
+        });
+        
+    }, [user])
+
+    
+    
 
 
     let updateToken = async ()=> {
@@ -42,7 +65,7 @@ export const AuthProvider = ({children}) => {
 
         
         //console.log(response.status)
-        console.log(data)
+        // console.log(data)
         if (response !== null){
             if(response.status === 200){
                 setAuthTokens(data)
@@ -62,8 +85,10 @@ export const AuthProvider = ({children}) => {
     let contextData = {
         user:user,
         authTokens:authTokens,
-        setAuthTokens:setAuthTokens,
+        userBookmark: userBookmark,
         setUser:setUser,
+        setAuthTokens:setAuthTokens,
+        setUserBookmark: setUserBookmark
     }
 
 
