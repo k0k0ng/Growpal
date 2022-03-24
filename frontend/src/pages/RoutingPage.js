@@ -2,7 +2,9 @@ import React from 'react';
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import PrivateRouting from '../utils/PrivateRouting';
+import AdminPrivateRoutings from '../utils/AdminPrivateRoutings';
+import UserPrivateRouting from '../utils/UserPrivateRouting';
+import NoAuthRoutings from '../utils/NoAuthRoutings'
 import { AuthProvider } from '.././context/AuthContext';
 
 import AdminDashboardPage from './admin/AdminDashboardPage';
@@ -22,8 +24,8 @@ export default function RoutingPage() {
             <AuthProvider>
                 <Routes>
                     {/* Admin Pages */}
-                    <Route path='/growpal-admin' element={<PrivateRouting><AdminDashboardPage/></PrivateRouting>} />
-                    <Route path='/create-tool' element={<PrivateRouting><CreateToolComponent/></PrivateRouting>} />
+                    <Route path='/growpal-admin' element={<AdminPrivateRoutings><AdminDashboardPage/></AdminPrivateRoutings>} />
+                    <Route path='/create-tool' element={<AdminPrivateRoutings><CreateToolComponent/></AdminPrivateRoutings>} />
                     
 
                     {/* User Pages */}
@@ -32,11 +34,11 @@ export default function RoutingPage() {
                     
 
                     {/* Auth Pages */}
-                    <Route path='/login' element={<LoginPage />} />
-                    <Route path='/register' element={<RegisterPage />} />
-                    <Route path='/activate/:uid/:token' element={<ActivateAccount />} />
-                    <Route path='/forgot-password' element={<ForgotPassword />} />
-                    <Route path='/password/reset/confirm/:uid/:token' element={<EnterNewPassword />} />
+                    <Route path='/login' element={<NoAuthRoutings> <LoginPage /> </NoAuthRoutings>} />
+                    <Route path='/register' element={<NoAuthRoutings> <RegisterPage/> </NoAuthRoutings>} />
+                    <Route path='/activate/:uid/:token' element={<NoAuthRoutings> <ActivateAccount /> </NoAuthRoutings>} />
+                    <Route path='/forgot-password' element={<NoAuthRoutings> <ForgotPassword /> </NoAuthRoutings>} />
+                    <Route path='/password/reset/confirm/:uid/:token' element={<NoAuthRoutings> <EnterNewPassword /> </NoAuthRoutings>} />
                 </Routes>
             </AuthProvider>
         </Router>

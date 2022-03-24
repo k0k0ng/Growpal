@@ -9,21 +9,72 @@ export default AuthContext;
 
 
 export const AuthProvider = ({children}) => {
+    const navigate = useNavigate()
+
+    let [accessToken, setAccessToken] = useState(() => localStorage.getItem('AccessToken') ? JSON.parse(localStorage.getItem('AccessToken')) : null)
+    let [refreshToken, setRefreshToken] = useState(() => localStorage.getItem('RefreshToken') ? JSON.parse(localStorage.getItem('RefreshToken')) : null)
     let [authTokens, setAuthTokens] = useState(() => localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
     let [user, setUser] = useState(() => localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null)
     let [userBookmark, setUserBookmark] = useState(() => { return []; })
     let [loading, setLoading] = useState(() => { return true; })
-    
 
-    const navigate = useNavigate()
 
     let logoutUser = () => {
         setUser(null)
+        setAccessToken(null)
+        setRefreshToken(null)
         setAuthTokens(null)
         setUserBookmark(null)
+        localStorage.removeItem('AccessToken')
+        localStorage.removeItem('RefreshToken')
         localStorage.removeItem('authTokens')
         // navigate('/login')
     }
+
+    let updateToken = async ()=> {
+        
+        let response = null
+        let data = null
+        if(accessToken){
+            response = await fetch('/api/token/refresh/', {
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({'refresh':refreshToken ? refreshToken : ''})
+            })
+
+            data = await response.json()
+        }
+
+        if (response !== null){
+            if(response.status === 200){
+                setAccessToken(data.access)
+                setUser(jwt_decode(data.access))
+                localStorage.setItem('AccessToken', JSON.stringify(data.access))
+            }
+            
+        }else{
+            logoutUser()
+        }
+
+        if(loading) setLoading(false);
+        
+    }
+
+    useEffect(()=> {
+
+        if(loading) updateToken();
+        
+        let fourMinutes = 1000 * 4
+
+        let interval = setInterval(()=> {
+            if(accessToken) updateToken()
+        }, fourMinutes)
+        return ()=> clearInterval(interval)
+
+    }, [accessToken, refreshToken ,loading])
+
 
     useEffect(()=> {
         if(!user) return;
@@ -42,72 +93,16 @@ export const AuthProvider = ({children}) => {
         
     }, [user])
 
-    
-    
-
-
-    let updateToken = async ()=> {
-        let response = null
-        let data = null
-        if(authTokens){
-            response = await fetch('/api/token/refresh/', {
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({'refresh':authTokens?.refresh})
-            })
-
-            data = await response.json()
-        }
-
-        
-
-        
-        //console.log(response.status)
-        // console.log(data)
-        if (response !== null){
-            if(response.status === 200){
-                setAuthTokens(data)
-                setUser(jwt_decode(data.access))
-                localStorage.setItem('authTokens', JSON.stringify(data))
-            }
-            
-        }else{
-            logoutUser()
-        }
-
-        if(loading){
-            setLoading(false)
-        }
-    }
-
     let contextData = {
         user:user,
         authTokens:authTokens,
         userBookmark: userBookmark,
         setUser:setUser,
+        setAccessToken:setAccessToken,
+        setRefreshToken:setRefreshToken,
         setAuthTokens:setAuthTokens,
         setUserBookmark: setUserBookmark
     }
-
-
-    useEffect(()=> {
-
-        if(loading){
-            updateToken()
-        }
-
-        let fourMinutes = 1000 * 60 * 4
-
-        let interval =  setInterval(()=> {
-            if(authTokens){
-                updateToken()
-            }
-        }, fourMinutes)
-        return ()=> clearInterval(interval)
-
-    }, [authTokens, loading])
 
     return(
         <AuthContext.Provider value={contextData} >

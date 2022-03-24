@@ -41,7 +41,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function TopNavComponent () {
     const navigate = useNavigate()
-    const {authTokens, setAuthTokens, setUser, setUserBookmark} = useContext(AuthContext);
+    const {authTokens, setAuthTokens, setUser, setUserBookmark, setAccessToken, setRefreshToken} = useContext(AuthContext);
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -65,7 +65,11 @@ export default function TopNavComponent () {
         setAuthTokens(null)
         setUser(null)
         setUserBookmark(null)
+        setAccessToken(null)
+        setRefreshToken(null)
         localStorage.removeItem('authTokens')
+        localStorage.removeItem('AccessToken')
+        localStorage.removeItem('RefreshToken')
         console.log("Logout Success")
         navigate('/')
     };

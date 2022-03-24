@@ -393,22 +393,9 @@ export default function HomePage() {
                 })
             }).then((response) => response.json()).then((data) => {
                 setUserBookmark(data.bookmarked_tool)
-            });
-
-            if(response.status === 201){
-                console.log("Adding Success ----------------------")
-                
-            } 
-
-            if(response.status === 200){
-                console.log("Removing Success ----------------------")
-            }          
+            });        
             
-            setRefresher(!refresher)
-            console.log("Refresh Success ----------------------")
-            console.log(BookmarkedTools) 
-            console.log("BookmarkedTools Up ----------------------")
-            
+            setRefresher(!refresher)            
         });
     }
 

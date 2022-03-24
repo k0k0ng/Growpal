@@ -14,7 +14,7 @@ import jwt_decode from "jwt-decode";
 
 export default function LoginPage () {
     const navigate = useNavigate();
-    const {user, setAuthTokens, setUser} = useContext(AuthContext);
+    const {setAccessToken, setRefreshToken, setAuthTokens, setUser} = useContext(AuthContext);
 
     const [email, setEmail] = useState(() => {
         return "";
@@ -33,7 +33,6 @@ export default function LoginPage () {
 
     const _handleSignInButtonPressed = async (e) => {
 
-        e.preventDefault()
         let response = await fetch('/api/token/', {
             method:'POST',
             headers:{
@@ -44,27 +43,17 @@ export default function LoginPage () {
                 password: password,
             })
         })
-
-
+        
         let data = await response.json()
         
-        
         if(response.status === 200){
+            setAccessToken(data.access)
+            setRefreshToken(data.refresh)
             setAuthTokens(data)
             setUser(jwt_decode(data.access))
+            localStorage.setItem('AccessToken', JSON.stringify(data.access))
+            localStorage.setItem('RefreshToken', JSON.stringify(data.refresh))
             localStorage.setItem('authTokens', JSON.stringify(data))
-
-            let another_response = await fetch('/api/get-user-bookmarked-tools', {
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({
-                    email: email
-                })
-            });
-
-            let account_details = await another_response.json()
             navigate('/')
         }else{
             alert('Something went wrong!')
