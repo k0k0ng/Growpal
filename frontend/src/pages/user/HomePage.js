@@ -349,18 +349,20 @@ export default function HomePage() {
 
 
     const _HandleBookmarkButtonPressed = (e) => {
-        fetch('/api/add-to-bookmark',{
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-                tool_ID: e,
-                user_Email: user.email,
-            })
-        }).then((response) => response.json()).then((data) => {
-            console.log("Nakabalik------------------------")
-        });
+        if(user){
+            fetch('/api/add-to-bookmark',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    tool_ID: e,
+                    user_Email: user.email,
+                })
+            }).then((response) => response.json()).then((data) => {
+                console.log("Nakabalik------------------------")
+            });
+        }
     }
 
     return (
