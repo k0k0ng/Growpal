@@ -1,11 +1,14 @@
 import React from "react";
 import { render } from "react-dom";
 import RoutingPage from "./RoutingPage";
+import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 
 export default function App () {
     return (
         <div>
-            <RoutingPage />
+            <StyledEngineProvider injectFirst>
+                <RoutingPage />
+            </StyledEngineProvider>
         </div>
     );
 }

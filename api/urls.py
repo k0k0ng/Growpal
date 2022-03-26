@@ -20,10 +20,10 @@ urlpatterns = [
     path('register-account-credentials', views.register, name='register-account'),
 
 
-    path('get-tools', GetAllTools.as_view()),
     path('create-tool', views.addTool, name='add-tool'),
     path('get-tool', GetTool.as_view()),
     path('update-tool', UpdateTool.as_view()),
+    path('get-all-tools', GetAllTools.as_view()),
     path('get-searched-tool', views.get_searched_tool, name='search-tool'),
 
     path('add-to-bookmark', BookmarkedTool.as_view()),

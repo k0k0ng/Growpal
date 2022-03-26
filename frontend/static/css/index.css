@@ -22,6 +22,189 @@ body {
   border: 1px solid green;
 }
 
+/* --- Hero > Home Page --- */
+.HeroMainDiv {
+  position: relative;
+  display: flex;
+  height: 890px;
+  /* background-color: #f3f4ed; */
+  /* border: 1px solid red; */
+}
+
+.HeroLeftDiv {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  height: 100%;
+  width: 50%;
+}
+
+.HeroImage {
+  width: 500px;
+  margin: 10%;
+}
+
+.HeroRightDiv {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 4%;
+}
+
+.HeroRightDivHeader {
+  transform: translate(0, -10%);
+}
+
+.HeroPrimaryColoredHeading {
+  color: #c06115;
+  font-size: 56px;
+  font-family: "Montserrat Alternates";
+  font-weight: 600;
+}
+
+.HeroSecondaryColoredHeading {
+  color: #546263;
+  font-size: 56px;
+  font-family: "Montserrat Alternates";
+  font-weight: 600;
+}
+
+.HeroSecondaryColoredSubHeader {
+  color: #546263;
+  font-size: 16px;
+  font-family: "Montserrat Alternates";
+  font-weight: 400;
+  width: "60%";
+  margin-top: 40px;
+  line-height: 2;
+}
+
+.HeroArrowDown {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  bottom: 5%;
+}
+
+.CirclesDiv {
+  position: absolute;
+  display: flex;
+  border: 1px solid green;
+  height: 100%;
+  width: 100%;
+}
+
+.Circle1 {
+  position: absolute;
+  top: 10%;
+  left: 40%;
+  background-color: #434743;
+  height: 75;
+  width: 75;
+  border-radius: 50%;
+}
+
+.Circle2 {
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  background-color: #434743;
+  height: 35;
+  width: 35;
+  border-radius: 50%;
+}
+
+.Circle3 {
+  position: absolute;
+  top: 5%;
+  right: -8;
+  background-color: #434743;
+  height: 300;
+  width: 300;
+  border-radius: "0%";
+}
+
+.Circle4 {
+  position: absolute;
+  top: 70%;
+  left: 15%;
+  background-color: #c06115;
+  height: 50;
+  width: 50;
+  border-radius: 50%;
+}
+
+.Circle5 {
+  position: absolute;
+  top: 65%;
+  left: 75%;
+  background-color: #c06115;
+  height: 35;
+  width: 35;
+  border-radius: 50%;
+}
+
+.Circle6 {
+  position: absolute;
+  top: 68%;
+  left: 65%;
+  background-color: #434743;
+  height: 58;
+  width: 58;
+  border-radius: 50%;
+}
+/* === Hero > Home Page === */
+
+/* --- Tools > Home page --- */
+.ToolsSearchDiv {
+  position: relative;
+  display: flex;
+  height: 100px;
+  width: 100%;
+  background-color: #546263;
+  padding-top: 45px;
+}
+
+.ToolsContentsDiv {
+  position: relative;
+  display: flex;
+  width: 100%;
+  padding-top: 25px;
+  padding-bottom: 45px;
+  background-color: #546263;
+}
+
+.SidebarButtonContainer {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.SidebarButtons {
+  font-family: "Montserrat Alternates";
+  font-weight: 500;
+  font-size: 11px;
+  color: #434743;
+  background-color: #f3f4ed;
+  border-radius: 25px;
+  padding: 5px 30px;
+}
+
+.SidebarButtonsInActive {
+  font-family: "Montserrat Alternates";
+  font-weight: 500;
+  font-size: 11px;
+  color: #f3f4ed;
+  background-color: #434743;
+  padding: 5px 30px;
+}
+
+/* --- Filter & Order Dropdowns > Tools > Home page --- */
 #custom-select-parent {
   position: relative;
 }
@@ -95,3 +278,90 @@ select::-ms-expand {
 #custom-select :focus {
   outline: none;
 }
+
+/* --- Pagination Button Styles > Tools > Home Page --- */
+.paginationBttns {
+  width: 80%;
+  height: 40px;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+}
+
+.paginationBttns a {
+  padding: 10px;
+  margin: 8px;
+  border-radius: 5px;
+  border: 1px solid #2b2eff;
+  color: #2b2eff;
+  cursor: pointer;
+}
+
+.paginationBttns a:hover {
+  color: white;
+  background-color: #2b2eff;
+}
+
+.paginationActive a {
+  color: white;
+  background-color: #2b2eff;
+}
+
+.paginationDisabled a {
+  color: grey;
+  background-color: grey;
+}
+/* === Tools > Home Page END === */
+
+/* --- Contact Us > Tools > Home Page --- */
+.ContactUsSection {
+  background-color: #f3f4ed;
+  height: 620px;
+}
+
+.ContactUsLeftContainer {
+  height: 100%;
+  z-index: 1500;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 40px 0 0;
+}
+
+.ContactUsLeftContainerHeader {
+  text-align: end;
+  font-family: "Montserrat Alternates";
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #546263;
+}
+
+.ContactUsLeftContainerSubHeader {
+  text-align: end;
+  font-family: "Montserrat Alternates";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 2;
+  margin-bottom: 40px;
+  margin-left: 25%;
+  color: #546263;
+}
+
+.ContactUsRightContainer {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 0 0 40px;
+}
+
+.ContactUsRightContainerSendButton {
+  color: white;
+  border-radius: 25px;
+  background-color: #c06115;
+  padding: 10px 45px;
+  margin-right: 20;
+  font-family: Montserrat Alternates;
+  text-transform: none;
+}
+
+/* === Contact Us > Home Page END === */

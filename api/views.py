@@ -6,6 +6,7 @@ from .models import Category, Tool, UserAccount
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
 from rest_framework.decorators import api_view
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
