@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import TopNavComponent from './TopNavComponent';
-import { 
-    Button,
-    Grid,
-    Typography,
-    TextField,
-    FormHelperText,
-    FormControl,
-} from "@material-ui/core";
-import { styled } from '@mui/material/styles';
-
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+
+import TopNavComponent from './TopNavComponent';
+
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+
+import { styled } from '@mui/material/styles';
 
 export default function CreateToolComponent () {
     const navigate = useNavigate(); 
@@ -72,8 +73,9 @@ export default function CreateToolComponent () {
 
 
     return (
-        <div>
+        <Box component='div'>
             <TopNavComponent />
+
             <Grid container spacing={1}>
                 <Grid item xs={12} align="center">
                     <Typography compenent="h4" variant="h4">
@@ -112,12 +114,12 @@ export default function CreateToolComponent () {
                     </Button>
                 </Grid>
                 <Grid item xs={12} align="center">
-                    <Button variant="contained" color="default" to="/" component={Link}>
+                    <Button variant="contained" color="secondary" to="/" component={Link}>
                         Home
                     </Button>
                 </Grid>
             </Grid>
-        </div>
+        </Box>
     );
     
 }

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { 
-    Button,
-    Grid,
-    Typography,
-    TextField,
-    FormHelperText,
-    FormControl,
-} from "@material-ui/core";
+
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
 
 export default function ForgotPassword () {
@@ -44,7 +44,7 @@ export default function ForgotPassword () {
 
 
     return (
-        <div>
+        <Box component='div'>
             <Grid container spacing={1} style={{ marginTop:"100px" }}>
                 <Grid item xs={12} align="center">
                     <Typography compenent="h4" variant="h4">
@@ -66,7 +66,7 @@ export default function ForgotPassword () {
                 </Grid>
                 
             </Grid>
-        </div>
+        </Box>
     );
     
 }
