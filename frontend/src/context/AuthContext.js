@@ -12,8 +12,7 @@ export const AuthProvider = ({children}) => {
 
     let [accessToken, setAccessToken] = useState(() => localStorage.getItem('AccessToken') ? JSON.parse(localStorage.getItem('AccessToken')) : null)
     let [refreshToken, setRefreshToken] = useState(() => localStorage.getItem('RefreshToken') ? JSON.parse(localStorage.getItem('RefreshToken')) : null)
-    let [authTokens, setAuthTokens] = useState(() => localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
-    let [user, setUser] = useState(() => localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null)
+    let [user, setUser] = useState(() => localStorage.getItem('AccessToken') ? jwt_decode(localStorage.getItem('AccessToken')) : null)
     let [userBookmark, setUserBookmark] = useState(() => { return []; })
     let [loading, setLoading] = useState(() => { return true; })
 
@@ -22,11 +21,9 @@ export const AuthProvider = ({children}) => {
         setUser(null)
         setAccessToken(null)
         setRefreshToken(null)
-        setAuthTokens(null)
         setUserBookmark(null)
         localStorage.removeItem('AccessToken')
         localStorage.removeItem('RefreshToken')
-        localStorage.removeItem('authTokens')
         // navigate('/login')
     }
 
@@ -94,12 +91,10 @@ export const AuthProvider = ({children}) => {
 
     let contextData = {
         user:user,
-        authTokens:authTokens,
         userBookmark: userBookmark,
         setUser:setUser,
         setAccessToken:setAccessToken,
         setRefreshToken:setRefreshToken,
-        setAuthTokens:setAuthTokens,
         setUserBookmark: setUserBookmark
     }
 

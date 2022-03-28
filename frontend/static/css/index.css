@@ -22,56 +22,84 @@ body {
   border: 1px solid green;
 }
 
-/* --- Hero > Home Page --- */
-.HeroMainDiv {
-  position: relative;
-  display: flex;
-  height: 890px;
-  /* background-color: #f3f4ed; */
-  /* border: 1px solid red; */
+/* --- Top Navbar --- */
+.nav-container {
+  position: absolute;
+  background-color: #546263;
+  z-index: 1900;
 }
 
-.HeroLeftDiv {
-  position: absolute;
+.nav-brand-logo {
+  color: #fff;
+  font-size: 28px;
+  font-family: "Arvo";
+  text-transform: none;
+}
+
+/* --- Hero > Home Page --- */
+.hero-main-div {
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  height: 100vh;
+  /* background-color: #f3f4ed; */
+  z-index: 1800;
+  transform: translate(0, -50px);
+
+  /* border: 1px solid magenta; */
+}
+
+.hero-main-div-upper {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  gap: 5%;
+  padding: 0px 5%;
+  padding-top: 10%;
+  /* border: 2px solid yellow; */
+}
+
+.hero-left-div {
   display: flex;
   align-items: center;
   justify-content: end;
-  height: 100%;
   width: 50%;
+
+  /* border: 2px solid red; */
 }
 
-.HeroImage {
-  width: 500px;
-  margin: 10%;
+.hero-image {
+  max-width: 60%;
+  padding: 5%;
 }
 
-.HeroRightDiv {
-  position: absolute;
+.hero-right-div {
   display: flex;
   align-items: center;
-  height: 100%;
-  padding: 0 4%;
+  width: 50%;
+
+  /* border: 2px solid blue; */
 }
 
-.HeroRightDivHeader {
+.hero-right-div-header {
   transform: translate(0, -10%);
 }
 
-.HeroPrimaryColoredHeading {
+.hero-primary-colored-heading {
   color: #c06115;
   font-size: 56px;
   font-family: "Montserrat Alternates";
   font-weight: 600;
 }
 
-.HeroSecondaryColoredHeading {
+.hero-secondary-colored-heading {
   color: #546263;
   font-size: 56px;
   font-family: "Montserrat Alternates";
   font-weight: 600;
 }
 
-.HeroSecondaryColoredSubHeader {
+.hero-secondary-colored-subHeader {
   color: #546263;
   font-size: 16px;
   font-family: "Montserrat Alternates";
@@ -81,16 +109,22 @@ body {
   line-height: 2;
 }
 
-.HeroArrowDown {
-  position: absolute;
+.hero-arrow-down {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  bottom: 5%;
+  padding: 2% 0px;
+  padding-bottom: 0%;
+  /* border: 2px solid green; */
 }
 
-.CirclesDiv {
+.hero-arrow-down-icon {
+  font-size: 34;
+  color: #546263;
+}
+
+.circles-div {
   position: absolute;
   display: flex;
   border: 1px solid green;
@@ -98,7 +132,7 @@ body {
   width: 100%;
 }
 
-.Circle1 {
+.circle-1 {
   position: absolute;
   top: 10%;
   left: 40%;
@@ -108,7 +142,7 @@ body {
   border-radius: 50%;
 }
 
-.Circle2 {
+.circle-2 {
   position: absolute;
   top: 20%;
   left: 10%;
@@ -118,7 +152,7 @@ body {
   border-radius: 50%;
 }
 
-.Circle3 {
+.circle-3 {
   position: absolute;
   top: 5%;
   right: -8;
@@ -128,7 +162,7 @@ body {
   border-radius: "0%";
 }
 
-.Circle4 {
+.circle-4 {
   position: absolute;
   top: 70%;
   left: 15%;
@@ -138,7 +172,7 @@ body {
   border-radius: 50%;
 }
 
-.Circle5 {
+.circle-5 {
   position: absolute;
   top: 65%;
   left: 75%;
@@ -148,7 +182,7 @@ body {
   border-radius: 50%;
 }
 
-.Circle6 {
+.circle-6 {
   position: absolute;
   top: 68%;
   left: 65%;
@@ -160,7 +194,7 @@ body {
 /* === Hero > Home Page === */
 
 /* --- Tools > Home page --- */
-.ToolsSearchDiv {
+.tools-search-div {
   position: relative;
   display: flex;
   height: 100px;
@@ -169,7 +203,15 @@ body {
   padding-top: 45px;
 }
 
-.ToolsContentsDiv {
+.tools-search-field-container {
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 25px;
+}
+
+.tools-contents-div {
   position: relative;
   display: flex;
   width: 100%;
@@ -178,14 +220,20 @@ body {
   background-color: #546263;
 }
 
-.SidebarButtonContainer {
+.sidebar-box-container {
+  background-color: #434743;
+  border-radius: 20px;
+  padding: 50px 15px 50px 15px;
+}
+
+.sidebar-button-container {
   display: flex;
   width: 100%;
   margin-bottom: 20px;
   justify-content: center;
 }
 
-.SidebarButtons {
+.sidebar-button-active {
   font-family: "Montserrat Alternates";
   font-weight: 500;
   font-size: 11px;
@@ -195,13 +243,26 @@ body {
   padding: 5px 30px;
 }
 
-.SidebarButtonsInActive {
+.sidebar-button-active:hover {
+  color: #434743;
+  background-color: #f3f4ed;
+  border: none;
+}
+
+.sidebar-buttons {
   font-family: "Montserrat Alternates";
   font-weight: 500;
   font-size: 11px;
   color: #f3f4ed;
   background-color: #434743;
   padding: 5px 30px;
+  border-radius: 25px;
+}
+
+.sidebar-buttons:hover {
+  color: #c06115;
+  background-color: #f3f4ed;
+  border: none;
 }
 
 /* --- Filter & Order Dropdowns > Tools > Home page --- */
@@ -280,7 +341,17 @@ select::-ms-expand {
 }
 
 /* --- Pagination Button Styles > Tools > Home Page --- */
-.paginationBttns {
+
+.tool-image {
+  margin-left: 50%;
+  height: 100px;
+  transform: translate(-50%, 0px);
+}
+
+.pagination-buttons {
+  font-family: "Montserrat Alternates";
+  font-size: 14px;
+  font-weight: 400;
   width: 80%;
   height: 40px;
   list-style: none;
@@ -288,38 +359,51 @@ select::-ms-expand {
   justify-content: center;
 }
 
-.paginationBttns a {
+.pagination-buttons a {
   padding: 10px;
   margin: 8px;
   border-radius: 5px;
-  border: 1px solid #2b2eff;
-  color: #2b2eff;
+  color: #f3f4ed;
+  background-color: #434743;
   cursor: pointer;
 }
 
-.paginationBttns a:hover {
-  color: white;
-  background-color: #2b2eff;
+.pagination-active a {
+  color: #f3f4ed;
+  background-color: #c06115;
 }
 
-.paginationActive a {
-  color: white;
-  background-color: #2b2eff;
+.pagination-buttons a:hover {
+  color: #f3f4ed;
+  background-color: #c06115;
 }
 
-.paginationDisabled a {
-  color: grey;
-  background-color: grey;
+.pagination-disabled a {
+  color: #c06115;
+  background-color: #f3f4ed;
 }
+
+.pagination-disabled a:hover {
+  color: #c06115;
+  background-color: #f3f4ed;
+  cursor: context-menu;
+}
+
+.pagination-previous-button,
+.pagination-next-button {
+  border-radius: 20px !important;
+  padding: 10px 25px !important;
+}
+
 /* === Tools > Home Page END === */
 
 /* --- Contact Us > Tools > Home Page --- */
-.ContactUsSection {
+.contact-us-div {
   background-color: #f3f4ed;
   height: 620px;
 }
 
-.ContactUsLeftContainer {
+.contact-us-left-container {
   height: 100%;
   z-index: 1500;
   display: flex;
@@ -328,7 +412,7 @@ select::-ms-expand {
   padding: 0 40px 0 0;
 }
 
-.ContactUsLeftContainerHeader {
+.contact-us-left-container-header {
   text-align: end;
   font-family: "Montserrat Alternates";
   font-weight: 700;
@@ -336,7 +420,7 @@ select::-ms-expand {
   color: #546263;
 }
 
-.ContactUsLeftContainerSubHeader {
+.contact-us-left-container-sub-header {
   text-align: end;
   font-family: "Montserrat Alternates";
   font-size: 16px;
@@ -347,15 +431,15 @@ select::-ms-expand {
   color: #546263;
 }
 
-.ContactUsRightContainer {
+.contact-us-right-container {
   height: 100%;
   display: flex;
   align-items: center;
   padding: 0 0 0 40px;
 }
 
-.ContactUsRightContainerSendButton {
-  color: white;
+.contact-us-right-container-send-button {
+  color: #f3f4ed;
   border-radius: 25px;
   background-color: #c06115;
   padding: 10px 45px;
@@ -364,4 +448,88 @@ select::-ms-expand {
   text-transform: none;
 }
 
+.contact-us-right-container-send-button:hover {
+  color: #c06115;
+  background-color: #434743;
+}
+
 /* === Contact Us > Home Page END === */
+
+/*  --- Media Query for Large Laptop --- */
+@media only screen and (max-width: 1440px) {
+  .hero-image {
+    max-width: 85%;
+    /* padding: 5%; */
+  }
+}
+
+/*  --- Media Query for Small Laptop --- */
+@media only screen and (max-width: 1024px) {
+  .hero-main-div-upper {
+    padding-top: 16%;
+  }
+
+  .hero-image {
+    max-width: 90%;
+    padding: 5%;
+  }
+
+  .hero-primary-colored-heading {
+    font-size: 42px;
+  }
+
+  .hero-secondary-colored-heading {
+    font-size: 42px;
+  }
+}
+
+/*  --- Media Query for Mobile --- */
+@media only screen and (max-width: 768px) {
+  .hero-main-div-upper {
+    padding-top: 28%;
+  }
+
+  .hero-left-div {
+    display: none;
+  }
+
+  .hero-right-div {
+    width: 90%;
+    text-align: center;
+  }
+
+  .hero-primary-colored-heading {
+    font-size: 60px;
+  }
+
+  .hero-secondary-colored-heading {
+    font-size: 60px;
+  }
+
+  .hero-secondary-colored-subHeader {
+    font-size: 18px;
+  }
+}
+
+/*  --- Media Query for Mobile --- */
+@media only screen and (max-width: 425px) {
+  .hero-main-div-upper {
+    padding-top: 45%;
+  }
+
+  .hero-right-div-header div {
+    margin-bottom: 20px;
+  }
+
+  .hero-primary-colored-heading {
+    font-size: 48px;
+  }
+
+  .hero-secondary-colored-heading {
+    font-size: 48px;
+  }
+
+  .hero-secondary-colored-subHeader {
+    font-size: 15px;
+  }
+}

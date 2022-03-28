@@ -14,7 +14,6 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import InputBase from '@mui/material/InputBase';
-import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Card from '@mui/material/Card';
@@ -32,16 +31,6 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import SearchIcon from '@mui/icons-material/Search';
 import MailIcon from '@mui/icons-material/Mail';
 
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
 
 const categories = [
     'All Tools',
@@ -75,7 +64,7 @@ export default function HomePage() {
 
     let [allTools, setAllTools] = useState(() => { return []; });
     let [pageNumber, setPageNumber] = useState(() => { return 0; });
-    const ToolsPerPage = 5;
+    const ToolsPerPage = 10;
     const pagesVisited = pageNumber * ToolsPerPage;
     const pageCount = Math.ceil(allTools.length / ToolsPerPage);
     const changePage = ({ selected }) => {
@@ -100,7 +89,7 @@ export default function HomePage() {
     }, [userBookmark])
     
     useEffect(() => {
-        getToolS();        
+        getTools();        
     },[]);
     
     
@@ -109,7 +98,7 @@ export default function HomePage() {
     }
 
     useEffect(() => {
-        if(searchedKey === '') getToolS();
+        if(searchedKey === '') getTools();
         fetch('/api/get-searched-tool', {
             method:'POST',
             headers:{
@@ -134,9 +123,9 @@ export default function HomePage() {
 
 
 
-    function getToolS(){
+    function getTools(){
         fetch('/api/get-all-tools').then((response) => response.json()).then((data) => {
-            setAllTools(data.slice(0,10))
+            setAllTools(data.slice(0,50))
         });
     }
 
@@ -157,23 +146,55 @@ export default function HomePage() {
         setActiveCategory( prevValue => prevValue = event.currentTarget.value);
     };
 
+    const GetToolsByCategory = async () => {
+        let response = await fetch('/api/get-tool-by-category', {
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                category: activeCategory
+            })
+        }).catch(err => {
+            // console.log(err);
+        });
+
+        if(response.status === 204){
+            setAllTools([]);
+            return 
+        }
+
+        let data = await response.json();
+        setAllTools(data.slice(0,50));
+    }
+
+    useEffect(() => {
+
+        if(activeCategory === "All Tools"){
+            getTools();
+        }else{
+            GetToolsByCategory();
+        }
+
+    },[activeCategory]);
+
     const ActiveSidebarMenuButton = (category) => {
         return (
-            <Container key={category} className='SidebarButtonContainer'>
-                <Button variant="contained" className='SidebarButtons'>{category}</Button>
+            <Container key={category} className='sidebar-button-container'>
+                <Button variant="contained" className='sidebar-button-active'>{category}</Button>
             </Container>
         );
     };
     
     const SidebarMenuButton = (category) => {
         return (
-            <Container key={category} className='SidebarButtonContainer'>
+            <Container key={category} className='sidebar-button-container'>
                 <Button 
                     disableElevation 
                     onClick={handleActiveSidebarMenu} 
                     value={category.toString()} 
                     variant='contained' 
-                    className='SidebarButtonsInActive'
+                    className='sidebar-buttons'
                 >
                     {category}
                 </Button> 
@@ -231,7 +252,7 @@ export default function HomePage() {
         }
     }
 
-    const displayUsers = allTools
+    const DisplayTools = allTools
     .slice(pagesVisited, pagesVisited + ToolsPerPage)
     .map((tool) => {
       return (
@@ -252,8 +273,8 @@ export default function HomePage() {
                     onClick={() => _HandleAddBookmarkButtonPressed (tool.id, tool.title)}
                 />
 
-                <CardActionArea sx={{ minHeight:260, padding:'40px 20px 0px 20px' }} onClick={() => console.log(tool.title)}>
-                    <img alt="Tool Image" src={ '/static' + tool.image } style={{ marginLeft:'50%', height:'100px', transform:'translate(-50%,0px)' }} />
+                <CardActionArea sx={{ minHeight:350, padding:'40px 20px 0px 20px' }} onClick={() => console.log(tool.title)}>
+                    <img alt="Tool Image" src={ '/static' + tool.image } className='tool-image' />
                     <CardContent sx={{marginBottom:'20px'}}>
                         <Typography gutterBottom variant="h6" component="div" align='center' fontFamily='Montserrat Alternates' sx={{ lineHeight:'26px' }}>
                             { tool.title }
@@ -264,7 +285,7 @@ export default function HomePage() {
                     </CardContent>
                     <CardContent>
                         {tool.categories.map((tool_category) => (
-                            <Chip key={tool_category.id} label={tool_category.name} sx={{marginRight:'5px', color:'#fff'}} />
+                            <Chip key={tool_category.id} label={tool_category.name} sx={{margin:'3px', color:'#fff'}} />
                         ))} 
                     </CardContent>
                 </CardActionArea>
@@ -279,56 +300,56 @@ export default function HomePage() {
 
             <Parallax bgImage={herobg} strength={200}>
                 
-                <Box component="div" className='HeroMainDiv'>
-                    <Grid container>
-                        {/* <div style={CirclesDiv}>
-                            <div style={ Circle1 } />
-                            <div style={ Circle2 } />
-                            <div style={ Circle3 } />
-                            <div style={ Circle4 } />
-                            <div style={ Circle5 } />
-                            <div style={ Circle6 } />
-                        </div> */}
-                        <Grid item xs={12} md={6}>
-                            <Box component="div" className='HeroLeftDiv'>
-                                <img
-                                    className='HeroImage'
-                                    src="/static/images/Hero-img.png"
-                                    alt="Helping each other vector"
-                                    loading="lazy"
-                                />
-                            </Box>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <Box component='div' className='HeroRightDiv'>
-                                <Box component='div' className='HeroRightDivHeader'>
-                                    <Box>
-                                        <Typography display="inline" className='HeroPrimaryColoredHeading'>Work </Typography>
-                                        <Typography display="inline" className='HeroSecondaryColoredHeading'>efficiently</Typography>
-                                    </Box>
-                                    <Box>
-                                        <Typography display="inline" className='HeroPrimaryColoredHeading'>Grow </Typography>
-                                        <Typography display="inline" className='HeroSecondaryColoredHeading'>continously</Typography>
-                                    </Box>
-                                    <Box>
-                                        <Typography className='HeroSecondaryColoredSubHeader'>Growpal helps you find the best tools to keep you and your business stay ahead in the compitition. </Typography>
+                <Box component="div" className='hero-main-div'>
+                    
+                    <Box component="div" className='hero-main-div-upper' >
+                        <Box component="div" className='hero-left-div'>
+                            <img
+                                className='hero-image'
+                                src="/static/images/Hero-img.png"
+                                alt="Helping each other vector"
+                                loading="lazy"
+                            />
+                        </Box>
+                        { <Box component='div' className='hero-right-div'>
+                            <Box component='div' className='hero-right-div-header'>
+                                <Box component='div'>
+                                    <Typography display="inline" className='hero-primary-colored-heading'>Work </Typography>
+                                    <Typography display="inline" className='hero-secondary-colored-heading'>efficiently</Typography>
+                                </Box>
+                                <Box>
+                                    <Typography display="inline" className='hero-primary-colored-heading'>Grow </Typography>
+                                    <Typography display="inline" className='hero-secondary-colored-heading'>continously</Typography>
+                                </Box>
+                                <Box>
+                                    <Typography className='hero-secondary-colored-subHeader'>Growpal helps you find the best tools to keep you and your business stay ahead in the compitition. </Typography>
 
-                                    </Box>
                                 </Box>
                             </Box>
-                        </Grid>
-                        <Grid item md={12}>
-                            <Box component='div' className='HeroArrowDown'>
-                                <IconButton aria-label="menu" onClick={() => { window[`scrollTo`]({ top:960, behavior: `smooth` }) }}>
-                                    <KeyboardDoubleArrowDownIcon style={{ fontSize: 34, color: '#546263' }} />
-                                </IconButton>
-                            </Box>
-                        </Grid>
-                    </Grid>
+                        </Box> }
+                    </Box>
+                    
+                    <Box component='div' className='hero-arrow-down'>
+                        <IconButton aria-label="menu" onClick={() => { window[`scrollTo`]({ top:window.innerHeight, behavior: `smooth` }) }} >
+                            <KeyboardDoubleArrowDownIcon className='hero-arrow-down-icon' />
+                        </IconButton>
+                    </Box>
+
+
+                    {/* <Grid container>
+                        <div style={circles-div}>
+                            <div style={ circle-1 } />
+                            <div style={ circle-2 } />
+                            <div style={ circle-3 } />
+                            <div style={ circle-4 } />
+                            <div style={ circle-5 } />
+                            <div style={ circle-6 } />
+                        </div> 
+                    </Grid> */}
                 </Box>
             </Parallax>
 
-            <Box component="div" className='ToolsSearchDiv'>
+            <Box component="div" id='tool_search_div' className='tools-search-div'>
                 <Grid 
                     container 
                     spacing={4}
@@ -337,12 +358,13 @@ export default function HomePage() {
                     <Grid item md={7} >
                         <Paper
                             component="form"
-                            sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%' }}
-                            style={{
-                                borderRadius: '25px',
-                            }}
+                            className='tools-search-field-container'
                         >
-                            <IconButton onClick={ () => {} } sx={{ p: '10px' }} aria-label="search">
+                            <IconButton 
+                                sx={{ p: '10px' }} 
+                                aria-label="search"
+                                onClick={ () => {} } 
+                            >
                                 <SearchIcon />
                             </IconButton>
                             <InputBase
@@ -383,26 +405,19 @@ export default function HomePage() {
                     
                 </Grid>
             </Box>
-            <Box component="div" className='ToolsContentsDiv'>
+            <Box component="div" className='tools-contents-div'>
                 <Grid sx={{ flexGrow: 1 }} container spacing={3}>
                     <Grid 
                         item 
-                        style={{
-                            padding: '0px 0px 50px 50px'
-                        }} 
                         lg={2}
                         md={3}
                         sm={4}
                         xs={5}
+                        style={{
+                            padding: '0px 0px 50px 50px'
+                        }} 
                     >
-                        <Box 
-                            component='div'
-                            style={{
-                                backgroundColor: '#434743',
-                                borderRadius: '20px',
-                                padding: '50px 15px 50px 15px'
-                            }}
-                        >                                   
+                        <Box component='div' className='sidebar-box-container' >                                   
                             {categories.map((category) => (
                                 category === activeCategory ? ActiveSidebarMenuButton(category) : SidebarMenuButton(category) 
                             ))}   
@@ -410,27 +425,27 @@ export default function HomePage() {
                     </Grid>
                     <Grid 
                         item 
-                        style={{ 
-                            padding: '0 0 0 30px'
-                        }} 
                         md={10}
                         sm={8}
                         xs={7}
+                        style={{ 
+                            padding: '0 0 0 30px'
+                        }} 
                     >
-                        <Grid container spacing={4}>
-                            {displayUsers}
+                        <Grid container spacing={4} sx={{ height:'100%' }}>
+                            {DisplayTools}
 
-                            <Grid item md={2.3}>
+                            <Grid item xs={12} maxHeight="100px" sx={{ alignSelf: 'end'}}>
                                 <ReactPaginate
                                     previousLabel={"Previous"}
                                     nextLabel={"Next"}
                                     pageCount={pageCount}
                                     onPageChange={changePage}
-                                    containerClassName={"paginationBttns"}
-                                    previousLinkClassName={"previousBttn"}
-                                    nextLinkClassName={"nextBttn"}
-                                    disabledClassName={"paginationDisabled"}
-                                    activeClassName={"paginationActive"}
+                                    containerClassName={"pagination-buttons"}
+                                    nextLinkClassName={"pagination-next-button"}
+                                    previousLinkClassName={"pagination-previous-button"}
+                                    disabledClassName={"pagination-disabled"}
+                                    activeClassName={"pagination-active"}
                                 />
                             </Grid>
                             
@@ -439,7 +454,7 @@ export default function HomePage() {
                 </Grid>
             </Box>
 
-            <Box component="div" className='ContactUsSection' >
+            <Box component="div" className='contact-us-div' >
                 <Grid container height='100%'>
                     <Grid sx={{ position:'relative' }}>
                         <Paper style={{
@@ -450,7 +465,6 @@ export default function HomePage() {
                             position: 'absolute',
                             top:'10%',
                             left:'100px',
-
                         }}></Paper>
 
                         <Paper style={{
@@ -461,7 +475,6 @@ export default function HomePage() {
                             position: 'absolute',
                             top:'45%',
                             left:'170px',
-
                         }}></Paper>
 
                         <Paper style={{
@@ -472,7 +485,6 @@ export default function HomePage() {
                             position: 'absolute',
                             top:'52%',
                             left:'1780px',
-
                         }}></Paper>
 
                         <Paper style={{
@@ -483,21 +495,20 @@ export default function HomePage() {
                             position: 'absolute',
                             top:'80%',
                             left:'1580px',
-
                         }}></Paper>
 
                     </Grid>
-                    <Grid item className='ContactUsLeftContainer' md={6} >
+                    <Grid item className='contact-us-left-container' md={6} >
                         <Box>
                             <Typography 
                                 variant='h1'
                                 component='h2' 
                                 noWrap
-                                className='ContactUsLeftContainerHeader'
+                                className='contact-us-left-container-header'
                             >
                                 Need help?
                             </Typography>
-                            <Typography component='p' className='ContactUsLeftContainerSubHeader'>
+                            <Typography component='p' className='contact-us-left-container-sub-header'>
                                 Tell us your concerns whether you're curious about certain features, pricing, or even bundle deals.
                             </Typography>
                             <Box sx={{ display: 'flex', justifyContent: 'end' }}>
@@ -513,11 +524,9 @@ export default function HomePage() {
                             </Box>
                         </Box>
                     </Grid>
-                    <Grid item className='ContactUsRightContainer' md={6}>
+                    <Grid item className='contact-us-right-container' md={6}>
                         <Box
-                            style={{
-                                width: '100%',  
-                            }}
+                            sx={{ width: '100%' }}
                         >
                             
                             <TextField 
@@ -528,8 +537,7 @@ export default function HomePage() {
                                 InputLabelProps={{ style: { fontFamily:'Montserrat Alternates', fontStyle: 'italic' } }}
                                 sx={{ 
                                     width: '70%',
-                                    marginBottom: '25px',
-                                                                            
+                                    marginBottom: '25px',                                  
                                 }}
                             />
                             <TextField 
@@ -540,8 +548,7 @@ export default function HomePage() {
                                 InputLabelProps={{ style: { fontFamily:'Montserrat Alternates', fontStyle: 'italic' } }}
                                 sx={{ 
                                     width: '70%',
-                                    marginBottom: '25px',
-                                                                        
+                                    marginBottom: '25px',                      
                                 }}
                             />
                             <TextField
@@ -553,12 +560,11 @@ export default function HomePage() {
                                 InputLabelProps={{ style: { fontFamily:'Montserrat Alternates', fontStyle: 'italic' } }}
                                 sx={{ 
                                     width: '70%',
-                                    marginBottom: '25px',
-                                                                        
+                                    marginBottom: '25px',                   
                                 }}
                             />
                             <Box>
-                                <Button className='ContactUsRightContainerSendButton' to="/" component={Link}>
+                                <Button className='contact-us-right-container-send-button' to="/" component={Link}>
                                     Send
                                 </Button>
                             </Box>

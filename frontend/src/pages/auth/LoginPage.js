@@ -15,7 +15,7 @@ import Box from '@mui/material/Box';
 
 export default function LoginPage () {
     const navigate = useNavigate();
-    const {setAccessToken, setRefreshToken, setAuthTokens, setUser} = useContext(AuthContext);
+    const {setAccessToken, setRefreshToken, setUser} = useContext(AuthContext);
 
     const [email, setEmail] = useState(() => {
         return "";
@@ -45,19 +45,17 @@ export default function LoginPage () {
             })
         })
         
-        let data = await response.json()
+        let data = await response.json();
         
         if(response.status === 200){
-            setAccessToken(data.access)
-            setRefreshToken(data.refresh)
-            setAuthTokens(data)
-            setUser(jwt_decode(data.access))
-            localStorage.setItem('AccessToken', JSON.stringify(data.access))
-            localStorage.setItem('RefreshToken', JSON.stringify(data.refresh))
-            localStorage.setItem('authTokens', JSON.stringify(data))
-            navigate('/')
+            setAccessToken(data.access);
+            setRefreshToken(data.refresh);
+            setUser(jwt_decode(data.access));
+            localStorage.setItem('AccessToken', JSON.stringify(data.access));
+            localStorage.setItem('RefreshToken', JSON.stringify(data.refresh));
+            navigate('/');
         }else{
-            alert('Something went wrong!')
+            alert('Something went wrong!');
         }
         
         // const requestOptions = {
@@ -106,7 +104,7 @@ export default function LoginPage () {
                     <Button variant="contained" color="primary" onClick={_handleSignInButtonPressed}>
                         Sign In
                     </Button>
-                    <Button variant="contained" color="default" to="/" component={Link}>
+                    <Button variant="contained" color="secondary" to="/" component={Link}>
                         Cancel
                     </Button>
                 </Grid>

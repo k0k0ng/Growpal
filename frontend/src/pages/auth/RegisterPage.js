@@ -115,7 +115,7 @@ export default function RegisterPage () {
                     <Button variant="contained" color="primary" onClick={_handleRegisterButtonPressed}>
                         Register
                     </Button>
-                    <Button variant="contained" color="default" to="/" component={Link}>
+                    <Button variant="contained" color="secondary" to="/" component={Link}>
                         Cancel
                     </Button>
                 </Grid>

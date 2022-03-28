@@ -25,6 +25,7 @@ urlpatterns = [
     path('update-tool', UpdateTool.as_view()),
     path('get-all-tools', GetAllTools.as_view()),
     path('get-searched-tool', views.get_searched_tool, name='search-tool'),
+    path('get-tool-by-category', views.get_tool_by_category, name='tool-by-category'),
 
     path('add-to-bookmark', BookmarkedTool.as_view()),
 

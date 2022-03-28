@@ -14,23 +14,23 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 # Create your views here.
 class CreateToolsAPIView(generics.CreateAPIView):
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
     queryset = Tool.objects.all()
     serializer_class = ToolSerializer
 
 class ViewToolsAPIView(generics.ListAPIView):
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
     queryset = Tool.objects.all()
     serializer_class = ToolSerializer
 
 
 class CreateCategoryAPIView(generics.CreateAPIView):
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 class ViewCategoriesAPIView(generics.ListAPIView):
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -85,6 +85,23 @@ def register(request):
 @api_view(['POST'])
 def get_searched_tool(request):
     queryset = Tool.objects.filter(title__contains=request.data['keyword'])
+    tools = []
+    if queryset.exists():
+        for tool in queryset.iterator():
+            tools.append(AllToolSerializer(tool).data)
+
+        return Response(tools, status=status.HTTP_200_OK)
+    else:
+        return Response({'No Content': 'Request returns empty.'}, status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST'])
+def get_tool_by_category(request):
+    category_searched = Category.objects.get(name = request.data['category'])
+    tools = Tool.objects.all()
+    queryset = category_searched.tool_set.all()
+    if not queryset:
+        return Response({'No Content': 'Request returns empty.'}, status=status.HTTP_204_NO_CONTENT)
     tools = []
     if queryset.exists():
         for tool in queryset.iterator():

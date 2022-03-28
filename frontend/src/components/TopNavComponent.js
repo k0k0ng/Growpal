@@ -1,11 +1,11 @@
 import React, {useState, useContext} from 'react';
 import { Link, useNavigate } from "react-router-dom"
+
 import AuthContext from '../context/AuthContext';
 
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
@@ -16,20 +16,10 @@ import Menu from '@mui/material/Menu';
 import Box from '@mui/material/Box';
 
 
-const logoStyles = {
-    color: "#fff",
-    fontSize: 28,
-    fontFamily: 'Arvo',
-    textTransform: "none"
-}
-
-const navContainer = {
-    backgroundColor: '#546263'
-}
-
 const FontMontserrat = {
     fontFamily: 'Montserrat Alternates',
-    textTransform: "none"
+    textTransform: 'none',
+    color: '#c06115'
 }
 
 const pages = [
@@ -41,7 +31,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function TopNavComponent () {
     const navigate = useNavigate()
-    const {authTokens, setAuthTokens, setUser, setUserBookmark, setAccessToken, setRefreshToken} = useContext(AuthContext);
+    const {authTokens, setUser, setUserBookmark, setAccessToken, setRefreshToken} = useContext(AuthContext);
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -62,16 +52,14 @@ export default function TopNavComponent () {
 
     const handleLogoutUserMenu = () => {
         setAnchorElUser(null);
-        setAuthTokens(null)
-        setUser(null)
-        setUserBookmark(null)
-        setAccessToken(null)
-        setRefreshToken(null)
-        localStorage.removeItem('authTokens')
-        localStorage.removeItem('AccessToken')
-        localStorage.removeItem('RefreshToken')
-        console.log("Logout Success")
-        navigate('/')
+        setUser(null);
+        setUserBookmark(null);
+        setAccessToken(null);
+        setRefreshToken(null);
+        localStorage.removeItem('AccessToken');
+        localStorage.removeItem('RefreshToken');
+        console.log("Logout Success");
+        navigate('/');
     };
 
     const isLoggedIn = authTokens? true : false;
@@ -187,7 +175,7 @@ export default function TopNavComponent () {
                         <MenuItem onClick={handleCloseNavMenu}>
                             <Button 
                                 variant='text' 
-                                to="/sign-up"
+                                to="/register"
                                 component={Link}
                                 style={FontMontserrat}
                             >
@@ -226,22 +214,21 @@ export default function TopNavComponent () {
     // }
 
     return (    
-        <AppBar position="static" style={navContainer}>
-                <Toolbar>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex' } }}>
-                        <Button
-                            to="/"
-                            component={Link}
-                            variant="text"
-                            sx={{ mr: 2 }}
-                            style={logoStyles}
-                        >
-                            Growpal
-                        </Button>
-                    </Box>
+        <AppBar position="static" className='nav-container'>
+            <Toolbar>
+                <Box sx={{ flexGrow: 1, display: { xs: 'flex' } }}>
+                    <Button
+                        to="/"
+                        component={Link}
+                        variant="text"
+                        className='nav-brand-logo'
+                    >
+                        Growpal
+                    </Button>
+                </Box>
 
-                    { isLoggedIn ? LoggedInButtons() : LoggedOutButtons() }
-                </Toolbar>
+                { isLoggedIn ? LoggedInButtons() : LoggedOutButtons() }
+            </Toolbar>
         </AppBar>
 
         // <Container
