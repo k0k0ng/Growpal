@@ -92,6 +92,7 @@ export const AuthProvider = ({children}) => {
     let contextData = {
         user:user,
         userBookmark: userBookmark,
+        accessToken: accessToken,
         setUser:setUser,
         setAccessToken:setAccessToken,
         setRefreshToken:setRefreshToken,

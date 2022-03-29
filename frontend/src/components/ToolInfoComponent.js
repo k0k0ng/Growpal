@@ -158,8 +158,8 @@ export default function ToolInfoComponent(){
             <Grid item xs={12} align='center'><Typography variant='body2'>Title: {title}</Typography></Grid>
             <Grid item xs={12} align='center'><Typography variant='body2'>Description: {description}</Typography></Grid>
             <Grid item xs={12} align='center'><img alt="Tool Image" src={ '/static' + img } /></Grid>
-            <Grid item xs={12} align='center'><Button color='primary' href={"https://"+url}>{url}</Button></Grid>
-            <Grid item xs={12} align='center'><Button color='default' size='small' variant='contained' onClick={_toEditMode}>Edit Tool</Button></Grid>
+            <Grid item xs={12} align='center'><Button color='primary' href={"https://"+url}>Visit Website</Button></Grid>
+            <Grid item xs={12} align='center'><Button color='secondary' size='small' variant='contained' onClick={_toEditMode}>Edit Tool</Button></Grid>
         </Grid>
         );
     }
@@ -173,7 +173,7 @@ export default function ToolInfoComponent(){
             <Grid item xs={12} align='center'><TextField label="Image" defaultValue={img} variant="outlined" onChange={_setImg} /></Grid>
             <Grid item xs={12} align='center'><TextField label="Link" defaultValue={url} variant="outlined" onChange={_setURL} /></Grid>
             <Grid item xs={12} align='center'><Button color='primary' variant='contained' onClick={_saveEditTool}>Save</Button></Grid>
-            <Grid item xs={12} align='center'><Button color='default' size='small' variant='contained' onClick={_toViewMode}>Cancel</Button></Grid>
+            <Grid item xs={12} align='center'><Button color='secondary' size='small' variant='contained' onClick={_toViewMode}>Cancel</Button></Grid>
         </Grid>
         );
     }

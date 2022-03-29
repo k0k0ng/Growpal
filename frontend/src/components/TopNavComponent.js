@@ -16,11 +16,7 @@ import Menu from '@mui/material/Menu';
 import Box from '@mui/material/Box';
 
 
-const FontMontserrat = {
-    fontFamily: 'Montserrat Alternates',
-    textTransform: 'none',
-    color: '#c06115'
-}
+
 
 const pages = [
     {id:1, page_name:'Admin', page_url:'/admin-dashboard'},
@@ -31,7 +27,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function TopNavComponent () {
     const navigate = useNavigate()
-    const {authTokens, setUser, setUserBookmark, setAccessToken, setRefreshToken} = useContext(AuthContext);
+    const {accessToken, setUser, setUserBookmark, setAccessToken, setRefreshToken} = useContext(AuthContext);
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -62,7 +58,7 @@ export default function TopNavComponent () {
         navigate('/');
     };
 
-    const isLoggedIn = authTokens? true : false;
+    const isLoggedIn = accessToken? true : false;
 
 
     function LoggedInButtons (){
@@ -72,9 +68,9 @@ export default function TopNavComponent () {
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                         <Avatar alt="Remy Sharp" src="/static/images/2.jpg" />
                     </IconButton>
-                </Tooltip>
+                </Tooltip>  
                 <Menu
-                    sx={{ mt: '45px', position: 'absolute' }}
+                    sx={{ mt: '45px' }}
                     id="menu-appbar"
                     anchorEl={anchorElUser}
                     anchorOrigin={{
@@ -177,7 +173,7 @@ export default function TopNavComponent () {
                                 variant='text' 
                                 to="/register"
                                 component={Link}
-                                style={FontMontserrat}
+                                className='FontMontserrat'
                             >
                                 Sign Up
                             </Button>
@@ -188,7 +184,7 @@ export default function TopNavComponent () {
                                 variant='text' 
                                 to="/login"
                                 component={Link}
-                                style={FontMontserrat}
+                                className='FontMontserrat'
                             >
                                 Login
                             </Button>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ReactPaginate from 'react-paginate';
 import { Parallax } from 'react-parallax'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import TopNavComponent from '../../components/TopNavComponent';
 import FooterComponent from '../../components/FooterComponent';
@@ -31,7 +31,6 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import SearchIcon from '@mui/icons-material/Search';
 import MailIcon from '@mui/icons-material/Mail';
 
-
 const categories = [
     'All Tools',
     'Marketing',
@@ -49,16 +48,12 @@ const categories = [
     'Accounting'
   ];
 
-  const herobg = "/static/images/HeroBG.png";
-  const bg1 = "/static/images/HeroBG-1.png";
-  const bg2 = "/static/images/HeroBG-2.png";
-  const bg3 = "/static/images/HeroBG-3.png";
-  const bg4 = "/static/images/HeroBG-4.png";
-
+const herobg = "/static/images/HeroBG.png";
 
 export default function HomePage() {
+    const navigate = useNavigate(); 
+
     const {user, userBookmark ,setUserBookmark} = useContext(AuthContext);
-    const [expanded, setExpanded] = useState(() => { return false; });
     const [refresher, setRefresher] = useState(() => { return true; });
     const [activeCategory, setActiveCategory] = useState(() => { return "All Tools"; });
 
@@ -127,10 +122,6 @@ export default function HomePage() {
         });
     },[searchedKey]);
 
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
 
 
 
@@ -281,7 +272,7 @@ export default function HomePage() {
                 <CardHeader
                     avatar={
                         <IconButton aria-label="settings" sx={{ marginLeft:'12px', marginTop:'-3px' , padding:'0px', borderRadius:'0px'}}>
-                            <BookmarkIconToShow isBookmarked={ BookmarkedTools.includes(tool.title) ? true : false } />
+                            <BookmarkIconToShow isBookmarked={ BookmarkedTools.includes(tool.title) ? true : false } sx={{ height:'100px' }} />
                         </IconButton>
                     }
                     sx={{
@@ -292,19 +283,19 @@ export default function HomePage() {
                     onClick={() => _HandleAddBookmarkButtonPressed (tool.id, tool.title)}
                 />
 
-                <CardActionArea sx={{ minHeight:350, padding:'40px 20px 0px 20px' }} onClick={() => console.log(tool.title)}>
+                <CardActionArea sx={{ minHeight:350, padding:'40px 20px 0px 20px' }} onClick={() => {console.log(tool.title); navigate("/view-tool/"+tool.id)}} className='card-action-area'>
                     <img alt="Tool Image" src={ '/static' + tool.image } className='tool-image' />
                     <CardContent sx={{marginBottom:'20px'}}>
-                        <Typography gutterBottom variant="h6" component="div" align='center' fontFamily='Montserrat Alternates' sx={{ lineHeight:'26px' }}>
+                        <Typography gutterBottom variant="h6" component="div" align='center' className='tool-title'>
                             { tool.title }
                         </Typography>
-                        <Typography variant="body2" fontFamily='Montserrat Alternates' noWrap>
+                        <Typography variant="body2" sx={{ }} className='tool-description'>
                             { tool.description }
                         </Typography>
                     </CardContent>
                     <CardContent>
                         {tool.categories.map((tool_category) => (
-                            <Chip key={tool_category.id} label={tool_category.name} sx={{margin:'3px', color:'#fff'}} />
+                            <Chip key={tool_category.id} label={tool_category.name} className='tool-category-chip' />
                         ))} 
                     </CardContent>
                 </CardActionArea>
@@ -313,9 +304,14 @@ export default function HomePage() {
       );
     });
 
+
     return (
-        <Box component='div'>
+        <Box component='div' sx={{ position:'absolute' }}>
             <TopNavComponent /> 
+
+            {/* <Box sx={{ position:'relative', display:'block', backgroundColor:'gray', height:'100vh' }}>
+
+            </Box> */}
 
             <Parallax bgImage={herobg} strength={200}>
                 
@@ -353,18 +349,6 @@ export default function HomePage() {
                             <KeyboardDoubleArrowDownIcon className='hero-arrow-down-icon' />
                         </IconButton>
                     </Box>
-
-
-                    {/* <Grid container>
-                        <div style={circles-div}>
-                            <div style={ circle-1 } />
-                            <div style={ circle-2 } />
-                            <div style={ circle-3 } />
-                            <div style={ circle-4 } />
-                            <div style={ circle-5 } />
-                            <div style={ circle-6 } />
-                        </div> 
-                    </Grid> */}
                 </Box>
             </Parallax>
 
@@ -404,35 +388,7 @@ export default function HomePage() {
                                 </select>
                             </div>
                         </div>
-                    </Grid> 
-                    {/* <Grid item md='auto'>
-                        <div id="custom-select-parent">
-                            <div id="custom-select">
-                                <select onChange={handleFilterChange}>
-                                    <option value="None">Filter</option>
-                                    <option value="All Deals">All Deals</option>
-                                    <option value="Freemium">Freemium</option>
-                                    <option value="Premium">Premium</option>
-                                    <option value="Unlimited">Unlimited</option>
-                                </select>
-                            </div>
-                        </div>                            
-                    </Grid>
-
-                    <Grid item md='auto'>
-                        <div id="custom-select-parent">
-                            <div id="custom-select">
-                                <select onChange={handleOrderChange}>
-                                    <option value="0">Sort</option>
-                                    <option value={"Most Popular"}>Most Popular</option>
-                                    <option value={"Least Popular"}>Least Popular</option>
-                                    <option value={"Latest"}>Latest</option>
-                                    <option value={"Oldest"}>Oldest</option>
-                                </select>
-                            </div>
-                        </div>
-                    </Grid> */}
-                    
+                    </Grid>                     
                 </Grid>
             </Box>
             <Box component="div" className='tools-contents-div'>
@@ -487,48 +443,6 @@ export default function HomePage() {
 
             <Box component="div" className='contact-us-div'>
                 <Grid container>
-                    {/* <Grid sx={{ position:'relative' }}>
-                        <Paper style={{
-                            height: '45px',
-                            width: '45px',
-                            backgroundColor: '#c06115',
-                            borderRadius: '50%',
-                            position: 'absolute',
-                            top:'10%',
-                            left:'100px',
-                        }}></Paper>
-
-                        <Paper style={{
-                            height: '90px',
-                            width: '90px',
-                            backgroundColor: '#434743',
-                            borderRadius: '50%',
-                            position: 'absolute',
-                            top:'45%',
-                            left:'170px',
-                        }}></Paper>
-
-                        <Paper style={{
-                            height: '40px',
-                            width: '40px',
-                            backgroundColor: '#c06115',
-                            borderRadius: '50%',
-                            position: 'absolute',
-                            top:'52%',
-                            left:'1780px',
-                        }}></Paper>
-
-                        <Paper style={{
-                            height: '100px',
-                            width: '100px',
-                            backgroundColor: '#434743',
-                            borderRadius: '50%',
-                            position: 'absolute',
-                            top:'80%',
-                            left:'1580px',
-                        }}></Paper>
-
-                    </Grid> */}
                     <Grid item className='contact-us-left-container' md={6} >
                         <Box component='div'>
                             <Typography 

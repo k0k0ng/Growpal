@@ -63,7 +63,7 @@ export default function LoginPage () {
 
     return (
         <Box component='div' sx={{ height:'100vh', display:'flex', alignItems:'center' }} >
-            <Grid container spacing={1} style={{ border:'1px solid magenta' }}>
+            <Grid container spacing={1}>
                 <Grid item xs={12} align="center">
                     <Typography compenent="h4" variant="h4" className='register-header' sx={{ margin:'2% 0px' }}>
                         Sign In
