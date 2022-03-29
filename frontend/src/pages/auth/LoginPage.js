@@ -58,59 +58,82 @@ export default function LoginPage () {
             alert('Something went wrong!');
         }
         
-        // const requestOptions = {
-        //     method: 'POST',
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify({
-        //         email: email,
-        //         password: password,
-        //     }),
-        // };
-
-        // let responseData = fetch('/api/token/', requestOptions);
-        // let dAtA = await (await responseData).json()
-        // console.log("Access: "+dAtA.access);
-        // console.log("Refresh: "+dAtA.refresh);
     }
 
 
     return (
-        <Box component='div'>
-            <Grid container spacing={1} style={{ marginTop:"100px" }}>
+        <Box component='div' sx={{ height:'100vh', display:'flex', alignItems:'center' }} >
+            <Grid container spacing={1} style={{ border:'1px solid magenta' }}>
                 <Grid item xs={12} align="center">
-                    <Typography compenent="h4" variant="h4">
+                    <Typography compenent="h4" variant="h4" className='register-header' sx={{ margin:'2% 0px' }}>
                         Sign In
                     </Typography>
                 </Grid>
-                <Grid item xs={12} align="center">
-                    <FormControl component="fieldset">
-                        <FormHelperText>
-                            Fill in all the forms.
-                        </FormHelperText>
-                        <TextField id="email" label="Email" name='email' value={email || ''} variant="outlined" required onChange={_handleEmailChange} />
+                <Grid item xs={12} align="center" sx={{ margin:'1% 0px' }}>
+                    <FormControl component="fieldset" sx={{ width:'20%' }} className='register-fields'>
+                        <TextField 
+                            id="email" 
+                            label="Email" 
+                            name='email' 
+                            value={email || ''} 
+                            variant="outlined" 
+                            InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
+                            InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
+                            required 
+                            onChange={_handleEmailChange} 
+                        />
                     </FormControl>
                 </Grid>
-                <Grid item xs={12} align="center">
-                    <FormControl component="fieldset">
-                        <TextField id="password" label="Password" name='password' variant="outlined" required onChange={_handlePasswordChange} />
+                <Grid item xs={12} align="center" sx={{ margin:'1% 0px' }}>
+                    <FormControl component="fieldset" sx={{ width:'20%' }} className='register-fields'>
+                        <TextField 
+                            id="password" 
+                            label="Password" 
+                            name='password' 
+                            variant="outlined" 
+                            InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
+                            InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
+                            required 
+                            onChange={_handlePasswordChange} 
+                        />
                     </FormControl>
                 </Grid>
-                <Grid item xs={12} align="center" >
-                    <Button variant="text" color="primary" to="/forgot-password" component={Link}>
+                <Grid item xs={12} align="center" sx={{ margin:'0 0 2% 0px' }}>
+                    <Button 
+                        variant="text"
+                        color="primary" 
+                        to="/forgot-password" 
+                        sx={{ fontFamily:'Montserrat Alternates' }}
+                        component={Link}
+                    >
                         Forgot Password
                     </Button>
                 </Grid>
                 <Grid item xs={12} align="center" >
-                    <Button variant="contained" color="primary" onClick={_handleSignInButtonPressed}>
+                    <Button 
+                        variant="contained" 
+                        color="primary" 
+                        className='contact-us-right-container-send-button'
+                        sx={{ margin:'0px 1%' }}
+                        onClick={_handleSignInButtonPressed}
+                    >
                         Sign In
                     </Button>
-                    <Button variant="contained" color="secondary" to="/" component={Link}>
+                    <Button 
+                        variant="contained" 
+                        color="secondary"
+                        className='contact-us-right-container-send-button' 
+                        sx={{ margin:'0px 1%' }}
+                        to="/" 
+                        component={Link}
+                    >
                         Cancel
                     </Button>
                 </Grid>
                 
             </Grid>
         </Box>
+
     );
     
 }

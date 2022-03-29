@@ -76,51 +76,99 @@ export default function RegisterPage () {
 
 
     return (
-        <Box component='div'>
-            <Grid container spacing={1} style={{ marginTop:"100px" }}>
+        <Box component='div' sx={{ height:'100vh', display:'flex', alignItems:'center' }}>
+            <Grid container spacing={4}>
                 <Grid item xs={12} align="center">
-                    <Typography compenent="h4" variant="h4">
+                    <Typography compenent="h4" variant="h4" className='register-header'>
                         Create an account
                     </Typography>
                 </Grid>
                 <Grid item xs={12} align="center">
-                    <FormControl component="fieldset">
-                        <FormHelperText>
-                            Fill in all the forms.
-                        </FormHelperText>
-                        <TextField id="email" label="Email" variant="outlined" required onChange={_handleEmailChange} />
+                    <FormControl component="fieldset" sx={{ width:'20%' }} className='register-fields'>
+                        <TextField 
+                            id="email" 
+                            label="Email" 
+                            variant="outlined" 
+                            InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
+                            InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
+                            required
+                            onChange={_handleEmailChange} 
+                        />
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} align="center">
-                    <FormControl component="fieldset">
-                        <TextField id="first_name" label="First Name" variant="outlined" required onChange={_handleFirstNameChange} />
+                    <FormControl component="fieldset" sx={{ width:'20%' }} className='register-fields'>
+                        <TextField 
+                            id="first_name" 
+                            label="First Name" 
+                            variant="outlined"
+                            InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
+                            InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
+                            required 
+                            onChange={_handleFirstNameChange} 
+                        />
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} align="center">
-                    <FormControl component="fieldset">
-                        <TextField id="last_name" label="Last Name" variant="outlined" required onChange={_handleLastNameChange} />
+                    <FormControl component="fieldset" sx={{ width:'20%' }} className='register-fields'>
+                        <TextField 
+                            id="last_name" 
+                            label="Last Name" 
+                            variant="outlined" 
+                            InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
+                            InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
+                            required 
+                            onChange={_handleLastNameChange} 
+                        />
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} align="center">
-                    <FormControl component="fieldset">
-                        <TextField id="password1" label="Password" variant="outlined" required onChange={_handlePasswordChange} />
+                    <FormControl component="fieldset" sx={{ width:'20%' }} className='register-fields'>
+                        <TextField 
+                            id="password1" 
+                            label="Password" 
+                            variant="outlined" 
+                            InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
+                            InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
+                            required 
+                            onChange={_handlePasswordChange} 
+                        />
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} align="center">
-                    <FormControl component="fieldset">
-                        <TextField id="password2" label="Confirm Password" variant="outlined" required onChange={_handleRePasswordChange} />
+                    <FormControl component="fieldset" sx={{ width:'20%' }} className='register-fields'>
+                        <TextField 
+                            id="password2" 
+                            label="Confirm Password" 
+                            variant="outlined" 
+                            InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
+                            InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
+                            required 
+                            onChange={_handleRePasswordChange} 
+                        />
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} align="center">
-                    <Button variant="contained" color="primary" onClick={_handleRegisterButtonPressed}>
+                    <Button 
+                        variant="contained" 
+                        color="primary" 
+                        contact-us-right-container-send-button
+                        onClick={_handleRegisterButtonPressed} 
+                        sx={{ margin:'0px 2%' }}
+                        className='contact-us-right-container-send-button'
+                    >
                         Register
                     </Button>
-                    <Button variant="contained" color="secondary" to="/" component={Link}>
+                    <Button 
+                        variant="contained" 
+                        color="secondary" 
+                        to="/" 
+                        component={Link} 
+                        sx={{ margin:'0px 2%' }}
+                        className='contact-us-right-container-send-button'
+                    >
                         Cancel
                     </Button>
-                </Grid>
-                <Grid item xs={12} align="center">
-                    
                 </Grid>
             </Grid>
         </Box>

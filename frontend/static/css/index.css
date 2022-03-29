@@ -466,11 +466,21 @@ select::-ms-expand {
 
 /* === Contact Us > Home Page END === */
 
+/* --- Regiter Account Page --- */
+.register-header {
+  font-family: "Montserrat Alternates";
+  color: #434743;
+}
+
 /*  --- Media Query for Large Laptop --- */
 @media only screen and (max-width: 1440px) {
   .hero-image {
     max-width: 85%;
     /* padding: 5%; */
+  }
+
+  .register-fields {
+    width: 30%;
   }
 }
 
@@ -499,6 +509,10 @@ select::-ms-expand {
 
   .contact-us-left-container-sub-header {
     font-size: 16px;
+  }
+
+  .register-fields {
+    width: 40%;
   }
 }
 
@@ -558,6 +572,10 @@ select::-ms-expand {
   .contact-us-input-field {
     width: 100%;
   }
+
+  .register-fields {
+    width: 60%;
+  }
 }
 
 /*  --- Media Query for Mobile --- */
@@ -600,5 +618,9 @@ select::-ms-expand {
 
   .contact-us-right-container {
     padding: 0 40px 13% 40px;
+  }
+
+  .register-fields {
+    width: 80%;
   }
 }
