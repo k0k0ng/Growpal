@@ -214,6 +214,7 @@ body {
 .tools-contents-div {
   position: relative;
   display: flex;
+  min-height: 470px;
   width: 100%;
   padding-top: 25px;
   padding-bottom: 45px;
@@ -341,6 +342,9 @@ select::-ms-expand {
 }
 
 /* --- Pagination Button Styles > Tools > Home Page --- */
+.tools-container {
+  height: 100%;
+}
 
 .tool-image {
   margin-left: 50%;
@@ -399,8 +403,10 @@ select::-ms-expand {
 
 /* --- Contact Us > Tools > Home Page --- */
 .contact-us-div {
+  display: flex;
+  align-items: center;
   background-color: #f3f4ed;
-  height: 620px;
+  min-height: 620px;
 }
 
 .contact-us-left-container {
@@ -436,6 +442,11 @@ select::-ms-expand {
   display: flex;
   align-items: center;
   padding: 0 0 0 40px;
+}
+
+.contact-us-input-field {
+  width: 70%;
+  margin-bottom: 25px;
 }
 
 .contact-us-right-container-send-button {
@@ -481,6 +492,14 @@ select::-ms-expand {
   .hero-secondary-colored-heading {
     font-size: 42px;
   }
+
+  .contact-us-left-container-header {
+    font-size: 60px;
+  }
+
+  .contact-us-left-container-sub-header {
+    font-size: 16px;
+  }
 }
 
 /*  --- Media Query for Mobile --- */
@@ -509,6 +528,36 @@ select::-ms-expand {
   .hero-secondary-colored-subHeader {
     font-size: 18px;
   }
+
+  .tools-container {
+    display: flex;
+    justify-content: center;
+  }
+  .contact-us-left-container {
+    justify-content: center;
+    padding: 10% 70px 5% 70px;
+  }
+
+  .contact-us-left-container-header {
+    text-align: center;
+  }
+
+  .contact-us-left-container-sub-header {
+    text-align: center;
+    margin-left: 0%;
+  }
+
+  .contact-icons {
+    justify-content: center;
+  }
+
+  .contact-us-right-container {
+    padding: 0 60px 10% 60px;
+  }
+
+  .contact-us-input-field {
+    width: 100%;
+  }
 }
 
 /*  --- Media Query for Mobile --- */
@@ -531,5 +580,25 @@ select::-ms-expand {
 
   .hero-secondary-colored-subHeader {
     font-size: 15px;
+  }
+
+  .tools-search-div {
+    padding-bottom: 75px;
+  }
+
+  .contact-us-left-container {
+    padding: 13% 5% 5% 5%;
+  }
+
+  .contact-us-left-container-header {
+    margin-bottom: 20px;
+  }
+
+  .contact-us-left-container-sub-header {
+    margin-bottom: 20px;
+  }
+
+  .contact-us-right-container {
+    padding: 0 40px 13% 40px;
   }
 }

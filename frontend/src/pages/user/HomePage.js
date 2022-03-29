@@ -64,9 +64,9 @@ export default function HomePage() {
 
     let [allTools, setAllTools] = useState(() => { return []; });
     let [pageNumber, setPageNumber] = useState(() => { return 0; });
-    const ToolsPerPage = 10;
-    const pagesVisited = pageNumber * ToolsPerPage;
-    const pageCount = Math.ceil(allTools.length / ToolsPerPage);
+    let [toolsPerPage, setToolsPerPage] = useState(() => { return 10; });
+    const pagesVisited = pageNumber * toolsPerPage;
+    const pageCount = Math.ceil(allTools.length / toolsPerPage);
     const changePage = ({ selected }) => {
         setPageNumber(selected);
     };
@@ -89,7 +89,18 @@ export default function HomePage() {
     }, [userBookmark])
     
     useEffect(() => {
-        getTools();        
+        getTools();    
+        
+        
+        if( window.innerWidth <  600 ) {
+            setToolsPerPage(6);
+        }else if(window.innerWidth <  900){
+            setToolsPerPage(8);
+        }else if(window.innerWidth <  1200){
+            setToolsPerPage(9);
+        }else if(window.innerWidth <  1536){
+            setToolsPerPage(8);
+        }
     },[]);
     
     
@@ -138,7 +149,7 @@ export default function HomePage() {
     };
 
     const handleOrderChange = (event) => {
-        setOrder( prevValue => prevValue = event.target.value);
+        setActiveCategory( prevValue => prevValue = event.target.value);
     };
 
 
@@ -177,6 +188,7 @@ export default function HomePage() {
         }
 
     },[activeCategory]);
+
 
     const ActiveSidebarMenuButton = (category) => {
         return (
@@ -253,10 +265,17 @@ export default function HomePage() {
     }
 
     const DisplayTools = allTools
-    .slice(pagesVisited, pagesVisited + ToolsPerPage)
+    .slice(pagesVisited, pagesVisited + toolsPerPage)
     .map((tool) => {
       return (
-        <Grid item key={tool.id} md={2.3}>
+        <Grid item 
+            key={tool.id} 
+            xl={2.3}
+            lg={2.9}
+            md={4}
+            sm={5}
+            xs={9}
+        >
             <Card sx={{ maxWidth: 345, backgroundColor:'#546263', color:'#f3f4ed', border:'1px solid #f3f4ed', borderRadius:3 }} elevation={0}>
                 
                 <CardHeader
@@ -355,7 +374,7 @@ export default function HomePage() {
                     spacing={4}
                     justifyContent='center'
                 >
-                    <Grid item md={7} >
+                    <Grid item xs={10} sm={6} md={7} >
                         <Paper
                             component="form"
                             className='tools-search-field-container'
@@ -375,6 +394,17 @@ export default function HomePage() {
                             />
                         </Paper>
                     </Grid>
+                    <Grid item xs='auto' sx={{ display:{md:'none'} }}>
+                        <div id="custom-select-parent">
+                            <div id="custom-select">
+                                <select onChange={handleOrderChange}>
+                                    {categories.map((category) => (
+                                        <option key={category} value={category}>{category}</option>
+                                    ))}  
+                                </select>
+                            </div>
+                        </div>
+                    </Grid> 
                     {/* <Grid item md='auto'>
                         <div id="custom-select-parent">
                             <div id="custom-select">
@@ -409,13 +439,14 @@ export default function HomePage() {
                 <Grid sx={{ flexGrow: 1 }} container spacing={3}>
                     <Grid 
                         item 
-                        lg={2}
+                        lg={2.5}
                         md={3}
-                        sm={4}
-                        xs={5}
                         style={{
                             padding: '0px 0px 50px 50px'
                         }} 
+                        sx={{
+                            display: { xs: 'none', md: 'block' }
+                        }}
                     >
                         <Box component='div' className='sidebar-box-container' >                                   
                             {categories.map((category) => (
@@ -425,14 +456,14 @@ export default function HomePage() {
                     </Grid>
                     <Grid 
                         item 
-                        md={10}
-                        sm={8}
-                        xs={7}
+                        lg={9.5} 
+                        md={8.7}
+                        xs={12}
                         style={{ 
                             padding: '0 0 0 30px'
                         }} 
                     >
-                        <Grid container spacing={4} sx={{ height:'100%' }}>
+                        <Grid container spacing={4} className='tools-container'>
                             {DisplayTools}
 
                             <Grid item xs={12} maxHeight="100px" sx={{ alignSelf: 'end'}}>
@@ -454,9 +485,9 @@ export default function HomePage() {
                 </Grid>
             </Box>
 
-            <Box component="div" className='contact-us-div' >
-                <Grid container height='100%'>
-                    <Grid sx={{ position:'relative' }}>
+            <Box component="div" className='contact-us-div'>
+                <Grid container>
+                    {/* <Grid sx={{ position:'relative' }}>
                         <Paper style={{
                             height: '45px',
                             width: '45px',
@@ -497,9 +528,9 @@ export default function HomePage() {
                             left:'1580px',
                         }}></Paper>
 
-                    </Grid>
+                    </Grid> */}
                     <Grid item className='contact-us-left-container' md={6} >
-                        <Box>
+                        <Box component='div'>
                             <Typography 
                                 variant='h1'
                                 component='h2' 
@@ -511,7 +542,7 @@ export default function HomePage() {
                             <Typography component='p' className='contact-us-left-container-sub-header'>
                                 Tell us your concerns whether you're curious about certain features, pricing, or even bundle deals.
                             </Typography>
-                            <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'end' }} className='contact-icons'>
                                 <IconButton href={"https://www.linkedin.com"} aria-label="menu">
                                     <LinkedInIcon sx={{ fontSize: 34, color: '#434743' }} />
                                 </IconButton>
@@ -535,10 +566,7 @@ export default function HomePage() {
                                 variant="outlined" 
                                 InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
                                 InputLabelProps={{ style: { fontFamily:'Montserrat Alternates', fontStyle: 'italic' } }}
-                                sx={{ 
-                                    width: '70%',
-                                    marginBottom: '25px',                                  
-                                }}
+                                className='contact-us-input-field'
                             />
                             <TextField 
                                 id="outlined-basic" 
@@ -546,10 +574,7 @@ export default function HomePage() {
                                 variant="outlined" 
                                 InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
                                 InputLabelProps={{ style: { fontFamily:'Montserrat Alternates', fontStyle: 'italic' } }}
-                                sx={{ 
-                                    width: '70%',
-                                    marginBottom: '25px',                      
-                                }}
+                                className='contact-us-input-field'
                             />
                             <TextField
                                 id="outlined-multiline-static"
@@ -558,10 +583,7 @@ export default function HomePage() {
                                 rows={4}
                                 InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
                                 InputLabelProps={{ style: { fontFamily:'Montserrat Alternates', fontStyle: 'italic' } }}
-                                sx={{ 
-                                    width: '70%',
-                                    marginBottom: '25px',                   
-                                }}
+                                className='contact-us-input-field'
                             />
                             <Box>
                                 <Button className='contact-us-right-container-send-button' to="/" component={Link}>
