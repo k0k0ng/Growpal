@@ -1,5 +1,4 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'
 import jwt_decode from "jwt-decode";
 
 const AuthContext = createContext()
@@ -8,10 +7,10 @@ export default AuthContext;
 
 
 export const AuthProvider = ({children}) => {
-    const navigate = useNavigate()
 
-    let [accessToken, setAccessToken] = useState(() => localStorage.getItem('AccessToken') ? JSON.parse(localStorage.getItem('AccessToken')) : null)
-    let [refreshToken, setRefreshToken] = useState(() => localStorage.getItem('RefreshToken') ? JSON.parse(localStorage.getItem('RefreshToken')) : null)
+    let [authTokens, setAuthTokens] = useState(()=> localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
+    // let [accessToken, setAccessToken] = useState(() => localStorage.getItem('AccessToken') ? JSON.parse(localStorage.getItem('AccessToken')) : null)
+    // let [refreshToken, setRefreshToken] = useState(() => localStorage.getItem('RefreshToken') ? JSON.parse(localStorage.getItem('RefreshToken')) : null)
     let [user, setUser] = useState(() => localStorage.getItem('AccessToken') ? jwt_decode(localStorage.getItem('AccessToken')) : null)
     let [userBookmark, setUserBookmark] = useState(() => { return []; })
     let [loading, setLoading] = useState(() => { return true; })
@@ -19,39 +18,47 @@ export const AuthProvider = ({children}) => {
 
     let logoutUser = () => {
         setUser(null)
-        setAccessToken(null)
-        setRefreshToken(null)
+        // setAccessToken(null)
+        // setRefreshToken(null)
+        setAuthTokens(null)
         setUserBookmark(null)
-        localStorage.removeItem('AccessToken')
-        localStorage.removeItem('RefreshToken')
-        navigate('/login')
+        // localStorage.removeItem('AccessToken')
+        // localStorage.removeItem('RefreshToken')
+        localStorage.removeItem('authTokens')
     }
 
     let updateToken = async ()=> {
+        // let response = null
+        // let data = null
         
-        let response = null
-        let data = null
-        if(accessToken){
-            response = await fetch('/api/token/refresh/', {
+        if(authTokens === null){
+            setLoading(false);
+            return
+        }
+
+        const response = await fetch('/api/token/refresh/', {
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json'
                 },
-                body:JSON.stringify({'refresh':refreshToken ? refreshToken : ''})
+                body:JSON.stringify({'refresh':authTokens?.refresh})
             })
 
-            data = await response.json()
-        }
-
         if (response !== null){
+            const data = await response.json()
+
             if(response.status === 200){
-                setAccessToken(data.access)
+                setAuthTokens(data)
+                // setAccessToken(data.access)
+                // setRefreshToken(data.refresh)
                 setUser(jwt_decode(data.access))
-                localStorage.setItem('AccessToken', JSON.stringify(data.access))
+                // localStorage.setItem('AccessToken', JSON.stringify(data.access))
+                // localStorage.setItem('RefreshToken', JSON.stringify(data.refresh))
+                localStorage.setItem('authTokens', JSON.stringify(data))
             }
             
         }else{
-            logoutUser()
+            logoutUser();
         }
 
         if(loading) setLoading(false);
@@ -64,12 +71,14 @@ export const AuthProvider = ({children}) => {
         
         let fourMinutes = 1000 * 60 * 4
 
-        let interval = setInterval(()=> {
-            if(accessToken) updateToken()
+        let interval =  setInterval(()=> {
+            if(authTokens){
+                updateToken()
+            }
         }, fourMinutes)
         return ()=> clearInterval(interval)
 
-    }, [accessToken, refreshToken ,loading])
+    }, [authTokens ,loading])
 
 
 
@@ -112,10 +121,12 @@ export const AuthProvider = ({children}) => {
     let contextData = {
         user:user,
         userBookmark: userBookmark,
-        accessToken: accessToken,
+        // accessToken: accessToken,
+        authTokens:authTokens,
         setUser:setUser,
-        setAccessToken:setAccessToken,
-        setRefreshToken:setRefreshToken,
+        // setAccessToken:setAccessToken,
+        // setRefreshToken:setRefreshToken,
+        setAuthTokens:setAuthTokens,
         setUserBookmark: setUserBookmark
     }
 

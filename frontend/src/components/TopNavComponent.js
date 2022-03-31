@@ -28,7 +28,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function TopNavComponent () {
     const navigate = useNavigate()
-    const {accessToken, setUser, setUserBookmark, setAccessToken, setRefreshToken} = useContext(AuthContext);
+    const {authTokens, setUser, setUserBookmark, setAuthTokens} = useContext(AuthContext);
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -56,15 +56,17 @@ export default function TopNavComponent () {
         setAnchorElUser(null);
         setUser(null);
         setUserBookmark(null);
-        setAccessToken(null);
-        setRefreshToken(null);
-        localStorage.removeItem('AccessToken');
-        localStorage.removeItem('RefreshToken');
+        // setAccessToken(null);
+        // setRefreshToken(null);
+        setAuthTokens(null);
+        // localStorage.removeItem('AccessToken');
+        // localStorage.removeItem('RefreshToken');
+        localStorage.removeItem('authTokens');
         console.log("Logout Success");
         navigate('/');
     };
 
-    const isLoggedIn = accessToken? true : false;
+    const isLoggedIn = authTokens? true : false;
 
 
     function LoggedInButtons (){
@@ -93,7 +95,7 @@ export default function TopNavComponent () {
                 >
                     
                     <MenuItem sx={{ padding:'5px 30px', margin:'0px 10px', borderRadius:'10px' }} onClick={handleGoToProfileUserMenu}>
-                        <Typography align="center">Profile</Typography>
+                        <Typography align="center">Bookmark</Typography>
                     </MenuItem>
                     <MenuItem sx={{ padding:'5px 30px', margin:'0px 10px', borderRadius:'10px' }} onClick={handleCloseUserMenu}>
                         <Typography align="center">Settings</Typography>
@@ -199,20 +201,6 @@ export default function TopNavComponent () {
         );
     }
 
-    // const navigate = useNavigate(); 
-
-    // const [toolID, setToolID] = useState(() => {
-    //     return "";
-    // });
-
-    // function _viewToolBtnPressed(){
-    //     navigate("/view-tool/"+toolID)
-    // }
-
-    // function _setToolID(e){
-    //     setToolID( prevValue => prevValue = e.target.value);
-    // }
-
     return (    
         <AppBar position="static" className='nav-container'>
             <Toolbar>
@@ -230,60 +218,6 @@ export default function TopNavComponent () {
                 { isLoggedIn ? LoggedInButtons() : LoggedOutButtons() }
             </Toolbar>
         </AppBar>
-
-        // <Container
-        //     style={navContainer}
-        //     maxWidth="xl"
-        //     disableGutters={true}
-        // >
-        //     <Grid container spacing={3}>
-        //         <Grid item xs={6} align="center">
-        //             <ButtonGroup variant='contained'>
-        //                 <Button 
-        //                     style={{
-        //                         color: 'white',
-        //                         borderRadius: 25,
-        //                         backgroundColor: "#c06115",
-        //                         padding: "10px 30px"
-        //                     }} 
-        //                     to="/" 
-        //                     component={Link}
-        //                 >
-        //                     Sign Up
-        //                 </Button>
-        //                 <Button 
-        //                     style={{
-        //                         color: 'white'
-        //                     }} 
-        //                     to="/" 
-        //                     component={Link}
-        //                     variant={'text'}
-        //                 >
-        //                     Sign In
-        //                 </Button>
-        //                 <Button 
-        //                     style={{
-        //                         color: 'white',
-        //                         borderRadius: 25,
-        //                         backgroundColor: "#c06115",
-        //                         padding: "10px 30px"
-        //                     }} 
-        //                     to="/" 
-        //                     component={Link}
-        //                 >
-        //                     Home
-        //                 </Button>
-        //                 <Button color='primary' to="/login" component={Link}>Login</Button>
-        //                 <Button color='secondary' to="/admin-dashboard" component={Link}>Admin Dashboard</Button>
-        //                 <Button color='primary' to="/create-tool" component={Link}>Create Tool</Button>
-        //             </ButtonGroup>
-        //         </Grid>
-        //         <Grid item xs={6} align="center">
-        //             <TextField label="Tool ID" variant="outlined" onChange={_setToolID}/>
-        //             <Button variant='contained' color='default' size='large' onClick={_viewToolBtnPressed}>View Tool</Button>
-        //         </Grid>
-        //     </Grid>
-        // </Container>
     );
     
 }

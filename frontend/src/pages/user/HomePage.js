@@ -104,7 +104,13 @@ export default function HomePage() {
 
     useEffect(() => {
         if(searchedKey === '') getTools();
-        fetch('/api/get-searched-tool', {
+        
+        GetSearchedTool();
+    },[searchedKey]);
+    
+
+    const GetSearchedTool = async () => {
+        const response = await fetch('/api/get-searched-tool', {
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -112,24 +118,18 @@ export default function HomePage() {
             body:JSON.stringify({
                 keyword: searchedKey
             })
-        }).then((response) =>
-                response.json()
-        ).then((data) => {
-            setAllTools(data.slice(0,10));
         }).catch(err => {
             console.log(err);
         });
-    },[searchedKey]);
 
+        if(response.status === 204){
+            setAllTools([]);
+            return 
+        }
 
-
-
-    function getTools(){
-        fetch('/api/get-all-tools').then((response) => response.json()).then((data) => {
-            setAllTools(data.slice(0,40))
-        });
+        const data = await response.json();
+        setAllTools(data.slice(0,40));
     }
-
 
     const [filter, setFilter] = useState();
     const [order, setOrder] = useState();
@@ -147,8 +147,24 @@ export default function HomePage() {
         setActiveCategory( prevValue => prevValue = event.currentTarget.value);
     };
 
+
+    const getTools = async () => {
+        const response = await fetch('/api/get-all-tools').catch(err => {
+            console.log("-------------------")
+            console.log(err);
+        });
+
+        if(response.status === 204){
+            setAllTools([]);
+            return 
+        }
+
+        const data = await response.json();
+        setAllTools(data.slice(0,40));
+    }
+
     const GetToolsByCategory = async () => {
-        let response = await fetch('/api/get-tool-by-category', {
+        const response = await fetch('/api/get-tool-by-category', {
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -165,7 +181,7 @@ export default function HomePage() {
             return 
         }
 
-        let data = await response.json();
+        const data = await response.json();
         setAllTools(data.slice(0,40));
     }
 
@@ -324,10 +340,6 @@ export default function HomePage() {
     return (
         <Box component='div'>
             <TopNavComponent /> 
-
-            {/* <Box sx={{ position:'relative', display:'block', backgroundColor:'gray', height:'100vh' }}>
-
-            </Box> */}
 
             <Parallax bgImage={herobg} strength={200}>
                 

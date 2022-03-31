@@ -40,8 +40,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
 
         token['email'] = user.email
-        token['first_name'] = user.first_name
-        token['last_name'] = user.last_name
+        token['name'] = user.name
+        token['display_image'] = str(user.display_image)
         token['is_staff'] = user.is_staff
         token['is_superuser'] = user.is_staff
 

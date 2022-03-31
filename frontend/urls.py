@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, admin
+from .views import index
 
 urlpatterns = [
     path('', index),
@@ -12,5 +12,4 @@ urlpatterns = [
     path('view-tool/<str:toolID>', index),
     path('growpal-admin', index),
     path('profile', index),
-    path('sample-admin', admin),
 ]

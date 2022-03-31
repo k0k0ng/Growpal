@@ -226,6 +226,6 @@ DJOSER = {
 }
 
 
-SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
-}
+# SIMPLE_JWT = {
+#    'AUTH_HEADER_TYPES': ('JWT',),
+# }

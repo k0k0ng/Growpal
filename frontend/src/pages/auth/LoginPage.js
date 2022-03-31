@@ -15,7 +15,7 @@ import Box from '@mui/material/Box';
 
 export default function LoginPage () {
     const navigate = useNavigate();
-    const {setAccessToken, setRefreshToken, setUser} = useContext(AuthContext);
+    const {setAuthTokens, setUser} = useContext(AuthContext);
 
     const [email, setEmail] = useState(() => {
         return "";
@@ -34,7 +34,7 @@ export default function LoginPage () {
 
     const _handleSignInButtonPressed = async (e) => {
 
-        let response = await fetch('/api/token/', {
+        const response = await fetch('/api/token/', {
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -45,14 +45,14 @@ export default function LoginPage () {
             })
         })
         
-        let data = await response.json();
-        
         if(response.status === 200){
-            setAccessToken(data.access);
-            setRefreshToken(data.refresh);
+            const data = await response.json();
+
+            setAuthTokens(data);
+            console.log("_-------------------------------------------------_");
+            console.log(jwt_decode(data.access))
             setUser(jwt_decode(data.access));
-            localStorage.setItem('AccessToken', JSON.stringify(data.access));
-            localStorage.setItem('RefreshToken', JSON.stringify(data.refresh));
+            localStorage.setItem('authTokens', JSON.stringify(data));
             navigate('/');
         }else{
             alert('Something went wrong!');

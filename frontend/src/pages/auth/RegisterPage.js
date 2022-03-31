@@ -16,10 +16,7 @@ export default function RegisterPage () {
     const [email, setEmail] = useState(() => {
         return "";
     });
-    const [first_name, setFirstName] = useState(() => {
-        return "";
-    });
-    const [last_name, setLastName] = useState(() => {
+    const [name, setName] = useState(() => {
         return "";
     });
     const [password, setPassword] = useState(() => {
@@ -33,12 +30,8 @@ export default function RegisterPage () {
         setEmail( prevValue => prevValue = e.target.value);
     }
 
-    function _handleFirstNameChange(e) {
-        setFirstName( prevValue => prevValue = e.target.value);
-    }
-
-    function _handleLastNameChange(e) {
-        setLastName( prevValue => prevValue = e.target.value);
+    function _handleNameChange(e) {
+        setName( prevValue => prevValue = e.target.value);
     }
 
     function _handlePasswordChange(e) {
@@ -56,8 +49,7 @@ export default function RegisterPage () {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 email: email,
-                first_name: first_name,
-                last_name: last_name,
+                name: name,
                 password: password,
                 re_password: re_password
             }),
@@ -99,26 +91,13 @@ export default function RegisterPage () {
                 <Grid item xs={12} align="center">
                     <FormControl component="fieldset" sx={{ width:'20%' }} className='register-fields'>
                         <TextField 
-                            id="first_name" 
-                            label="First Name" 
+                            id="name" 
+                            label="Name" 
                             variant="outlined"
                             InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
                             InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
                             required 
-                            onChange={_handleFirstNameChange} 
-                        />
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12} align="center">
-                    <FormControl component="fieldset" sx={{ width:'20%' }} className='register-fields'>
-                        <TextField 
-                            id="last_name" 
-                            label="Last Name" 
-                            variant="outlined" 
-                            InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
-                            InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
-                            required 
-                            onChange={_handleLastNameChange} 
+                            onChange={_handleNameChange} 
                         />
                     </FormControl>
                 </Grid>
@@ -152,7 +131,6 @@ export default function RegisterPage () {
                     <Button 
                         variant="contained" 
                         color="primary" 
-                        contact-us-right-container-send-button
                         onClick={_handleRegisterButtonPressed} 
                         sx={{ margin:'0px 2%' }}
                         className='contact-us-right-container-send-button'

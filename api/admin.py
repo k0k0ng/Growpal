@@ -5,7 +5,18 @@ class ToolAdmin(admin.ModelAdmin):
     list_display = ('title', 'url')
 
 class UserAccountAdmin(admin.ModelAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'is_superuser')
+    list_display = ('email', 'name', 'is_staff', 'is_superuser')
+
+
+from rest_framework_simplejwt import token_blacklist
+
+class OutstandingTokenAdmin(token_blacklist.admin.OutstandingTokenAdmin):
+
+    def has_delete_permission(self, *args, **kwargs):
+        return True # or whatever logic you want
+
+admin.site.unregister(token_blacklist.models.OutstandingToken)
+admin.site.register(token_blacklist.models.OutstandingToken, OutstandingTokenAdmin)
 
 
 
