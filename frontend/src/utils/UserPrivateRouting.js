@@ -5,8 +5,6 @@ import AuthContext from '../context/AuthContext';
 
 const UserPrivateRouting = ({children}) => {
     const {user} = useContext(AuthContext);
-    console.log(user)
-
     return user ? children : <Navigate to="/login" />;
 }
 

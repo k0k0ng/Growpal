@@ -11,6 +11,7 @@ import AdminDashboardPage from './admin/AdminDashboardPage';
 import CreateToolComponent from '../components/CreateToolComponent';
 import ToolInfoComponent from '../components/ToolInfoComponent';
 import HomePage from './user/HomePage';
+import UserProfilePage from './user/UserProfilePage';
 
 import LoginPage from './auth/LoginPage';
 import RegisterPage from './auth/RegisterPage';
@@ -32,8 +33,10 @@ export default function RoutingPage() {
                     <Route exact path='/' element={<HomePage/>} />
                     <Route path='/view-tool/:toolID' element={<ToolInfoComponent />} />
                     
+                    {/* User Private Pages */}
+                    <Route path='/profile' element={<UserPrivateRouting><UserProfilePage/></UserPrivateRouting>} />
 
-                    {/* Auth Pages */}
+                    {/* No Auth Pages */}
                     <Route path='/login' element={<NoAuthRoutings> <LoginPage /> </NoAuthRoutings>} />
                     <Route path='/register' element={<NoAuthRoutings> <RegisterPage/> </NoAuthRoutings>} />
                     <Route path='/activate/:uid/:token' element={<NoAuthRoutings> <ActivateAccount /> </NoAuthRoutings>} />

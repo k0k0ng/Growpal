@@ -9,6 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
+import Divider from '@mui/material/Divider';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -46,6 +47,11 @@ export default function TopNavComponent () {
         setAnchorElUser(null);
     };
 
+    const handleGoToProfileUserMenu = () => {
+        setAnchorElUser(null);
+        navigate('/profile');
+    }
+
     const handleLogoutUserMenu = () => {
         setAnchorElUser(null);
         setUser(null);
@@ -70,7 +76,7 @@ export default function TopNavComponent () {
                     </IconButton>
                 </Tooltip>  
                 <Menu
-                    sx={{ mt: '45px' }}
+                    sx={{ mt: '60px' }}
                     id="menu-appbar"
                     anchorEl={anchorElUser}
                     anchorOrigin={{
@@ -86,16 +92,14 @@ export default function TopNavComponent () {
                     onClose={handleCloseUserMenu}
                 >
                     
-                    <MenuItem onClick={handleCloseUserMenu}>
+                    <MenuItem sx={{ padding:'5px 30px', margin:'0px 10px', borderRadius:'10px' }} onClick={handleGoToProfileUserMenu}>
                         <Typography align="center">Profile</Typography>
                     </MenuItem>
-                    <MenuItem onClick={handleCloseUserMenu}>
-                        <Typography align="center">Account</Typography>
+                    <MenuItem sx={{ padding:'5px 30px', margin:'0px 10px', borderRadius:'10px' }} onClick={handleCloseUserMenu}>
+                        <Typography align="center">Settings</Typography>
                     </MenuItem>
-                    <MenuItem onClick={handleCloseUserMenu}>
-                        <Typography align="center">Dashboard</Typography>
-                    </MenuItem>
-                    <MenuItem onClick={handleLogoutUserMenu}>
+                    <Divider />
+                    <MenuItem sx={{ padding:'5px 30px', margin:'0px 10px', borderRadius:'10px' }} onClick={handleLogoutUserMenu}>
                         <Typography align="center">Logout</Typography>
                     </MenuItem>
                     

@@ -11,5 +11,6 @@ urlpatterns = [
     path('create-tool', index),
     path('view-tool/<str:toolID>', index),
     path('growpal-admin', index),
+    path('profile', index),
     path('sample-admin', admin),
 ]

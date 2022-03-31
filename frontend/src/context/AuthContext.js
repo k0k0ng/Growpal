@@ -24,7 +24,7 @@ export const AuthProvider = ({children}) => {
         setUserBookmark(null)
         localStorage.removeItem('AccessToken')
         localStorage.removeItem('RefreshToken')
-        // navigate('/login')
+        navigate('/login')
     }
 
     let updateToken = async ()=> {
@@ -72,10 +72,9 @@ export const AuthProvider = ({children}) => {
     }, [accessToken, refreshToken ,loading])
 
 
-    useEffect(()=> {
-        if(!user) return;
 
-        fetch('/api/get-user-bookmarked-tools',{
+    const GetUserBookmarkedTools = async () => {
+        let response = await fetch('/api/get-user-bookmarked-tools',{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -83,11 +82,32 @@ export const AuthProvider = ({children}) => {
             body:JSON.stringify({
                 email: user.email
             })
-        }).then((response) => response.json()).then((data) => {
-            setUserBookmark(data.bookmarked_tool)
-        });
+        })
+
+        if(response.status === 204) {
+            setUserBookmark([]);
+            return;
+        }
         
+        let data = await response.json();
+        
+        if(response.status === 200){
+            setUserBookmark(data);
+        }else{
+            alert('Bookmark is empty!');
+            setUserBookmark([]);
+        }
+    }
+    
+
+    useEffect(()=> {
+        if(!user) return;
+
+        GetUserBookmarkedTools()        
     }, [user])
+
+
+
 
     let contextData = {
         user:user,

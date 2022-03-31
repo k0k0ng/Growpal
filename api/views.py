@@ -112,6 +112,22 @@ def get_tool_by_category(request):
         return Response({'No Content': 'Request returns empty.'}, status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(['POST'])
+def get_user_bookmarked_tools(request):
+    user = UserAccount.objects.get(id = request.data['userID'])
+    tools = user.bookmarked_tool.all()
+    if not tools:
+        return Response({'No Content': 'Request returns empty.'}, status=status.HTTP_204_NO_CONTENT)
+
+    if tools.exists():
+        for tool in tools.iterator():
+            tools.append(AllToolSerializer(tool).data)
+
+        return Response(tools, status=status.HTTP_200_OK)
+    else:
+        return Response({'No Content': 'Request returns empty.'}, status=status.HTTP_204_NO_CONTENT)
+
+
 class GetTool(APIView):
     serializer_class = ToolSerializer
     tool_ID = "toolID"
@@ -168,15 +184,19 @@ class BookmarkedTool(APIView):
 
         user.bookmarked_tool.add(tool)
         user.save()        
-
         return Response({'Success': 'Adding tool to bookmark success.'}, status=status.HTTP_201_CREATED)
 
 
 class GetUserBookmarkedTools(APIView):
     def post(self, request, format=None):
         user = UserAccount.objects.get(email=request.data['email'])
-        if user:
-            return Response(UserAccountInfoSerializer(user).data, status=status.HTTP_200_OK)
+        queryset = user.bookmarked_tool.all()
+        tools = []
+        if queryset.exists():
+            for tool in queryset.iterator():
+                tools.append(AllToolSerializer(tool).data)
+
+            return Response(tools, status=status.HTTP_200_OK)
         else:
             return Response({'No Content': 'Request returns empty.'}, status=status.HTTP_204_NO_CONTENT)
 

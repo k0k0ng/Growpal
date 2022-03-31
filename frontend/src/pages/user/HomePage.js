@@ -86,7 +86,6 @@ export default function HomePage() {
     useEffect(() => {
         getTools();    
         
-        
         if( window.innerWidth <  600 ) {
             setToolsPerPage(6);
         }else if(window.innerWidth <  900){
@@ -118,7 +117,7 @@ export default function HomePage() {
         ).then((data) => {
             setAllTools(data.slice(0,10));
         }).catch(err => {
-            // console.log(err);
+            console.log(err);
         });
     },[searchedKey]);
 
@@ -127,7 +126,7 @@ export default function HomePage() {
 
     function getTools(){
         fetch('/api/get-all-tools').then((response) => response.json()).then((data) => {
-            setAllTools(data.slice(0,50))
+            setAllTools(data.slice(0,40))
         });
     }
 
@@ -158,7 +157,7 @@ export default function HomePage() {
                 category: activeCategory
             })
         }).catch(err => {
-            // console.log(err);
+            console.log(err);
         });
 
         if(response.status === 204){
@@ -167,7 +166,7 @@ export default function HomePage() {
         }
 
         let data = await response.json();
-        setAllTools(data.slice(0,50));
+        setAllTools(data.slice(0,40));
     }
 
     useEffect(() => {
@@ -206,6 +205,31 @@ export default function HomePage() {
     };
 
 
+    const GetUserBookmarkedTools = async () => {
+        let response = await fetch('/api/get-user-bookmarked-tools',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                email: user.email
+            })
+        })
+        if(response.status === 204) {
+            setUserBookmark([]);
+            return;
+        }
+
+        let data = await response.json();
+        
+        if(response.status === 200){
+            setUserBookmark(data);
+        }else{
+            alert('Bookmark is empty!');
+            setUserBookmark();
+        }
+    }
+
     const _HandleAddBookmarkButtonPressed = (toolID) => {
         if(!user){
             alert("Please login.")
@@ -225,28 +249,20 @@ export default function HomePage() {
 
             if(response.status === 404) return;
 
-            fetch('/api/get-user-bookmarked-tools',{
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({
-                    email: user.email
-                })
-            }).then((response) => response.json()).then((data) => {
-                setUserBookmark(data.bookmarked_tool)
-            });        
+            GetUserBookmarkedTools()       
             
             setRefresher(!refresher)            
         });
     }
 
     
+    
+
 
     const BookmarkIconToShow = (props) => {
         if (props.isBookmarked) {
             return (
-                <BookmarkIcon sx={{fontSize:'35px', padding:'0px', color:'#434743'}}  />          
+                <BookmarkIcon sx={{fontSize:'35px', padding:'0px', color:'#c06115'}}  />          
             )
         }else{
             return (
@@ -306,7 +322,7 @@ export default function HomePage() {
 
 
     return (
-        <Box component='div' sx={{ position:'absolute' }}>
+        <Box component='div'>
             <TopNavComponent /> 
 
             {/* <Box sx={{ position:'relative', display:'block', backgroundColor:'gray', height:'100vh' }}>
