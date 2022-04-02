@@ -49,13 +49,13 @@ export default function TopNavComponent () {
 
     const handleGoToProfileBookmarks = () => {
         setAnchorElUser(null);
-        localStorage.setItem('BookmarkPanel', "Bookmark")
+        localStorage.setItem('PanelToShow', "Bookmark")
         navigate('/profile');
     }
 
     const handleGoToProfileSettings = () => {
         setAnchorElUser(null);
-        localStorage.setItem('BookmarkPanel', "Settings")
+        localStorage.setItem('PanelToShow', "Settings")
         navigate('/profile');
     }
 

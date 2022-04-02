@@ -420,7 +420,21 @@ select::-ms-expand {
   justify-content: center;
 }
 
-.pagination-buttons a {
+.pagination-buttons-profile {
+  font-family: "Montserrat Alternates";
+  font-size: 14px;
+  font-weight: 400;
+  width: 80%;
+  height: 40px;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  padding: 0;
+  padding-right: 2%;
+}
+
+.pagination-buttons a, .pagination-buttons-profile a {
   padding: 10px;
   margin: 8px;
   border-radius: 5px;
@@ -436,6 +450,11 @@ select::-ms-expand {
 }
 
 .pagination-buttons a:hover {
+  color: #f3f4ed;
+  background-color: #c06115;
+}
+
+.pagination-buttons-profile a:hover {
   color: #f3f4ed;
   background-color: #c06115;
 }
