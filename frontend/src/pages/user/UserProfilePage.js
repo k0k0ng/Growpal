@@ -7,58 +7,43 @@ import TopNavComponent from '../../components/TopNavComponent';
 import FooterComponent from '../../components/FooterComponent';
 import AuthContext from '../../context/AuthContext';
 
-import ButtonGroup from '@mui/material/ButtonGroup';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Divider from'@mui/material/Divider';
+import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
+import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Container from '@mui/material/Container';
-import InputBase from '@mui/material/InputBase';
-import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import Divider from'@mui/material/Divider';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
-import CardActions from '@mui/material/CardActions';
-import CardMedia from '@mui/material/CardMedia';
-import Tooltip from '@mui/material/Tooltip';
+import Box from '@mui/material/Box';
 
 import ListSubheader from '@mui/material/ListSubheader';
-import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
 import FormControl from '@mui/material/FormControl';
+import Collapse from '@mui/material/Collapse';
+import List from '@mui/material/List';
 
-
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
-import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
-import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-
-import Dialog from '@mui/material/Dialog';
+import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
 
-import { CardActionArea } from '@mui/material';
-
-
-import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
+import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 
+import { CardActionArea } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 const Input = styled('input')({
@@ -133,7 +118,7 @@ export default function UserProfilePage(){
             return
         }
 
-        fetch('/api/add-to-bookmark',{
+        fetch('/api/add-remove-tool-to-bookmark',{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'

@@ -68,3 +68,11 @@ class UpdateUserAccountNameImageSerializer(serializers.ModelSerializer):
         model = UserAccount
         fields = ('email', 'name', 'display_image')
 
+
+class AlternativeToolsSerializer(serializers.ModelSerializer):
+    anternative_tool = ToolSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Tool
+        fields = ('title', 'anternative_tool')
+

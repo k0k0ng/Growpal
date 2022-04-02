@@ -252,7 +252,7 @@ export default function HomePage() {
             return
         }
 
-        fetch('/api/add-to-bookmark',{
+        fetch('/api/add-remove-tool-to-bookmark',{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'

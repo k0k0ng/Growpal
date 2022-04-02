@@ -136,6 +136,22 @@ def get_user_bookmarked_tools(request):
     else:
         return Response({'No Content': 'Request returns empty.'}, status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['POST'])
+def get_tool_alternative_tools(request):
+    tool = Tool.objects.get(id = request.data['toolID'])
+
+    if not tool: Response({'Not Found': 'Tool info not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    queryset = tool.anternative_tool.all()
+    tools = []
+    if queryset.exists():
+        for tool in queryset.iterator():
+            tools.append(AllToolSerializer(tool).data)
+
+        return Response(tools, status=status.HTTP_200_OK)
+    else:
+        return Response({'No Content': 'Request returns empty.'}, status=status.HTTP_204_NO_CONTENT)
+
 
 class GetTool(APIView):
     serializer_class = ToolSerializer

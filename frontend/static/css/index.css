@@ -203,6 +203,18 @@ body {
 }
 /* === Hero > Home Page === */
 
+
+/* View Tool Page */
+.alternative-tools-div {
+  position: relative;
+  display: flex;
+  min-height: 470px;
+  width: 100%;
+  padding-top: 25px;
+  background-color: #546263;
+}
+
+
 /* --- Tools > Home page --- */
 .tools-search-div {
   position: relative;
@@ -397,6 +409,26 @@ select::-ms-expand {
   color: #434743;
   height: 140px;
 }
+
+
+.tool-info-description{
+  height: auto;
+  margin-bottom: 5%;
+}
+
+.tool-info-description pre {
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;
+  text-align: start;
+  line-height: 26px;
+  color: #f3f4ed;
+  font-family: 'Montserrat Alternates' !important;
+}
+
+
 
 .tool-category-chip {
   margin: 3px;
