@@ -51,7 +51,7 @@ class RegisterAccountSerializer(serializers.ModelSerializer):
 class UserCreateSerializer(UserCreateSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'name', 'password')
+        fields = ('id', 'email', 'name', 'image', 'password')
 
 
 class UserAccountInfoSerializer(serializers.ModelSerializer):
@@ -60,4 +60,11 @@ class UserAccountInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
         fields = ('email', 'bookmarked_tool')
+
+
+class UpdateUserAccountNameImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserAccount
+        fields = ('email', 'name', 'display_image')
 

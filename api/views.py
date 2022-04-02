@@ -1,7 +1,7 @@
 from queue import Empty
 from rest_framework import generics, status
 from rest_framework.permissions import IsAdminUser
-from .serializers import UpdateToolSerializer, ToolSerializer, CategorySerializer, CreateToolSerializer, AllToolSerializer, UserAccountInfoSerializer
+from .serializers import UpdateToolSerializer, ToolSerializer, CategorySerializer, CreateToolSerializer, AllToolSerializer, UserAccountInfoSerializer, UpdateUserAccountNameImageSerializer
 from .models import Category, Tool, UserAccount
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -113,6 +113,15 @@ def get_tool_by_category(request):
 
 
 @api_view(['POST'])
+def get_user_name_and_display_image(request):
+
+    user = UserAccount.objects.get(email=request.data['email'])
+    if not user: return Response({'No Content': 'Request returns empty.'}, status=status.HTTP_204_NO_CONTENT)
+
+    return Response(UpdateUserAccountNameImageSerializer(user).data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
 def get_user_bookmarked_tools(request):
     user = UserAccount.objects.get(id = request.data['userID'])
     tools = user.bookmarked_tool.all()
@@ -155,7 +164,6 @@ class UpdateTool(APIView):
             image = serializer.data.get('image')
             url = serializer.data.get('url')
             queryset = Tool.objects.filter(id=id)
-            # print (len(queryset), flush=True)
             if queryset.exists():
                 tool = queryset[0]
                 tool.title = title
@@ -166,6 +174,19 @@ class UpdateTool(APIView):
                 return Response(ToolSerializer(tool).data, status=status.HTTP_200_OK)
             return Response({'Tool Not Found': 'Invalid Room Code'}, status=status.HTTP_404_NOT_FOUND)
         return Response({'Bad Request': 'Code parameter not found in request.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PATCH'])
+def update_user_account_info(request):
+    user_account = UserAccount.objects.get(email=request.data['email'])
+    
+    if not user_account: return Response({'Bad Request': 'Something went wrong validating account details. Please login again.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    user_account.name = request.data['name']
+    user_account.display_image = request.data['display_image']
+    user_account.save(update_fields=['name', 'display_image'])
+    return Response({'Update Success': 'Updating UserAccount display and/or name successful.'}, status=status.HTTP_200_OK)    
+
 
 
 class BookmarkedTool(APIView):

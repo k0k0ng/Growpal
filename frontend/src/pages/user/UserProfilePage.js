@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
+import axios from 'axios';
 
 import TopNavComponent from '../../components/TopNavComponent';
 import FooterComponent from '../../components/FooterComponent';
@@ -43,6 +44,7 @@ import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -64,10 +66,22 @@ const Input = styled('input')({
 
 
 export default function UserProfilePage(){
-    const navigate = useNavigate();   
-    const {user, userBookmark ,setUserBookmark} = useContext(AuthContext);
-    const [showBookmarkPanel, setShowBookmarkPanel] = useState(() => {return true;})
+    const navigate = useNavigate();
+    const [refresher, setRefresher] = useState(() => { return true; });
+    const {user, UserAccountName, UserAccountImage, userBookmark ,setUserBookmark, resetUser, setResetUser} = useContext(AuthContext);
     let BookmarkedTools = [];
+
+    const [PanelToShow, setPanelToShow] = useState(() => { 
+        if(localStorage.getItem('BookmarkPanel')){
+            return localStorage.getItem('BookmarkPanel');
+        }
+
+        return "Settings";
+    })
+
+    useEffect(()=> {
+        localStorage.removeItem('BookmarkPanel');
+    }, [PanelToShow])
 
     let [pageNumber, setPageNumber] = useState(() => { return 0; });
     let [toolsPerPage, setToolsPerPage] = useState(() => { return 10; });
@@ -76,9 +90,6 @@ export default function UserProfilePage(){
     const changePage = ({ selected }) => {
         setPageNumber(selected);
     };
-
-
-    console.log(user);
     
     useEffect(()=> {
         if(!userBookmark) return;
@@ -212,41 +223,30 @@ export default function UserProfilePage(){
     }
 
     const [hasChanges, setHasChanges] = useState(() => {return false;});
-    const [emailField, setEmailField] = useState(() => {return "";});
-    const [firstNameField, setFirstNameField] = useState(() => {return "";});
-    const [lastNameField, setLastNameField] = useState(() => {return "";});
+    const [NameField, setNameField] = useState(() => {return "";});
     const [uploadedPhoto, setUploadedPhoto] = useState(() => {return null;});
-    const [openEditEmail, setOpenEditEmail] = useState(() => {return false;});
-    const [openEditFirstName, setOpenEditFirstName] = useState(() => {return false;});
-    const [openEditLastName, setOpenEditLastName] = useState(() => {return false;});
+    const [openEditName, setOpenEditName] = useState(() => {return false;});
     const [openUploadPhoto, setOpenUploadPhoto] = useState(() => {return false;});
 
-    const ShowEditEmail = () => {
-        setOpenEditEmail(!openEditEmail);
-    };
-    const ShowEditFirstName = () => {
-        setOpenEditFirstName(!openEditFirstName);
-    };
-    const ShowEditLastName = () => {
-        setOpenEditLastName(!openEditLastName);
+    useEffect(() => {
+        setNameField(UserAccountName)
+    }, [UserAccountName])
+
+    // useEffect(() => {
+    //     setUploadedPhoto(UserAccountImage)
+    //     console.log(uploadedPhoto)
+    // }, [UserAccountImage])
+    
+    const ShowEditName = () => {
+        setOpenEditName(!openEditName);
     };
     const ShowUploadPhoto = () => {
         setOpenUploadPhoto(!openUploadPhoto);
     };
 
-    const ChangeEmailField = (e) => {
+    const ChangeNameField = (e) => {
         setHasChanges(true);
-        setEmailField(e.target.value);
-    }
-
-    const ChangeFirstNameField = (e) => {
-        setHasChanges(true);
-        setFirstNameField(e.target.value);
-    }
-
-    const ChangeLastNameField = (e) => {
-        setHasChanges(true);
-        setLastNameField(e.target.value);
+        setNameField(e.target.value);
     }
 
     const ChangeUploadPhoto = (e) => {
@@ -254,14 +254,8 @@ export default function UserProfilePage(){
         setUploadedPhoto(prevValue => prevValue = e.target.files[0]);
     }
 
-    useEffect(()=> {
-        console.log(uploadedPhoto)
-    },[uploadedPhoto])
-
     const CancelChangeConfirmed = () => {
-        setEmailField("");
-        setFirstNameField("");
-        setLastNameField("");
+        setNameField("");
         setHasChanges(false);
         setUploadedPhoto(null);
         setShowCancelConfirmation(false);
@@ -269,6 +263,26 @@ export default function UserProfilePage(){
 
 
     const [ShowCancelConfirmation, setShowCancelConfirmation] = useState(false);
+
+    const SaveButtonClicked = () => {
+        let formField = new FormData()
+        formField.append('email', user.email)
+        formField.append('name', NameField !== "" ? NameField : user.name)
+        formField.append('display_image', uploadedPhoto !== null ? uploadedPhoto : user.display_image)
+
+        axios({
+            method: 'PATCH',
+            url:'/api/update-account-name-image',
+            data: formField,
+            xsrfCookieName: 'csrftoken',
+            xsrfHeaderName: 'X-CSRFTOKEN',
+        }).then(response=>{
+            console.log("========== Activate Reset User ================")
+            setResetUser(!resetUser);
+        });
+
+        setHasChanges(false);
+    }
 
     const ShowCancelConfirmationOpen = () => {
         setShowCancelConfirmation(true);
@@ -287,7 +301,7 @@ export default function UserProfilePage(){
                         color="primary" 
                         className='contact-us-right-container-send-button'
                         sx={{ margin:'0px 1%' }}
-                        onClick={() => {}}
+                        onClick={SaveButtonClicked}
                     >
                         Save
                     </Button>
@@ -377,81 +391,34 @@ export default function UserProfilePage(){
                             </ListSubheader>
                         }
                     >
-                        <ListItemButton onClick={ShowEditEmail}>
+                        <ListItemButton>
                             <ListItemIcon>
                                 <EmailRoundedIcon sx={{ color:'#c06115' }} />
                             </ListItemIcon>
                             <ListItemText primary={user.email} primaryTypographyProps={{ fontFamily:'Montserrat Alternates' }} />
-                            {openEditEmail ? <ExpandLess sx={{ color:'#546263' }} /> : <ExpandMore sx={{ color:'#546263' }} />}
                         </ListItemButton>
-                        <Collapse in={openEditEmail} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                            <ListItemButton sx={{ pl: 4 }}>
-                                <FormControl component="fieldset" sx={{ width:'90%' }} className='register-fields'>
-                                    <TextField 
-                                        id="email" 
-                                        label="Email" 
-                                        name='email' 
-                                        value={emailField === "" ? user.email : emailField} 
-                                        variant="outlined" 
-                                        InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
-                                        InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
-                                        required 
-                                        onChange={ChangeEmailField} 
-                                    />
-                                </FormControl>
-                            </ListItemButton>
-                            </List>
-                        </Collapse>
 
-                        <ListItemButton onClick={ShowEditFirstName}>
+                        <ListItemButton onClick={ShowEditName}>
                             <ListItemIcon>
                                 <AssignmentIndRoundedIcon sx={{ color:'#c06115' }} />
                             </ListItemIcon>
-                            <ListItemText primary={user.first_name} primaryTypographyProps={{ fontFamily:'Montserrat Alternates' }} />
-                            {openEditFirstName ? <ExpandLess sx={{ color:'#546263' }} /> : <ExpandMore sx={{ color:'#546263' }} />}
+                            <ListItemText primary={UserAccountName} primaryTypographyProps={{ fontFamily:'Montserrat Alternates' }} />
+                            {openEditName ? <ExpandLess sx={{ color:'#546263' }} /> : <ExpandMore sx={{ color:'#546263' }} />}
                         </ListItemButton>
-                        <Collapse in={openEditFirstName} timeout="auto" unmountOnExit>
+                        <Collapse in={openEditName} timeout="auto" unmountOnExit>
                             <List component="div" disablePadding>
-                            <ListItemButton sx={{ pl: 4 }}>
-                                <FormControl component="fieldset" sx={{ width:'90%' }} className='register-fields'>
+                            <ListItemButton sx={{ pl: 4, pr: 4 }}>
+                                <FormControl component="fieldset" sx={{ width:'100%' }}>
                                     <TextField 
-                                        id="first_name" 
-                                        label="First Name" 
-                                        name='first_name' 
-                                        value={firstNameField === "" ? user.first_name : firstNameField} 
+                                        id="name" 
+                                        label="Name" 
+                                        name='name' 
+                                        value={NameField} 
                                         variant="outlined" 
                                         InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
                                         InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
                                         required 
-                                        onChange={ChangeFirstNameField} 
-                                    />
-                                </FormControl>
-                            </ListItemButton>
-                            </List>
-                        </Collapse>
-
-                        <ListItemButton onClick={ShowEditLastName}>
-                            <ListItemIcon>
-                                <AssignmentIndRoundedIcon sx={{ color:'#c06115' }} />
-                            </ListItemIcon>
-                            <ListItemText primary={user.last_name} primaryTypographyProps={{ fontFamily:'Montserrat Alternates' }} />
-                            {openEditLastName ? <ExpandLess sx={{ color:'#546263' }} /> : <ExpandMore sx={{ color:'#546263' }} />}
-                        </ListItemButton>
-                        <Collapse in={openEditLastName} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                            <ListItemButton sx={{ pl: 4 }}>
-                                <FormControl component="fieldset" sx={{ width:'90%' }} className='register-fields'>
-                                    <TextField 
-                                        id="last_name" 
-                                        label="Last Name" 
-                                        name='last_name' 
-                                        value={lastNameField === "" ? user.last_name : lastNameField} 
-                                        variant="outlined" 
-                                        InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
-                                        InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
-                                        required 
-                                        onChange={ChangeLastNameField}  
+                                        onChange={ChangeNameField} 
                                     />
                                 </FormControl>
                             </ListItemButton>
@@ -469,15 +436,17 @@ export default function UserProfilePage(){
                             <List component="div" disablePadding>
                             <ListItemButton sx={{ pl: 4 }}>
                                 <Grid item xs={12} align="center">
-                                        <Typography 
-                                            variant="body2" 
-                                            sx={{ fontFamily:'Montserrat Alternates' }}
-                                        >{uploadedPhoto === null ? "Sample" : uploadedPhoto.name}</Typography>
+                                    <Typography 
+                                        variant="body2" 
+                                        sx={{ fontFamily:'Montserrat Alternates' }}
+                                    >
+                                        { uploadedPhoto ? uploadedPhoto.name : "Image name"}
+                                    </Typography>
                                     <label htmlFor="contained-button-file">
                                         <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={ChangeUploadPhoto} />
-                                        <Button variant="contained" color='primary' component="span">
-                                            Upload
-                                        </Button>
+                                        <IconButton color="primary" aria-label="upload picture" component="span">
+                                            <PhotoCamera />
+                                        </IconButton>
                                     </label>
                                 </Grid>
                             </ListItemButton>
@@ -497,9 +466,9 @@ export default function UserProfilePage(){
     const BookmarkMenuActive = () => {
         return (
             <Box sx={{ display:'flex', justifyContent:'center', alignItems:'center' }}>
-                <Button onClick={() => { setShowBookmarkPanel(true); }} variant="text" sx={{ fontFamily:'Montserrat Alternates', color:'#f3f4ed', height:'50px', borderRadius:'0px', padding:'0px 45px', borderBottom:'2px solid #c06115' }} elevation={0}>Bookmarks</Button>
+                <Button onClick={() => { setPanelToShow("Bookmark"); }} variant="text" sx={{ fontFamily:'Montserrat Alternates', color:'#f3f4ed', height:'50px', borderRadius:'0px', padding:'0px 45px', borderBottom:'2px solid #c06115' }} elevation={0}>Bookmarks</Button>
                 <Divider orientation="vertical" sx={{ height:'30px', background:'#f3f4ed' }} />
-                <Button onClick={() => { setShowBookmarkPanel(false); }} variant="text" sx={{ fontFamily:'Montserrat Alternates', color:'#f3f4ed', height:'50px', borderRadius:'0px', padding:'0px 45px' }}>Settings</Button>
+                <Button onClick={() => { setPanelToShow("Settings"); }} variant="text" sx={{ fontFamily:'Montserrat Alternates', color:'#f3f4ed', height:'50px', borderRadius:'0px', padding:'0px 45px' }}>Settings</Button>
             </Box>
         )
     }
@@ -507,13 +476,21 @@ export default function UserProfilePage(){
     const SettingsMenuActive = () => {
         return (
             <Box sx={{ display:'flex', justifyContent:'center', alignItems:'center' }}>
-                <Button onClick={() => { setShowBookmarkPanel(true); }} variant="text" sx={{ fontFamily:'Montserrat Alternates', color:'#f3f4ed', height:'50px', borderRadius:'0px', padding:'0px 45px' }} >Bookmarks</Button>
+                <Button onClick={() => { setPanelToShow("Bookmark"); }} variant="text" sx={{ fontFamily:'Montserrat Alternates', color:'#f3f4ed', height:'50px', borderRadius:'0px', padding:'0px 45px' }} >Bookmarks</Button>
                 <Divider orientation="vertical" sx={{ height:'30px', background:'#f3f4ed' }} />
-                <Button onClick={() => { setShowBookmarkPanel(false); }} variant="text" sx={{ fontFamily:'Montserrat Alternates', color:'#f3f4ed', height:'50px', borderRadius:'0px', padding:'0px 45px', borderBottom:'2px solid #c06115' }} elevation={0}>Settings</Button>
+                <Button onClick={() => { setPanelToShow("Settings"); }} variant="text" sx={{ fontFamily:'Montserrat Alternates', color:'#f3f4ed', height:'50px', borderRadius:'0px', padding:'0px 45px', borderBottom:'2px solid #c06115' }} elevation={0}>Settings</Button>
             </Box>
         )
     }
 
+
+    const RenderProfileImage = () => {
+        if(UserAccountImage){
+            return <img alt="User Cover" src={ '/static'+ UserAccountImage } height='150px'/>
+        }else{
+            return <img alt="User Cover" src={ '/static/images/default_avatar.png' } height='150px'/>
+        }
+    }
     return (
         <Box component='div'>
             <TopNavComponent />
@@ -530,7 +507,7 @@ export default function UserProfilePage(){
                         <Grid container justifyContent='center' sx={{ height:'120px', position:'relative', top:'-76px' }}>
                              <Grid item xs={12} sx={{ display:'flex', justifyContent:'center' }}>
                                 <Box sx={{  width:'150px', height:'150px', overflow:'hidden', borderRadius:'75px', border:'2px solid #c06115'}}>
-                                    <img alt="User Cover" src={ '/static/images/2.jpg'} height='150px'/>
+                                    {RenderProfileImage()}
                                 </Box>
                              </Grid>
                         </Grid>                        
@@ -538,13 +515,13 @@ export default function UserProfilePage(){
                             <Grid container justifyContent='center'>
                                 <Grid item xs={12} sx={{ display:'flex', justifyContent:'center' }}>
                                     
-                                    { showBookmarkPanel ? BookmarkMenuActive() : SettingsMenuActive() }
+                                    { PanelToShow === "Bookmark" ? BookmarkMenuActive() : SettingsMenuActive() }
                                     
                                 </Grid>
                             </Grid> 
                         </CardActions>
                         <CardContent sx={{ padding:'0px', minHeight:'480px' }}>
-                            { showBookmarkPanel ? BookmarkPanel() : SettingsPanel() }
+                            { PanelToShow === "Bookmark" ? BookmarkPanel() : SettingsPanel() }
                         </CardContent>
                         
                     </Card>

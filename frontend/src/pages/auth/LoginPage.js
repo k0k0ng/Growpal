@@ -49,8 +49,6 @@ export default function LoginPage () {
             const data = await response.json();
 
             setAuthTokens(data);
-            console.log("_-------------------------------------------------_");
-            console.log(jwt_decode(data.access))
             setUser(jwt_decode(data.access));
             localStorage.setItem('authTokens', JSON.stringify(data));
             navigate('/');

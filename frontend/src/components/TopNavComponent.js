@@ -28,7 +28,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function TopNavComponent () {
     const navigate = useNavigate()
-    const {authTokens, setUser, setUserBookmark, setAuthTokens} = useContext(AuthContext);
+    const {authTokens, setUser, setUserBookmark, setAuthTokens, UserAccountImage} = useContext(AuthContext);
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -47,10 +47,18 @@ export default function TopNavComponent () {
         setAnchorElUser(null);
     };
 
-    const handleGoToProfileUserMenu = () => {
+    const handleGoToProfileBookmarks = () => {
         setAnchorElUser(null);
+        localStorage.setItem('BookmarkPanel', "Bookmark")
         navigate('/profile');
     }
+
+    const handleGoToProfileSettings = () => {
+        setAnchorElUser(null);
+        localStorage.setItem('BookmarkPanel', "Settings")
+        navigate('/profile');
+    }
+
 
     const handleLogoutUserMenu = () => {
         setAnchorElUser(null);
@@ -68,13 +76,21 @@ export default function TopNavComponent () {
 
     const isLoggedIn = authTokens? true : false;
 
+    const RenderProfileImage = () => {
+        if(UserAccountImage){
+            return <Avatar alt="User Image" src = {'/static'+ UserAccountImage} height='150px' />
+        }else{
+            return <Avatar alt="User Image" src = '/static/images/default_avatar.png' height='150px' />
+        }
+    }
 
     function LoggedInButtons (){
         return(
             <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt="Remy Sharp" src="/static/images/2.jpg" />
+                        {RenderProfileImage()}
+                        
                     </IconButton>
                 </Tooltip>  
                 <Menu
@@ -94,10 +110,10 @@ export default function TopNavComponent () {
                     onClose={handleCloseUserMenu}
                 >
                     
-                    <MenuItem sx={{ padding:'5px 30px', margin:'0px 10px', borderRadius:'10px' }} onClick={handleGoToProfileUserMenu}>
+                    <MenuItem sx={{ padding:'5px 30px', margin:'0px 10px', borderRadius:'10px' }} onClick={handleGoToProfileBookmarks}>
                         <Typography align="center">Bookmark</Typography>
                     </MenuItem>
-                    <MenuItem sx={{ padding:'5px 30px', margin:'0px 10px', borderRadius:'10px' }} onClick={handleCloseUserMenu}>
+                    <MenuItem sx={{ padding:'5px 30px', margin:'0px 10px', borderRadius:'10px' }} onClick={handleGoToProfileSettings}>
                         <Typography align="center">Settings</Typography>
                     </MenuItem>
                     <Divider />

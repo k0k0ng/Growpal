@@ -9,28 +9,23 @@ export default AuthContext;
 export const AuthProvider = ({children}) => {
 
     let [authTokens, setAuthTokens] = useState(()=> localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
-    // let [accessToken, setAccessToken] = useState(() => localStorage.getItem('AccessToken') ? JSON.parse(localStorage.getItem('AccessToken')) : null)
-    // let [refreshToken, setRefreshToken] = useState(() => localStorage.getItem('RefreshToken') ? JSON.parse(localStorage.getItem('RefreshToken')) : null)
     let [user, setUser] = useState(() => localStorage.getItem('AccessToken') ? jwt_decode(localStorage.getItem('AccessToken')) : null)
+    let [UserAccountName, setUserAccountName] = useState(() => { user ? user.name : "" });
+    let [UserAccountImage, setUserAccountImage] = useState(() => { user ? user.display_image : "" });
     let [userBookmark, setUserBookmark] = useState(() => { return []; })
     let [loading, setLoading] = useState(() => { return true; })
-
+    let [resetUser, setResetUser] = useState(() => { return false; })
+    
 
     let logoutUser = () => {
         setUser(null)
-        // setAccessToken(null)
-        // setRefreshToken(null)
         setAuthTokens(null)
         setUserBookmark(null)
-        // localStorage.removeItem('AccessToken')
-        // localStorage.removeItem('RefreshToken')
         localStorage.removeItem('authTokens')
     }
 
     let updateToken = async ()=> {
-        // let response = null
-        // let data = null
-        
+
         if(authTokens === null){
             setLoading(false);
             return
@@ -41,20 +36,17 @@ export const AuthProvider = ({children}) => {
                 headers:{
                     'Content-Type':'application/json'
                 },
-                body:JSON.stringify({'refresh':authTokens?.refresh})
+                body:JSON.stringify({'refresh':authTokens.refresh})
             })
 
         if (response !== null){
             const data = await response.json()
-
             if(response.status === 200){
                 setAuthTokens(data)
-                // setAccessToken(data.access)
-                // setRefreshToken(data.refresh)
                 setUser(jwt_decode(data.access))
-                // localStorage.setItem('AccessToken', JSON.stringify(data.access))
-                // localStorage.setItem('RefreshToken', JSON.stringify(data.refresh))
                 localStorage.setItem('authTokens', JSON.stringify(data))
+            }else{
+                logoutUser();
             }
             
         }else{
@@ -62,6 +54,28 @@ export const AuthProvider = ({children}) => {
         }
 
         if(loading) setLoading(false);
+        
+    }
+
+
+    const ResetUserInformation = () => {
+
+        fetch('/api/get-account-name-image', {
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                email: user.email
+            })
+        }).then((response) => response.json()
+        ).then((data) => {
+            setUserAccountName(data.name);
+            setUserAccountImage(data.display_image);
+        }).catch(err => {
+            console.log("Something went wrong getting updated user info.")
+            console.log(err);
+        });
         
     }
 
@@ -112,22 +126,29 @@ export const AuthProvider = ({children}) => {
     useEffect(()=> {
         if(!user) return;
 
-        GetUserBookmarkedTools()        
+        GetUserBookmarkedTools();
+        ResetUserInformation();
     }, [user])
 
 
+    useEffect(()=> {
+        if(!user) return;
+
+        ResetUserInformation();     
+    }, [resetUser])
 
 
     let contextData = {
         user:user,
+        UserAccountName: UserAccountName,
+        UserAccountImage: UserAccountImage,
         userBookmark: userBookmark,
-        // accessToken: accessToken,
         authTokens:authTokens,
         setUser:setUser,
-        // setAccessToken:setAccessToken,
-        // setRefreshToken:setRefreshToken,
+        resetUser:resetUser,
         setAuthTokens:setAuthTokens,
-        setUserBookmark: setUserBookmark
+        setUserBookmark: setUserBookmark,
+        setResetUser:setResetUser
     }
 
     return(
@@ -136,3 +157,6 @@ export const AuthProvider = ({children}) => {
         </AuthContext.Provider>
     )
 }
+
+
+
