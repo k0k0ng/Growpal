@@ -71,6 +71,11 @@ export default function RegisterPage () {
         <Box component='div' sx={{ height:'100vh', display:'flex', alignItems:'center' }}>
             <Grid container spacing={4}>
                 <Grid item xs={12} align="center">
+                    <Typography compenent="h1" variant="h3" sx={{ fontFamily:'Arvo', color:'#546263' }}>
+                        Growpal
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} align="center">
                     <Typography compenent="h4" variant="h4" className='register-header'>
                         Create an account
                     </Typography>

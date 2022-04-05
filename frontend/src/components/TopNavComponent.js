@@ -64,11 +64,7 @@ export default function TopNavComponent () {
         setAnchorElUser(null);
         setUser(null);
         setUserBookmark(null);
-        // setAccessToken(null);
-        // setRefreshToken(null);
         setAuthTokens(null);
-        // localStorage.removeItem('AccessToken');
-        // localStorage.removeItem('RefreshToken');
         localStorage.removeItem('authTokens');
         console.log("Logout Success");
         navigate('/');
@@ -187,8 +183,8 @@ export default function TopNavComponent () {
                         onClose={handleCloseNavMenu}
                         sx={{
                             display: { xs: 'block', md: 'none' },
+                            mt: '60px',
                         }}
-
                     >
                         <MenuItem onClick={handleCloseNavMenu}>
                             <Button 

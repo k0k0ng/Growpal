@@ -79,7 +79,7 @@ body {
 }
 
 .hero-image {
-  max-width: 60%;
+  max-width: 75%;
   padding: 5%;
 }
 
@@ -204,7 +204,7 @@ body {
 /* === Hero > Home Page === */
 
 
-/* View Tool Page */
+/* ------------ View Tool Page ------------ */
 .alternative-tools-div {
   position: relative;
   display: flex;
@@ -214,8 +214,25 @@ body {
   background-color: #546263;
 }
 
+.tool-info-description{
+  height: auto;
+  margin-bottom: 5%;
+}
 
-/* --- Tools > Home page --- */
+.tool-info-description pre {
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;
+  text-align: start;
+  line-height: 26px;
+  color: #f3f4ed;
+  font-family: 'Montserrat Alternates' !important;
+}
+
+
+/* ------------ Tools > Home page ------------ */
 .tools-search-div {
   position: relative;
   display: flex;
@@ -369,11 +386,35 @@ select::-ms-expand {
   height: 100%;
 }
 
-.card-action-area {
-  transition: 0.5s;
+
+.tool-content-card {
+  max-width: 345px; 
+  background-color:#546263; 
+  color:#f3f4ed; 
+  border:1px solid #f3f4ed; 
+  border-radius: 12px;
 }
 
-.card-action-area:hover {
+.tool-content-card-header {
+  position: absolute;
+  padding: 0px;
+  z-index: 1999;
+}
+
+.tool-content-card-bookmark-button {
+  margin-left: 12px; 
+  margin-top: -3px; 
+  padding: 0px; 
+  border-radius: 0px;
+}
+
+.tool-content-card-action-area {
+  transition: 0.5s;
+  min-height: 350px; 
+  padding: 40px 20px 0px 20px;
+}
+
+.tool-content-card-action-area:hover {
   background-color: #f3f4ed;
   min-height: 500px;
 }
@@ -401,32 +442,17 @@ select::-ms-expand {
   transition: 0.5s;
 }
 
-.card-action-area:hover .tool-title {
+.tool-content-card-action-area:hover .tool-title {
   color: #434743;
 }
 
-.card-action-area:hover .tool-description {
+.tool-content-card-action-area:hover .tool-description {
   color: #434743;
   height: 140px;
 }
 
 
-.tool-info-description{
-  height: auto;
-  margin-bottom: 5%;
-}
 
-.tool-info-description pre {
-  white-space: pre-wrap;       /* Since CSS 2.1 */
-  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-  white-space: -pre-wrap;      /* Opera 4-6 */
-  white-space: -o-pre-wrap;    /* Opera 7 */
-  word-wrap: break-word;
-  text-align: start;
-  line-height: 26px;
-  color: #f3f4ed;
-  font-family: 'Montserrat Alternates' !important;
-}
 
 
 
@@ -437,7 +463,7 @@ select::-ms-expand {
   transition: 0.5s;
 }
 
-.card-action-area:hover .tool-category-chip {
+.tool-content-card-action-area:hover .tool-category-chip {
   border: 1px solid #ff9933;
 }
 
@@ -573,6 +599,16 @@ select::-ms-expand {
   background-color: #434743;
 }
 
+.contact-us-right-container-send-button-loading {
+  color: #f3f4ed;
+  background-color: #546263;
+  border-radius: 25px;
+  padding: 10px 45px;
+  margin-right: 20;
+  font-family: Montserrat Alternates;
+  text-transform: none;
+}
+
 /* === Contact Us > Home Page END === */
 
 /* --- Regiter Account Page --- */
@@ -584,7 +620,7 @@ select::-ms-expand {
 /*  --- Media Query for Large Laptop --- */
 @media only screen and (max-width: 1440px) {
   .hero-image {
-    max-width: 85%;
+    max-width: 90%;
     /* padding: 5%; */
   }
 
@@ -600,7 +636,7 @@ select::-ms-expand {
   }
 
   .hero-image {
-    max-width: 90%;
+    max-width: 100%;
     padding: 5%;
   }
 

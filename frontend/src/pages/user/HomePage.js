@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import TopNavComponent from '../../components/TopNavComponent';
 import FooterComponent from '../../components/FooterComponent';
 import AuthContext from '../../context/AuthContext';
+import ContactUsComponent from '../../components/ContactUsComponent';
 
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
@@ -14,6 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import InputBase from '@mui/material/InputBase';
+import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Card from '@mui/material/Card';
@@ -299,29 +301,27 @@ export default function HomePage() {
             sm={5}
             xs={9}
         >
-            <Card sx={{ maxWidth: 345, backgroundColor:'#546263', color:'#f3f4ed', border:'1px solid #f3f4ed', borderRadius:3 }} elevation={0}>
+            <Card className={'tool-content-card'} elevation={0}>
                 
                 <CardHeader
                     avatar={
-                        <IconButton aria-label="settings" sx={{ marginLeft:'12px', marginTop:'-3px' , padding:'0px', borderRadius:'0px'}}>
-                            <BookmarkIconToShow isBookmarked={ BookmarkedTools.includes(tool.title) ? true : false } sx={{ height:'100px' }} />
-                        </IconButton>
+                        <Tooltip title={ user && BookmarkedTools.includes(tool.title) ? "Remove bookmark" : "Bookmark Tool"} placement="right-start">
+                            <IconButton aria-label="settings" className={'tool-content-card-bookmark-button'}>
+                                <BookmarkIconToShow isBookmarked={ BookmarkedTools.includes(tool.title) ? true : false } sx={{ height:'100px' }} />         
+                            </IconButton>
+                        </Tooltip>
                     }
-                    sx={{
-                        position:'absolute',
-                        padding:'0px',
-                        zIndex:'1999'
-                    }}
+                    className={'tool-content-card-header'}
                     onClick={() => _HandleAddBookmarkButtonPressed (tool.id, tool.title)}
                 />
 
-                <CardActionArea sx={{ minHeight:350, padding:'40px 20px 0px 20px' }} onClick={() => {console.log(tool.title); navigate("/view-tool/"+tool.id)}} className='card-action-area'>
+                <CardActionArea className={'tool-content-card-action-area'} onClick={() => {console.log(tool.title); navigate("/view-tool/"+tool.id)}} >
                     <img alt="Tool Image" src={ '/static' + tool.image } className='tool-image' />
                     <CardContent sx={{marginBottom:'20px'}}>
                         <Typography gutterBottom variant="h6" component="div" align='center' className='tool-title'>
                             { tool.title }
                         </Typography>
-                        <Typography variant="body2" sx={{ }} className='tool-description'>
+                        <Typography variant="body2" className='tool-description'>
                             { tool.description }
                         </Typography>
                     </CardContent>
@@ -349,7 +349,7 @@ export default function HomePage() {
                         <Box component="div" className='hero-left-div'>
                             <img
                                 className='hero-image'
-                                src="/static/images/Hero-img.png"
+                                src="/static/images/hero-image.png"
                                 alt="Helping each other vector"
                                 loading="lazy"
                             />
@@ -401,7 +401,7 @@ export default function HomePage() {
                             <InputBase
                                 sx={{ ml: 1, flex: 1 }}
                                 placeholder="Search Tool"
-                                inputProps={{ 'aria-label': 'search tool' }}
+                                inputProps={{ style: { fontFamily:'Montserrat Alternates' },'aria-label': 'search tool' }}
                                 onChange={_SearchedKeyChange}
                             />
                         </Paper>
@@ -469,75 +469,7 @@ export default function HomePage() {
                 </Grid>
             </Box>
 
-            <Box component="div" className='contact-us-div'>
-                <Grid container>
-                    <Grid item className='contact-us-left-container' md={6} >
-                        <Box component='div'>
-                            <Typography 
-                                variant='h1'
-                                component='h2' 
-                                noWrap
-                                className='contact-us-left-container-header'
-                            >
-                                Need help?
-                            </Typography>
-                            <Typography component='p' className='contact-us-left-container-sub-header'>
-                                Tell us your concerns whether you're curious about certain features, pricing, or even bundle deals.
-                            </Typography>
-                            <Box sx={{ display: 'flex', justifyContent: 'end' }} className='contact-icons'>
-                                <IconButton href={"https://www.linkedin.com"} aria-label="menu">
-                                    <LinkedInIcon sx={{ fontSize: 34, color: '#434743' }} />
-                                </IconButton>
-                                <IconButton href={"https://facebook.com"} aria-label="menu">
-                                    <FacebookIcon sx={{ fontSize: 34, color: '#434743' }} />
-                                </IconButton>
-                                <IconButton href={"https://gmail.com"} aria-label="menu">
-                                    <MailIcon sx={{ fontSize: 34, color: '#434743' }} />
-                                </IconButton>
-                            </Box>
-                        </Box>
-                    </Grid>
-                    <Grid item className='contact-us-right-container' md={6}>
-                        <Box
-                            sx={{ width: '100%' }}
-                        >
-                            
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Name" 
-                                variant="outlined" 
-                                InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
-                                InputLabelProps={{ style: { fontFamily:'Montserrat Alternates', fontStyle: 'italic' } }}
-                                className='contact-us-input-field'
-                            />
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Email" 
-                                variant="outlined" 
-                                InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
-                                InputLabelProps={{ style: { fontFamily:'Montserrat Alternates', fontStyle: 'italic' } }}
-                                className='contact-us-input-field'
-                            />
-                            <TextField
-                                id="outlined-multiline-static"
-                                label="Message"
-                                multiline
-                                rows={4}
-                                InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
-                                InputLabelProps={{ style: { fontFamily:'Montserrat Alternates', fontStyle: 'italic' } }}
-                                className='contact-us-input-field'
-                            />
-                            <Box>
-                                <Button className='contact-us-right-container-send-button' to="/" component={Link}>
-                                    Send
-                                </Button>
-                            </Box>
-                        </Box>
-                        
-                    </Grid>
-                    
-                </Grid>
-            </Box>
+            <ContactUsComponent />
 
             <FooterComponent />
         </Box>

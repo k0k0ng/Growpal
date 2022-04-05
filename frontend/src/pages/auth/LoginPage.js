@@ -63,6 +63,11 @@ export default function LoginPage () {
         <Box component='div' sx={{ height:'100vh', display:'flex', alignItems:'center' }} >
             <Grid container spacing={1}>
                 <Grid item xs={12} align="center">
+                    <Typography compenent="h1" variant="h3" sx={{ fontFamily:'Arvo', color:'#546263' }}>
+                        Growpal
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} align="center">
                     <Typography compenent="h4" variant="h4" className='register-header' sx={{ margin:'2% 0px' }}>
                         Sign In
                     </Typography>

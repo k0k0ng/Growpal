@@ -5,6 +5,7 @@ import ReactPaginate from 'react-paginate';
 import TopNavComponent from './TopNavComponent';
 import FooterComponent from './FooterComponent';
 import AuthContext from '../context/AuthContext';
+import ContactUsComponent from './ContactUsComponent';
 
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -22,6 +23,7 @@ import CardActions from '@mui/material/CardActions';
 
 import Tooltip from '@mui/material/Tooltip';
 
+import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
 import MailIcon from '@mui/icons-material/Mail';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -34,7 +36,7 @@ import { CardActionArea } from '@mui/material';
 export default function ToolInfoComponent(){
 
     const navigate = useNavigate();
-    const {user, setUserBookmark} = useContext(AuthContext);
+    const {user, setUserBookmark, userBookmark } = useContext(AuthContext);
     const { toolID } = useParams();
 
     const [isLoading, setIsLoading] = useState(() => { return true; });
@@ -58,10 +60,6 @@ export default function ToolInfoComponent(){
         _GetToolDetails();
         _GetAlternativeTools();
     },[toolID]);
-
-    useEffect(() =>{
-        console.log(toolInfo);
-    },[toolInfo])
     
 
     const _GetToolDetails = () => {
@@ -173,6 +171,22 @@ export default function ToolInfoComponent(){
         }
     }
 
+    let BookmarkedTools = [];
+
+    if(userBookmark){
+        userBookmark.forEach((tool) =>{
+            BookmarkedTools.push(tool.title)
+        })
+    }
+
+    useEffect(()=> {
+        if(!userBookmark) return;
+        BookmarkedTools = [];
+        userBookmark.map((item) => {
+            BookmarkedTools.push(item.title)
+        })
+    }, [userBookmark])
+
     const _GetUserBookmarkedTools = async () => {
         let response = await fetch('/api/get-user-bookmarked-tools',{
             method:'POST',
@@ -247,22 +261,28 @@ export default function ToolInfoComponent(){
         }else{
             alert('Something went wrong getting alternative tools!');
         }
-    }
-
-    useEffect(() => {
-        console.log(alternativeTools);
-        console.log("=====================================================================")
-    }, [alternativeTools])
-    
+    }    
     
 
     let [pageNumber, setPageNumber] = useState(() => { return 0; });
-    let [toolsPerPage, setToolsPerPage] = useState(() => { return 5; });
+    let [toolsPerPage, setToolsPerPage] = useState(() => { return 4; });
     const pagesVisited = pageNumber * toolsPerPage;
     const pageCount = Math.ceil(alternativeTools.length / toolsPerPage);
     const changePage = ({ selected }) => {
         setPageNumber(selected);
     };
+
+    useEffect(() => {        
+        if( window.innerWidth <  600 ) {
+            setToolsPerPage(2);
+        }else if(window.innerWidth <  900){
+            setToolsPerPage(2);
+        }else if(window.innerWidth <  1200){
+            setToolsPerPage(3);
+        }else if(window.innerWidth <  1536){
+            setToolsPerPage(4);
+        }
+    },[]);
 
     const DisplayPagination = () => {
         if(alternativeTools.length > 0){
@@ -286,6 +306,17 @@ export default function ToolInfoComponent(){
         return null;
     }
 
+    const BookmarkIconToShow = (props) => {
+        if (props.isBookmarked) {
+            return (
+                <BookmarkIcon sx={{fontSize:'35px', padding:'0px', color:'#c06115'}}  />          
+            )
+        }else{
+            return (
+                <BookmarkBorderOutlinedIcon sx={{fontSize:'35px', padding:'0px', color:'#434743'}}  />
+            )
+        }
+    }
 
     const DisplayAlternativeTools = () => {
         return (
@@ -306,37 +337,33 @@ export default function ToolInfoComponent(){
 
                     return <Grid item 
                                 key={tool.id} 
-                                xl={2.35}
-                                lg={2.91}
-                                md={3.85}
-                                sm={5.65}
-                                xs={11}
+                                xl={2.3}
+                                lg={2.9}
+                                md={4}
+                                sm={5}
+                                xs={9}
                             >
-                                <Card sx={{ maxWidth: 345, backgroundColor:'#546263', color:'#f3f4ed', border:'1px solid #f3f4ed', borderRadius:3 }} elevation={0}>
+                                <Card className={'tool-content-card'} elevation={0}>
                                     
                                     <CardHeader
                                         avatar={
-                                            <Tooltip title="Remove bookmark" placement="right-start">
-                                                <IconButton aria-label="settings" sx={{ marginLeft:'12px', marginTop:'-3px' , padding:'0px', borderRadius:'0px'}}>
-                                                    <BookmarkIcon sx={{fontSize:'35px', padding:'0px', color:'#c06115'}}  />          
+                                            <Tooltip title={ user && BookmarkedTools.includes(tool.title) ? "Remove bookmark" : "Bookmark Tool"} placement="right-start">
+                                                <IconButton aria-label="settings" className={'tool-content-card-bookmark-button'}>
+                                                    <BookmarkIconToShow isBookmarked={ BookmarkedTools.includes(tool.title) ? true : false } sx={{ height:'100px' }} />         
                                                 </IconButton>
-                                            </Tooltip> 
+                                            </Tooltip>
                                         }
-                                        sx={{
-                                            position:'absolute',
-                                            padding:'0px',
-                                            zIndex:'1999'
-                                        }}
+                                        className={'tool-content-card-header'}
                                         onClick={() => _HandleAddBookmarkButtonPressed (tool.id, tool.title)}
                                     />
                     
-                                    <CardActionArea sx={{ minHeight:350, padding:'40px 20px 0px 20px' }} onClick={() => {console.log(tool.title); navigate("/view-tool/"+tool.id)}} className='card-action-area'>
+                                    <CardActionArea className={'tool-content-card-action-area'} onClick={() => {console.log(tool.title); navigate("/view-tool/"+tool.id)}} >
                                         <img alt="Tool Image" src={ '/static' + tool.image } className='tool-image' />
                                         <CardContent sx={{marginBottom:'20px'}}>
                                             <Typography gutterBottom variant="h6" component="div" align='center' className='tool-title'>
                                                 { tool.title }
                                             </Typography>
-                                            <Typography variant="body2" sx={{ }} className='tool-description'>
+                                            <Typography variant="body2" className='tool-description'>
                                                 { tool.description }
                                             </Typography>
                                         </CardContent>
@@ -399,75 +426,7 @@ export default function ToolInfoComponent(){
                 </Grid>
             </Box>
 
-            <Box component="div" className='contact-us-div'>
-                <Grid container>
-                    <Grid item className='contact-us-left-container' md={6} >
-                        <Box component='div'>
-                            <Typography 
-                                variant='h1'
-                                component='h2' 
-                                noWrap
-                                className='contact-us-left-container-header'
-                            >
-                                Need help?
-                            </Typography>
-                            <Typography component='p' className='contact-us-left-container-sub-header'>
-                                Tell us your concerns whether you're curious about certain features, pricing, or even bundle deals.
-                            </Typography>
-                            <Box sx={{ display: 'flex', justifyContent: 'end' }} className='contact-icons'>
-                                <IconButton href={"https://www.linkedin.com"} aria-label="menu">
-                                    <LinkedInIcon sx={{ fontSize: 34, color: '#434743' }} />
-                                </IconButton>
-                                <IconButton href={"https://facebook.com"} aria-label="menu">
-                                    <FacebookIcon sx={{ fontSize: 34, color: '#434743' }} />
-                                </IconButton>
-                                <IconButton href={"https://gmail.com"} aria-label="menu">
-                                    <MailIcon sx={{ fontSize: 34, color: '#434743' }} />
-                                </IconButton>
-                            </Box>
-                        </Box>
-                    </Grid>
-                    <Grid item className='contact-us-right-container' md={6}>
-                        <Box
-                            sx={{ width: '100%' }}
-                        >
-                            
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Name" 
-                                variant="outlined" 
-                                InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
-                                InputLabelProps={{ style: { fontFamily:'Montserrat Alternates', fontStyle: 'italic' } }}
-                                className='contact-us-input-field'
-                            />
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Email" 
-                                variant="outlined" 
-                                InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
-                                InputLabelProps={{ style: { fontFamily:'Montserrat Alternates', fontStyle: 'italic' } }}
-                                className='contact-us-input-field'
-                            />
-                            <TextField
-                                id="outlined-multiline-static"
-                                label="Message"
-                                multiline
-                                rows={4}
-                                InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
-                                InputLabelProps={{ style: { fontFamily:'Montserrat Alternates', fontStyle: 'italic' } }}
-                                className='contact-us-input-field'
-                            />
-                            <Box>
-                                <Button className='contact-us-right-container-send-button' to="/" component={Link}>
-                                    Send
-                                </Button>
-                            </Box>
-                        </Box>
-                        
-                    </Grid>
-                    
-                </Grid>
-            </Box>
+            <ContactUsComponent />
 
             <FooterComponent />
         </Box>

@@ -26,6 +26,8 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@emailjs/browser": "^3.5.0",
+    "@mui/lab": "^5.0.0-alpha.75",
     "@mui/system": "^5.5.2",
     "axios": "^0.26.1",
     "jwt-decode": "^3.1.2",
