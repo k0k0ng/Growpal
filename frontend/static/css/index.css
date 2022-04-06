@@ -26,6 +26,84 @@ body {
   border: 1px solid green;
 }
 
+
+/* ================================== Blog =============================== */
+.blogs-container{
+  min-height: 96.1vh;
+  padding-top: 100px;
+  /* border: 1px solid magenta; */
+}
+
+.blog-card-action-area {
+  transition: 0.5s;
+  min-height: 350px; 
+  padding: 40px 20px 0px 20px;
+}
+
+.blog-card-action-area:hover {
+  background-color: #434743;
+}
+
+
+.blog-image {
+  margin-left: 50%;
+  max-height: 300px;
+  transform: translate(-50%, 0px);
+}
+
+.blog-title {
+  font-family: "Montserrat Alternates";
+  transition: 0.5s;
+  color: #546263;
+  line-height: 26px;
+  /* border: 1px solid red; */
+}
+
+.blog-card-action-area:hover .blog-title {
+  color: #f3f4ed;
+}
+
+.blog-category-chip {
+  margin: 3px;
+  color: #c06115;
+  border: 1px solid #c06115;
+  background-color: #f3f4ed;
+  transition: 0.5s;
+}
+
+.blog-card-action-area:hover .blog-category-chip {
+  color: #f3f4ed;
+  border: 1px solid #c06115;
+  background-color: #c06115;
+}
+
+.blog-description {
+  color: #546263;
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;
+  overflow: hidden;
+  text-align: center;
+  align-items: center;
+  font-family: "Montserrat Alternates";
+  height: 120px;
+  margin-top: 20px;
+  transition: 0.5s;
+  padding: 0% 20px;
+  /* border: 1px solid black; */
+}
+
+.blog-card-action-area:hover .blog-description {
+  color: #f3f4ed;
+}
+
+
+
+
+
+
 /* --- Top Navbar --- */
 .nav-container {
   position: absolute;

@@ -1,17 +1,20 @@
 import React from 'react';
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from '.././context/AuthContext';
 
 import AdminPrivateRoutings from '../utils/AdminPrivateRoutings';
 import UserPrivateRouting from '../utils/UserPrivateRouting';
 import NoAuthRoutings from '../utils/NoAuthRoutings'
-import { AuthProvider } from '.././context/AuthContext';
 
 import AdminDashboardPage from './admin/AdminDashboardPage';
 import CreateToolComponent from '../components/CreateToolComponent';
-import ToolInfoComponent from '../components/ToolInfoComponent';
-import HomePage from './user/HomePage';
+
 import UserProfilePage from './user/UserProfilePage';
+
+import HomePage from './user/HomePage';
+import ToolInfoComponent from '../components/ToolInfoComponent';
+import BlogPage from './user/BlogPage';
 
 import LoginPage from './auth/LoginPage';
 import RegisterPage from './auth/RegisterPage';
@@ -32,11 +35,12 @@ export default function RoutingPage() {
                     {/* User Pages */}
                     <Route exact path='/' element={<HomePage/>} />
                     <Route path='/view-tool/:toolID' element={<ToolInfoComponent />} />
+                    <Route path='/blog' element={<BlogPage />} />
                     
                     {/* User Private Pages */}
                     <Route path='/profile' element={<UserPrivateRouting><UserProfilePage/></UserPrivateRouting>} />
 
-                    {/* No Auth Pages */}
+                    {/* Strictly No Auth Pages */}
                     <Route path='/login' element={<NoAuthRoutings> <LoginPage /> </NoAuthRoutings>} />
                     <Route path='/register' element={<NoAuthRoutings> <RegisterPage/> </NoAuthRoutings>} />
                     <Route path='/activate/:uid/:token' element={<NoAuthRoutings> <ActivateAccount /> </NoAuthRoutings>} />
