@@ -129,6 +129,19 @@ export default function TopNavComponent () {
                     <Button 
                         style={{
                             color: 'white',
+                            fontFamily: 'Montserrat Alternates',
+                            textTransform: "none"
+                        }} 
+                        to="/blog" 
+                        component={Link}
+                        variant={'text'}
+                    >
+                        Blogs
+                    </Button>
+
+                    <Button 
+                        style={{
+                            color: 'white',
                             borderRadius: 25,
                             backgroundColor: "#c06115",
                             padding: "7px 35px",
@@ -186,6 +199,17 @@ export default function TopNavComponent () {
                             mt: '60px',
                         }}
                     >
+                        <MenuItem onClick={handleCloseNavMenu}>
+                            <Button 
+                                variant='text' 
+                                to="/login"
+                                component={Link}
+                                className='FontMontserrat'
+                            >
+                                Blogs
+                            </Button>
+                        </MenuItem>
+
                         <MenuItem onClick={handleCloseNavMenu}>
                             <Button 
                                 variant='text' 

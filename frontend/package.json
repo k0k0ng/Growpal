@@ -30,6 +30,7 @@
     "@mui/lab": "^5.0.0-alpha.75",
     "@mui/system": "^5.5.2",
     "axios": "^0.26.1",
+    "date-fns": "^2.28.0",
     "jwt-decode": "^3.1.2",
     "react-paginate": "^8.1.2",
     "react-parallax": "^3.3.0",
