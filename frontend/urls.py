@@ -15,4 +15,5 @@ urlpatterns = [
     path('view-tool/<str:toolID>', index),
     path('profile', index),
     path('blog', index),
+    path('blog/<str:blogID>', index),
 ]

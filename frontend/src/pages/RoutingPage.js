@@ -15,6 +15,7 @@ import UserProfilePage from './user/UserProfilePage';
 import HomePage from './user/HomePage';
 import ToolInfoComponent from '../components/ToolInfoComponent';
 import BlogPage from './user/BlogPage';
+import BlogInfoPage from './user/BlogInfoPage';
 
 import LoginPage from './auth/LoginPage';
 import RegisterPage from './auth/RegisterPage';
@@ -36,6 +37,7 @@ export default function RoutingPage() {
                     <Route exact path='/' element={<HomePage/>} />
                     <Route path='/view-tool/:toolID' element={<ToolInfoComponent />} />
                     <Route path='/blog' element={<BlogPage />} />
+                    <Route path='/blog/:blogID' element={<BlogInfoPage />} />
                     
                     {/* User Private Pages */}
                     <Route path='/profile' element={<UserPrivateRouting><UserProfilePage/></UserPrivateRouting>} />
