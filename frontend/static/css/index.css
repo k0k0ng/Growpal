@@ -22,138 +22,7 @@ body {
   height: 100%;
 }
 
-#loginDiv {
-  border: 1px solid green;
-}
-
-
-/* ================================== Blog =============================== */
-.blogs-container{
-  min-height: 96.1vh;
-  padding-top: 100px;
-  /* border: 1px solid magenta; */
-}
-
-.blog-card-action-area {
-  transition: 0.5s;
-  min-height: 350px; 
-  padding: 40px 20px 0px 20px;
-}
-
-.blog-card-action-area:hover {
-  background-color: #434743;
-}
-
-
-.blog-image {
-  margin-left: 50%;
-  /* max-height: 600px; */
-  /* max-width: 90%; */
-  margin-bottom: 2%;
-  transform: translate(-50%, 0px);
-}
-
-.blog-title {
-  font-family: "Montserrat Alternates";
-  transition: 0.5s;
-  color: #546263;
-  line-height: 26px;
-  /* border: 1px solid red; */
-}
-
-.blog-card-action-area:hover .blog-title {
-  color: #f3f4ed;
-}
-
-.blog-category-chip {
-  margin: 3px;
-  color: #c06115;
-  border: 1px solid #c06115;
-  background-color: #f3f4ed;
-  transition: 0.5s;
-}
-
-.blog-card-action-area:hover .blog-category-chip {
-  color: #f3f4ed;
-  border: 1px solid #c06115;
-  background-color: #c06115;
-}
-
-.blog-description {
-  color: #546263;
-  white-space: pre-wrap;       /* Since CSS 2.1 */
-  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-  white-space: -pre-wrap;      /* Opera 4-6 */
-  white-space: -o-pre-wrap;    /* Opera 7 */
-  word-wrap: break-word;
-  overflow: hidden;
-  text-align: center;
-  align-items: center;
-  font-family: "Montserrat Alternates";
-  line-height: 30px;
-  /* height: 120px; */
-  transition: 0.5s;
-  padding: 0% 20px;
-  /* border: 1px solid black; */
-}
-
-.blog-card-action-area:hover .blog-description {
-  color: #f3f4ed;
-}
-
-.skeleton{
-  border-radius: 5px;
-  animation: skeleton-loading 1s linear infinite alternate;
-}
-
-@keyframes skeleton-loading {
-  0% {
-    background-color: hsl(200, 20%, 70%);
-  }
-
-  100% {
-    background-color: hsl(200, 20%, 90%);
-  }
-}
-
-.skeleton-text{
-  display: block;
-  width: 100%;
-  height: 20px;
-  margin-bottom: 5px;
-}
-
-.skeleton-text:last-child {
-  display: block;
-  width: 80%;
-  height: 20px;
-  margin-bottom: 5px;
-}
-
-
-.loading-icon {
-  color: #c06115;
-  height: 40px;
-  width: 40px;
-  -webkit-animation: icon-loading 2s linear infinite;
-  -moz-animation: icon-loading 2s linear infinite;
-  animation: icon-loading 2s linear infinite;
-}
-@-webkit-keyframes icon-loading{
-  100% { -webkit-transform: rotate(360deg); }
-}
-
-@-moz-keyframes icon-loading{
-  100% { -webkit-transform: rotate(360deg); }
-}
-
-@keyframes icon-loading {
-  100% { -webkit-transform: rotate(360deg); }
-}
-
-
-
-/* --- Top Navbar --- */
+/* =============================== Top Navbar =============================== */
 .nav-container {
   position: absolute;
   background-color: #546263;
@@ -173,17 +42,14 @@ body {
   text-transform: none;
 }
 
-/* --- Hero > Home Page --- */
+
+/* =============================== Hero > Home Page =============================== */
 .hero-main-div {
   position: relative;
   display: flex;
   flex-flow: column;
   height: 100vh;
-  /* background-color: #f3f4ed; */
-  /* z-index: 1800; */
   transform: translate(0, -50px);
-
-  /* border: 1px solid magenta; */
 }
 
 .hero-main-div-upper {
@@ -193,7 +59,6 @@ body {
   gap: 5%;
   padding: 0px 5%;
   padding-top: 10%;
-  /* border: 2px solid yellow; */
 }
 
 .hero-left-div {
@@ -201,8 +66,6 @@ body {
   align-items: center;
   justify-content: end;
   width: 50%;
-
-  /* border: 2px solid red; */
 }
 
 .hero-image {
@@ -214,8 +77,6 @@ body {
   display: flex;
   align-items: center;
   width: 50%;
-
-  /* border: 2px solid blue; */
 }
 
 .hero-right-div-header {
@@ -253,7 +114,6 @@ body {
   width: 100%;
   padding: 2% 0px;
   padding-bottom: 0%;
-  /* border: 2px solid green; */
 }
 
 .hero-arrow-down-icon {
@@ -331,35 +191,10 @@ body {
 /* === Hero > Home Page === */
 
 
-/* ------------ View Tool Page ------------ */
-.alternative-tools-div {
-  position: relative;
-  display: flex;
-  min-height: 470px;
-  width: 100%;
-  padding-top: 25px;
-  background-color: #546263;
-}
-
-.tool-info-description{
-  height: auto;
-  margin-bottom: 5%;
-}
-
-.tool-info-description pre {
-  white-space: pre-wrap;       /* Since CSS 2.1 */
-  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-  white-space: -pre-wrap;      /* Opera 4-6 */
-  white-space: -o-pre-wrap;    /* Opera 7 */
-  word-wrap: break-word;
-  text-align: start;
-  line-height: 26px;
-  color: #f3f4ed;
-  font-family: 'Montserrat Alternates' !important;
-}
 
 
-/* ------------ Tools > Home page ------------ */
+
+/* ------------ Tools Section > Home page ------------ */
 .tools-search-div {
   position: relative;
   display: flex;
@@ -432,7 +267,7 @@ body {
   border: none;
 }
 
-/* --- Filter & Order Dropdowns > Tools > Home page --- */
+/* --------- Filter & Order Dropdowns > Tools > Home page --------- */
 #custom-select-parent {
   position: relative;
 }
@@ -507,12 +342,11 @@ select::-ms-expand {
   outline: none;
 }
 
-/* --- Pagination Button Styles > Tools > Home Page --- */
+/* --------- Pagination Button Styles > Tools > Home Page --------- */
 
 .tools-container {
   height: 100%;
 }
-
 
 .tool-content-card {
   max-width: 345px; 
@@ -577,11 +411,6 @@ select::-ms-expand {
   color: #434743;
   height: 140px;
 }
-
-
-
-
-
 
 .tool-category-chip {
   margin: 3px;
@@ -661,9 +490,8 @@ select::-ms-expand {
   padding: 10px 25px !important;
 }
 
-/* === Tools > Home Page END === */
 
-/* --- Contact Us > Tools > Home Page --- */
+/* --------- Contact Us > Home Page --------- */
 .contact-us-div {
   display: flex;
   align-items: center;
@@ -722,13 +550,13 @@ select::-ms-expand {
 }
 
 .contact-us-right-container-send-button:hover {
-  color: #c06115;
-  background-color: #434743;
+  color: #f3f4ed;
+  background-color: #DE6503;
 }
 
 .contact-us-right-container-send-button-loading {
-  color: #f3f4ed;
-  background-color: #546263;
+  color: #f3f4ed !important;
+  background-color: #DE6503;
   border-radius: 25px;
   padding: 10px 45px;
   margin-right: 20;
@@ -736,15 +564,186 @@ select::-ms-expand {
   text-transform: none;
 }
 
-/* === Contact Us > Home Page END === */
 
-/* --- Regiter Account Page --- */
+.contact-us-right-container-cancel-button {
+  color: #f3f4ed;
+  border-radius: 25px;
+  background-color: #546263;
+  padding: 10px 45px;
+  margin-right: 20;
+  font-family: Montserrat Alternates;
+  text-transform: none;
+}
+
+.contact-us-right-container-cancel-button:hover {
+  color: #DE6503;
+  background-color: #546263;
+}
+
+
+.custom-button-text:hover {
+  color: #DE6503;
+}
+
+
+/* =============================== View Tool Page =============================== */
+.alternative-tools-div {
+  position: relative;
+  display: flex;
+  min-height: 470px;
+  width: 100%;
+  padding-top: 25px;
+  background-color: #546263;
+}
+
+.tool-info-description{
+  height: auto;
+  margin-bottom: 5%;
+}
+
+.tool-info-description pre {
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;
+  text-align: start;
+  line-height: 26px;
+  color: #f3f4ed;
+  font-family: 'Montserrat Alternates' !important;
+}
+
+/* ================================== Blog =============================== */
+.blogs-container{
+  min-height: 96.1vh;
+  padding-top: 100px;
+}
+
+.blog-card-action-area {
+  transition: 0.5s;
+  min-height: 350px; 
+  padding: 40px 20px 0px 20px;
+}
+
+.blog-card-action-area:hover {
+  background-color: #434743;
+}
+
+
+.blog-image {
+  margin-left: 50%;
+  margin-bottom: 2%;
+  transform: translate(-50%, 0px);
+}
+
+.blog-title {
+  font-family: "Montserrat Alternates";
+  transition: 0.5s;
+  color: #546263;
+  line-height: 26px;
+}
+
+.blog-card-action-area:hover .blog-title {
+  color: #f3f4ed;
+}
+
+.blog-category-chip {
+  margin: 3px;
+  color: #c06115;
+  border: 1px solid #c06115;
+  background-color: #f3f4ed;
+  transition: 0.5s;
+}
+
+.blog-card-action-area:hover .blog-category-chip {
+  color: #f3f4ed;
+  border: 1px solid #c06115;
+  background-color: #c06115;
+}
+
+.blog-description {
+  color: #546263;
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;
+  overflow: hidden;
+  text-align: center;
+  align-items: center;
+  font-family: "Montserrat Alternates";
+  line-height: 30px;
+  transition: 0.5s;
+  padding: 0% 20px;
+}
+
+.blog-card-action-area:hover .blog-description {
+  color: #f3f4ed;
+}
+
+.skeleton{
+  border-radius: 5px;
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(200, 20%, 70%);
+  }
+
+  100% {
+    background-color: hsl(200, 20%, 90%);
+  }
+}
+
+.skeleton-text{
+  display: block;
+  width: 100%;
+  height: 20px;
+  margin-bottom: 5px;
+}
+
+.skeleton-text:last-child {
+  display: block;
+  width: 80%;
+  height: 20px;
+  margin-bottom: 5px;
+}
+
+
+.loading-icon {
+  color: #c06115;
+  height: 40px;
+  width: 40px;
+  -webkit-animation: icon-loading 2s linear infinite;
+  -moz-animation: icon-loading 2s linear infinite;
+  animation: icon-loading 2s linear infinite;
+}
+@-webkit-keyframes icon-loading{
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@-moz-keyframes icon-loading{
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes icon-loading {
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+
+/* =============================== Register Account Page =============================== */
 .register-header {
   font-family: "Montserrat Alternates";
   color: #434743;
 }
 
-/*  --- Media Query for Large Laptop --- */
+
+
+/* 
+*** Media Query for Large Laptop ***
+*/
+
 @media only screen and (max-width: 1440px) {
   .hero-image {
     max-width: 90%;
@@ -756,7 +755,12 @@ select::-ms-expand {
   }
 }
 
-/*  --- Media Query for Small Laptop --- */
+
+
+/* 
+*** Media Query for Small Laptop ***
+*/
+
 @media only screen and (max-width: 1024px) {
   .hero-main-div-upper {
     padding-top: 16%;
@@ -788,7 +792,11 @@ select::-ms-expand {
   }
 }
 
-/*  --- Media Query for Mobile --- */
+
+/* 
+*** Media Query for Tablet ***
+*/
+
 @media only screen and (max-width: 768px) {
   .hero-main-div-upper {
     padding-top: 28%;
@@ -850,7 +858,10 @@ select::-ms-expand {
   }
 }
 
-/*  --- Media Query for Mobile --- */
+
+/* 
+*** Media Query for Mobile ***
+*/
 @media only screen and (max-width: 425px) {
   .hero-main-div-upper {
     padding-top: 45%;

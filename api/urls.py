@@ -19,6 +19,7 @@ urlpatterns = [
     path('get-account-name-image', views.get_user_name_and_display_image, name='get-account-name-image'),
     path('get-user-bookmarked-tools', GetUserBookmarkedTools.as_view()),
     path('register-account-credentials', views.register, name='register-account'),
+    path('check-email-exists', views.check_email_if_exists, name='check-email'),
     path('update-account-name-image', views.update_user_account_info, name='update-account-name-image'),
 
 
