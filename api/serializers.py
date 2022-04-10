@@ -19,12 +19,6 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'created_at')
 
 
-class CreateToolSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tool
-        fields = ('title', 'description', 'image', 'url')
-
-
 class AllToolSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(read_only=True, many=True)
     id = serializers.IntegerField()
@@ -42,10 +36,10 @@ class UpdateToolSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'description', 'image', 'url')
 
 
-class RegisterAccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'title', 'description', 'image', 'url')
+# class RegisterAccountSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ('id', 'title', 'description', 'image', 'url')
 
 
 class UserCreateSerializer(UserCreateSerializer):
@@ -67,12 +61,3 @@ class UpdateUserAccountNameImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
         fields = ('email', 'name', 'display_image')
-
-
-class AlternativeToolsSerializer(serializers.ModelSerializer):
-    anternative_tool = ToolSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = Tool
-        fields = ('title', 'anternative_tool')
-

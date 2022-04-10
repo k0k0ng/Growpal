@@ -123,7 +123,7 @@ const ToolsSection = () => {
     }
 
     const _GetAllToolsByCategory = async () => {
-        const response = await fetch('/api/get-tool-by-category', {
+        const response = await fetch('/api/get-tools-by-category', {
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -306,7 +306,7 @@ const ToolsSection = () => {
                         className={'tool-content-card-header'}
                         onClick={() => _HandleAddBookmarkButtonPressed (tool.id, tool.title)}
                     />
-                    <CardActionArea className={'tool-content-card-action-area'} onClick={() => {console.log(tool.title); navigate("/view-tool/"+tool.id)}} >
+                    <CardActionArea className={'tool-content-card-action-area'} onClick={() => {navigate("/view-tool/"+tool.id)}} >
                         <img alt="Tool Image" src={ '/static' + tool.image } className='tool-image' />
                         <CardContent sx={{marginBottom:'20px'}}>
                             <Typography gutterBottom variant="h6" component="div" align='center' className='tool-title'>

@@ -196,7 +196,7 @@ const ToolCardHeader = () => {
                                         onClick={() => _HandleAddBookmarkButtonPressed (tool.id)}
                                     />
 
-                                    <CardActionArea sx={{ minHeight:350, padding:'40px 20px 0px 20px' }} onClick={() => {console.log(tool.title); navigate("/view-tool/"+tool.id)}} className='card-action-area'>
+                                    <CardActionArea sx={{ minHeight:350, padding:'40px 20px 0px 20px' }} onClick={() => {navigate("/view-tool/"+tool.id)}} className='card-action-area'>
                                         <img alt="Tool Image" src={ '/static' + tool.image } className='tool-image' />
                                         <CardContent sx={{marginBottom:'20px'}}>
                                             <Typography gutterBottom variant="h6" component="div" align='center' className='tool-title'>
@@ -294,7 +294,11 @@ export default function UserProfilePage(){
         let formField = new FormData()
         formField.append('email', user.email)
         formField.append('name', _NameField !== "" ? _NameField : user.name)
-        formField.append('display_image', _uploadedPhoto !== null ? _uploadedPhoto : UserAccountImage.slice(8))
+
+        let imageToUpload = "";
+        if(UserAccountImage !== null) imageToUpload = UserAccountImage.slice(8);
+        if(_uploadedPhoto !== null) imageToUpload = _uploadedPhoto;
+        formField.append('display_image', imageToUpload)
         
         axios({
             method: 'PATCH',

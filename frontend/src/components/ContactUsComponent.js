@@ -26,12 +26,10 @@ export default function ContactUsComponent(){
 
         emailjs.sendForm('service_h0yi24a', 'template_73pygbh', form.current, '_53QZqaTZdEKmoM4r')
         .then((result) => {
-            console.log(result.text);
             setSendResult("Success");
             e.target.reset();
             setLoading(false);
         }, (error) => {
-            console.log(error.text);
             setSendResult("Failed");
             setLoading(false);
         });

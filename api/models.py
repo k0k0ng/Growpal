@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 class Category(models.Model):
     name        = models.CharField(max_length=100)
@@ -74,9 +74,3 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-
-# class UserAdditionalAttributes(models.Model):
-#     user_ID         = models.OneToOneField(User, on_delete=models.CASCADE)
-#     tool_ID         = models.ManyToManyField(Tool, blank=True)
-#     profile_image   = models.ImageField(blank=True, null=True)
-#     created_at      = models.DateTimeField(auto_now_add=True)
