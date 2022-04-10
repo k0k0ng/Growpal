@@ -13,7 +13,7 @@ import CreateToolComponent from '../components/CreateToolComponent';
 import UserProfilePage from './user/UserProfilePage';
 
 import HomePage from './user/HomePage';
-import ToolInfoComponent from '../components/ToolInfoComponent';
+import ToolInfoPage from './user/ToolInfoPage';
 import BlogPage from './user/BlogPage';
 import BlogInfoPage from './user/BlogInfoPage';
 
@@ -35,7 +35,7 @@ export default function RoutingPage() {
 
                     {/* User Pages */}
                     <Route exact path='/' element={<HomePage/>} />
-                    <Route path='/view-tool/:toolID' element={<ToolInfoComponent />} />
+                    <Route path='/view-tool/:toolID' element={<ToolInfoPage />} />
                     <Route path='/blog' element={<BlogPage />} />
                     <Route path='/blog/:blogID' element={<BlogInfoPage />} />
                     

@@ -146,21 +146,21 @@ const ToolsSection = () => {
 
     const BookmarkActionLoggedInUser = (variant) => {
         if(variant === "success"){
-            enqueueSnackbar('Tool added to bookmark.', { variant });
+            enqueueSnackbar('Tool added to bookmark.', { variant, autoHideDuration: 3000 });
         }else{
-            enqueueSnackbar('Tool removed from bookmark.', { variant });
+            enqueueSnackbar('Tool removed from bookmark.', { variant, autoHideDuration: 3000 });
         }
         
     };
 
     const BookmarkActionNotLoggedInUser = (variant) => {
-        enqueueSnackbar('Please loggin to bookmark a tool.', { variant });
+        enqueueSnackbar('Please loggin to bookmark a tool.', { variant, autoHideDuration: 3000 });
     };
 
     const _HandleAddBookmarkButtonPressed = (toolID) => {
         if(!user){
-            BookmarkActionNotLoggedInUser('warning')
-            return
+            BookmarkActionNotLoggedInUser('error')
+            return null;
         }
 
         fetch('/api/add-remove-tool-to-bookmark',{
@@ -277,7 +277,7 @@ const ToolsSection = () => {
             )
         }else{
             return (
-                <BookmarkBorderOutlinedIcon sx={{fontSize:'35px', padding:'0px', color:'#434743'}}  />
+                <BookmarkBorderOutlinedIcon sx={{fontSize:'35px', padding:'0px', color:'#c06115'}}  />
             )
         }
     }
@@ -463,7 +463,7 @@ export default function HomePage() {
                 </Box>
             </Parallax>
 
-            <SnackbarProvider maxSnack={3}>
+            <SnackbarProvider maxSnack={3} className="snackbar-custom-style">
                 <ToolsSection />
             </SnackbarProvider>
 

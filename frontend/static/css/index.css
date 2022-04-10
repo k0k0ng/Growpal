@@ -192,8 +192,6 @@ body {
 
 
 
-
-
 /* ------------ Tools Section > Home page ------------ */
 .tools-search-div {
   position: relative;
@@ -202,6 +200,11 @@ body {
   width: 100%;
   background-color: #546263;
   padding-top: 45px;
+}
+
+.snackbar-custom-style{
+  color: #f3f4ed !important;
+  background-color: #c06115 !important;
 }
 
 .tools-search-field-container {
