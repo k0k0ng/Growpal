@@ -39,6 +39,11 @@ export default function LoginPage () {
             setAlertInfo("Activating Failed")
             return null;
         }
+
+        if(localStorage.getItem('PasswordResetSuccess')){
+            setAlertInfo("Reset Success")
+            return null;
+        }
     },[])
 
     function _HandleEmailChange(e) {
@@ -119,6 +124,20 @@ export default function LoginPage () {
                 </Alert>
             );
         } 
+
+        if(_alertInfo === "Reset Success"){
+            localStorage.removeItem('PasswordResetSuccess');
+            return (
+                <Alert 
+                    severity="success"
+                    onClose={_CloseAlert}
+                    sx={{ width:'18.5%' }} 
+                    className='register-fields'
+                >
+                    Please check you email for password reset confirmation.
+                </Alert>
+            );
+        }
 
         if(_alertInfo === "Activating Failed"){
             localStorage.removeItem('ActivateFailed');

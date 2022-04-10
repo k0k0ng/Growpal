@@ -496,6 +496,7 @@ export default function UserProfilePage(){
                                         name='name' 
                                         value={_NameField} 
                                         variant="outlined" 
+                                        autoComplete='off'
                                         InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
                                         InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
                                         required 

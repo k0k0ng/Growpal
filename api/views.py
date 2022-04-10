@@ -65,7 +65,6 @@ def check_email_if_exists(request):
     if not user: 
         return Response({'Email Not Exists': 'Email is not in the database.'}, status=status.HTTP_200_OK)
     else:
-        print(user[0])
         return Response(UserAccountInfoSerializer(user[0]).data, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
