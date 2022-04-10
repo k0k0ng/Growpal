@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import axios from 'axios';
+import { SnackbarProvider, useSnackbar } from 'notistack';
 
 import TopNavComponent from '../../components/TopNavComponent';
 import FooterComponent from '../../components/FooterComponent';
@@ -16,13 +17,14 @@ import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from'@mui/material/Divider';
 import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
 
-import ListSubheader from '@mui/material/ListSubheader';
 import ListItemButton from '@mui/material/ListItemButton';
+import ListSubheader from '@mui/material/ListSubheader';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import FormControl from '@mui/material/FormControl';
@@ -50,43 +52,30 @@ const Input = styled('input')({
     display: 'none',
 });
 
-
-export default function UserProfilePage(){
+const ToolCardHeader = () => {
     const navigate = useNavigate();
-    const [refresher, setRefresher] = useState(() => { return true; });
-    const {user, UserAccountName, UserAccountImage, userBookmark ,setUserBookmark, resetUser, setResetUser} = useContext(AuthContext);
-    let BookmarkedTools = [];
-
-    const [PanelToShow, setPanelToShow] = useState(() => { 
-        if(localStorage.getItem('PanelToShow')){
-            return localStorage.getItem('PanelToShow');
-        }
-
-        return "Bookmark";
-    })
-
-    useEffect(()=> {
-        localStorage.removeItem('PanelToShow');
-    }, [PanelToShow])
-
-    let [pageNumber, setPageNumber] = useState(() => { return 0; });
-    let [toolsPerPage, setToolsPerPage] = useState(() => { return 10; });
-    const pagesVisited = pageNumber * toolsPerPage;
-    const pageCount = Math.ceil(userBookmark.length / toolsPerPage);
-    const changePage = ({ selected }) => {
-        setPageNumber(selected);
-    };
+    const {user, userBookmark ,setUserBookmark} = useContext(AuthContext);
+    const {enqueueSnackbar} = useSnackbar();
+    let _BookmarkedTools = [];
     
+    let [_pageNumber, setPageNumber] = useState(() => { return 0; });
+    let [_toolsPerPage, setToolsPerPage] = useState(() => { return 10; });
+    const _pagesVisited = _pageNumber * _toolsPerPage;
+    const _pageCount = Math.ceil(userBookmark.length / _toolsPerPage);
+
     useEffect(()=> {
         if(!userBookmark) return;
-        BookmarkedTools = [];
+        _BookmarkedTools = [];
         userBookmark.map((item) => {
-            BookmarkedTools.push(item)
+            _BookmarkedTools.push(item)
         })
     }, [userBookmark])
 
+    const _ChangePage = ({ selected }) => {
+        setPageNumber(selected);
+    };
 
-    const GetUserBookmarkedTools = async () => {
+    const _GetUserBookmarkedTools = async () => {
         let response = await fetch('/api/get-user-bookmarked-tools',{
             method:'POST',
             headers:{
@@ -111,10 +100,22 @@ export default function UserProfilePage(){
         }
     }
 
+    const _BookmarkActionLoggedInUser = (variant) => {
+        if(variant === "success"){
+            enqueueSnackbar('Tool added to bookmark.', { variant, autoHideDuration: 3000 });
+        }else{
+            enqueueSnackbar('Tool removed from bookmark.', { variant, autoHideDuration: 3000 });
+        }
+        
+    };
 
-    const _HandleAddBookmarkButtonPressed = (toolID) => {
+    const _BookmarkActionNotLoggedInUser = (variant) => {
+        enqueueSnackbar('Please loggin to bookmark a tool.', { variant, autoHideDuration: 3000 });
+    };
+
+    const _HandleAddBookmarkButtonPressed = (tool_ID) => {
         if(!user){
-            alert("Please login.")
+            _BookmarkActionNotLoggedInUser('error')
             return
         }
 
@@ -124,28 +125,29 @@ export default function UserProfilePage(){
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-                tool_ID: toolID,
+                tool_ID: tool_ID,
                 user_Email: user.email,
             })
         }).then((response) => {
 
             if(response.status === 404) return;
             
-            GetUserBookmarkedTools()
-            
-            setRefresher(!refresher)            
+            if(response.status === 201) _BookmarkActionLoggedInUser('success');
+            if(response.status === 200) _BookmarkActionLoggedInUser('info');
+
+            _GetUserBookmarkedTools()        
         });
     }
 
-    const DisplayPagination = () => {
+    const _DisplayPagination = () => {
         if(userBookmark.length > 0){
             return (
                 <Grid item xs={12} maxHeight="100px" sx={{ alignSelf: 'end' }}>
                     <ReactPaginate
                         previousLabel={"Previous"}
                         nextLabel={"Next"}
-                        pageCount={pageCount}
-                        onPageChange={changePage}
+                        pageCount={_pageCount}
+                        onPageChange={_ChangePage}
                         containerClassName={"pagination-buttons-profile"}
                         nextLinkClassName={"pagination-next-button"}
                         previousLinkClassName={"pagination-previous-button"}
@@ -159,8 +161,7 @@ export default function UserProfilePage(){
         return null;
     }
 
-    const BookmarkPanel = (props) => {
-        return (
+    return (
             <Grid 
                 container 
                 spacing={4}
@@ -168,7 +169,7 @@ export default function UserProfilePage(){
                 width={'100%'}
                 sx={{ margin:'0', padding:'0px 5% 4% 5%' }}
             >
-                {userBookmark.slice(pagesVisited, pagesVisited + toolsPerPage).map((tool) => {
+                {userBookmark.slice(_pagesVisited, _pagesVisited + _toolsPerPage).map((tool) => {
                     
                     return <Grid item 
                                 key={tool.id} 
@@ -179,7 +180,6 @@ export default function UserProfilePage(){
                                 xs={11}
                             >
                                 <Card sx={{ maxWidth: 345, backgroundColor:'#546263', color:'#f3f4ed', border:'1px solid #f3f4ed', borderRadius:3 }} elevation={0}>
-                                    
                                     <CardHeader
                                         avatar={
                                             <Tooltip title="Remove bookmark" placement="right-start">
@@ -193,9 +193,9 @@ export default function UserProfilePage(){
                                             padding:'0px',
                                             zIndex:'1999'
                                         }}
-                                        onClick={() => _HandleAddBookmarkButtonPressed (tool.id, tool.title)}
+                                        onClick={() => _HandleAddBookmarkButtonPressed (tool.id)}
                                     />
-                    
+
                                     <CardActionArea sx={{ minHeight:350, padding:'40px 20px 0px 20px' }} onClick={() => {console.log(tool.title); navigate("/view-tool/"+tool.id)}} className='card-action-area'>
                                         <img alt="Tool Image" src={ '/static' + tool.image } className='tool-image' />
                                         <CardContent sx={{marginBottom:'20px'}}>
@@ -216,44 +216,64 @@ export default function UserProfilePage(){
                             </Grid>
                 })}
 
-                { DisplayPagination() }
+                { _DisplayPagination() }
                 
             </Grid>
-        )
-    }
+        
+    );
+}
 
-    const [hasChanges, setHasChanges] = useState(() => {return false;});
-    const [NameField, setNameField] = useState(() => {return "";});
-    const [uploadedPhoto, setUploadedPhoto] = useState(() => {return null;});
-    const [openEditName, setOpenEditName] = useState(() => {return false;});
-    const [openUploadPhoto, setOpenUploadPhoto] = useState(() => {return false;});
+export default function UserProfilePage(){
+    const {user, UserAccountName, UserAccountImage, resetUser, setResetUser} = useContext(AuthContext);
+
+    const [_hasChanges, setHasChanges] = useState(() => {return false;});
+    const [_NameField, setNameField] = useState(() => {return "";});
+    const [_uploadedPhoto, setUploadedPhoto] = useState(() => {return null;});
+    const [_openEditName, setOpenEditName] = useState(() => {return false;});
+    const [_openUploadPhoto, setOpenUploadPhoto] = useState(() => {return false;});
+
+    const [_HasAlert, setHasAlert] = useState(() => { return "";});
+    const [_ShowSaveChangesConfirmation, setShowSaveChangesConfirmation] = useState(false);
+    const [_ShowCancelConfirmation, setShowCancelConfirmation] = useState(false);
+
+    const [_PanelToShow, setPanelToShow] = useState(() => { 
+        if(localStorage.getItem('PanelToShow')){
+            return localStorage.getItem('PanelToShow');
+        }
+
+        return "Bookmark";
+    })
+
+    useEffect(()=> {
+        localStorage.removeItem('PanelToShow');
+    }, [_PanelToShow])
 
     useEffect(() => {
         setNameField(UserAccountName)
     }, [UserAccountName])
-    
-    const ShowEditName = () => {
-        setOpenEditName(!openEditName);
+
+    useEffect(() => {
+        _RenderToUploadImagePreview()
+    },[_uploadedPhoto])
+
+    const _ShowEditName = () => {
+        setOpenEditName(!_openEditName);
     };
-    const ShowUploadPhoto = () => {
-        setOpenUploadPhoto(!openUploadPhoto);
+    const _ShowUploadPhoto = () => {
+        setOpenUploadPhoto(!_openUploadPhoto);
     };
 
-    const ChangeNameField = (e) => {
+    const _ChangeNameField = (e) => {
         setHasChanges(true);
         setNameField(e.target.value);
     }
 
-    const ChangeUploadPhoto = (e) => {
+    const _ChangeUploadPhoto = (e) => {
         setHasChanges(true);
         setUploadedPhoto(prevValue => prevValue = e.target.files[0]);
     }
 
-    useEffect(() => {
-        RenderToUploadImagePreview()
-    },[uploadedPhoto])
-
-    const CancelChangeConfirmed = () => {
+    const _CancelChangeConfirmed = () => {
         setHasChanges(false);
         setNameField(UserAccountName);
         setOpenEditName(false);
@@ -262,22 +282,20 @@ export default function UserProfilePage(){
         setShowCancelConfirmation(false);
     }
 
-    const [ShowCancelConfirmation, setShowCancelConfirmation] = useState(false);
-
-    const ShowCancelConfirmationOpen = () => {
+    const _ShowCancelConfirmationOpen = () => {
         setShowCancelConfirmation(true);
     };
 
-    const ShowCancelConfirmationClose = () => {
+    const _ShowCancelConfirmationClose = () => {
         setShowCancelConfirmation(false);
     };
 
-    const SaveChangesConfirmed = () => {
+    const _SaveChangesConfirmed = () => {
         let formField = new FormData()
         formField.append('email', user.email)
-        formField.append('name', NameField !== "" ? NameField : user.name)
-        formField.append('display_image', uploadedPhoto !== null ? uploadedPhoto : user.display_image)
-
+        formField.append('name', _NameField !== "" ? _NameField : user.name)
+        formField.append('display_image', _uploadedPhoto !== null ? _uploadedPhoto : UserAccountImage.slice(8))
+        
         axios({
             method: 'PATCH',
             url:'/api/update-account-name-image',
@@ -285,8 +303,13 @@ export default function UserProfilePage(){
             xsrfCookieName: 'csrftoken',
             xsrfHeaderName: 'X-CSRFTOKEN',
         }).then(response=>{
-            console.log("========== Activate Reset User ================")
             setResetUser(!resetUser);
+            if(response.status === 200){
+                setHasAlert("Success");
+            }else{
+                setHasAlert("Failed");
+            }
+            
         });
 
         setHasChanges(false);
@@ -297,18 +320,17 @@ export default function UserProfilePage(){
         setShowSaveChangesConfirmation(false);
     }
 
-    const [ShowSaveChangesConfirmation, setShowSaveChangesConfirmation] = useState(false);
 
-    const ShowSaveChangesConfirmationOpen = () => {
+    const _ShowSaveChangesConfirmationOpen = () => {
         setShowSaveChangesConfirmation(true);
     };
 
-    const ShowSaveChangesConfirmationClose = () => {
+    const _ShowSaveChangesConfirmationClose = () => {
         setShowSaveChangesConfirmation(false);
     };
     
-    const DisplaySaveCancelButton = () => {
-        if(hasChanges){
+    const _DisplaySaveCancelButton = () => {
+        if(_hasChanges){
             return (
                 <Grid item xs={12} sx={{ display:'flex', justifyContent:'center', marginTop:'2%' }}>
                     <Button 
@@ -316,14 +338,14 @@ export default function UserProfilePage(){
                         color="primary" 
                         className='contact-us-right-container-send-button'
                         sx={{ margin:'0px 1%' }}
-                        onClick={ShowSaveChangesConfirmationOpen}
+                        onClick={_ShowSaveChangesConfirmationOpen}
                     >
                         Save
                     </Button>
                     <Box component='div'>
                         <Dialog
-                            open={ShowSaveChangesConfirmation}
-                            onClose={ShowSaveChangesConfirmationClose}
+                            open={_ShowSaveChangesConfirmation}
+                            onClose={_ShowSaveChangesConfirmationClose}
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description"
                         >
@@ -338,10 +360,10 @@ export default function UserProfilePage(){
                                 </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={ShowSaveChangesConfirmationClose}>Disagree</Button>
+                                <Button onClick={_ShowSaveChangesConfirmationClose}>Disagree</Button>
                                 <Button 
                                     className='contact-us-right-container-send-button' 
-                                    onClick={SaveChangesConfirmed} 
+                                    onClick={_SaveChangesConfirmed} 
                                     autoFocus
                                 >
                                     Agree
@@ -354,14 +376,14 @@ export default function UserProfilePage(){
                         color="secondary"
                         className='contact-us-right-container-send-button' 
                         sx={{ margin:'0px 1%' }}
-                        onClick={ShowCancelConfirmationOpen}
+                        onClick={_ShowCancelConfirmationOpen}
                     >
                         Cancel
                     </Button>
                     <Box component='div'>
                         <Dialog
-                            open={ShowCancelConfirmation}
-                            onClose={ShowCancelConfirmationClose}
+                            open={_ShowCancelConfirmation}
+                            onClose={_ShowCancelConfirmationClose}
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description"
                         >
@@ -376,10 +398,10 @@ export default function UserProfilePage(){
                                 </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={ShowCancelConfirmationClose}>Disagree</Button>
+                                <Button onClick={_ShowCancelConfirmationClose}>Disagree</Button>
                                 <Button 
                                     className='contact-us-right-container-send-button' 
-                                    onClick={CancelChangeConfirmed} 
+                                    onClick={_CancelChangeConfirmed} 
                                     autoFocus
                                 >
                                     Agree
@@ -415,16 +437,27 @@ export default function UserProfilePage(){
         }
     }   
 
-    
+    const _BookmarkPanel = () => {
+        return (
+            <SnackbarProvider maxSnack={3} className='snackbar-custom-style'>
+                <ToolCardHeader />
+            </SnackbarProvider>
+        )
+    }
 
-    const SettingsPanel = () => {
+    const _SettingsPanel = () => {
         return (
             <Grid 
                 container 
                 justifyContent='center'
                 sx={{ marginTop:'2%' }}
             >
-                <Grid item xs={10} md={6} lg={4} sx={{ display:'flex', justifyContent:'center', margin:'3% 0 5% 0'  }}>
+                <Grid item container justifyContent='center' xs={12}>
+                    <Grid item xs={10} md={6} lg={4}>
+                        { _ShowAlert() }
+                    </Grid>
+                </Grid>
+                <Grid item xs={10} md={6} lg={4} sx={{ display:'flex', justifyContent:'center', margin:'1% 0 5% 0'  }}>
                     <List
                         sx={{ width: '100%', bgcolor: 'background.paper', borderRadius:'5px'}}
                         component="nav"
@@ -442,14 +475,14 @@ export default function UserProfilePage(){
                             <ListItemText primary={user.email} primaryTypographyProps={{ fontFamily:'Montserrat Alternates' }} />
                         </ListItemButton>
 
-                        <ListItemButton onClick={ShowEditName}>
+                        <ListItemButton onClick={_ShowEditName}>
                             <ListItemIcon>
                                 <AssignmentIndRoundedIcon sx={{ color:'#c06115' }} />
                             </ListItemIcon>
                             <ListItemText primary={UserAccountName} primaryTypographyProps={{ fontFamily:'Montserrat Alternates' }} />
-                            {openEditName ? <ExpandLess sx={{ color:'#546263' }} /> : <ExpandMore sx={{ color:'#546263' }} />}
+                            {_openEditName ? <ExpandLess sx={{ color:'#546263' }} /> : <ExpandMore sx={{ color:'#546263' }} />}
                         </ListItemButton>
-                        <Collapse in={openEditName} timeout="auto" unmountOnExit>
+                        <Collapse in={_openEditName} timeout="auto" unmountOnExit>
                             <List component="div" disablePadding>
                             <ListItemButton sx={{ pl: 4, pr: 4 }}>
                                 <FormControl component="fieldset" sx={{ width:'100%' }}>
@@ -457,38 +490,38 @@ export default function UserProfilePage(){
                                         id="name" 
                                         label="Name" 
                                         name='name' 
-                                        value={NameField} 
+                                        value={_NameField} 
                                         variant="outlined" 
                                         InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
                                         InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
                                         required 
-                                        onChange={ChangeNameField} 
+                                        onChange={_ChangeNameField} 
                                     />
                                 </FormControl>
                             </ListItemButton>
                             </List>
                         </Collapse>
 
-                        <ListItemButton onClick={ShowUploadPhoto}>
+                        <ListItemButton onClick={_ShowUploadPhoto}>
                             <ListItemIcon>
                                 <ImageRoundedIcon sx={{ color:'#c06115' }} />
                             </ListItemIcon>
                             <ListItemText primary="Change Profile" primaryTypographyProps={{ fontFamily:'Montserrat Alternates' }} />
-                            {openUploadPhoto ? <ExpandLess sx={{ color:'#546263' }} /> : <ExpandMore sx={{ color:'#546263' }} />}
+                            {_openUploadPhoto ? <ExpandLess sx={{ color:'#546263' }} /> : <ExpandMore sx={{ color:'#546263' }} />}
                         </ListItemButton>
-                        <Collapse in={openUploadPhoto} timeout="auto" unmountOnExit>
+                        <Collapse in={_openUploadPhoto} timeout="auto" unmountOnExit>
                             <List component="div" disablePadding>
                             <ListItemButton sx={{ pl: 4 }}>
                                 <Grid item xs={12} align="center">
-                                    {RenderToUploadImagePreview()}
+                                    {_RenderToUploadImagePreview()}
                                     <Typography 
                                         variant="body2" 
                                         sx={{ fontFamily:'Montserrat Alternates' }}
                                     >
-                                        { uploadedPhoto ? uploadedPhoto.name : "Upload Image"}
+                                        { _uploadedPhoto ? _uploadedPhoto.name : "Upload Image"}
                                     </Typography>
                                     <label htmlFor="contained-button-file">
-                                        <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={ChangeUploadPhoto} />
+                                        <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={_ChangeUploadPhoto} />
                                         <IconButton color="primary" aria-label="upload picture" component="span">
                                             <PhotoCamera sx={{color:'#c06115'}}  />
                                         </IconButton>
@@ -502,13 +535,37 @@ export default function UserProfilePage(){
 
                 </Grid>
                 
-                {DisplaySaveCancelButton()}
+                {_DisplaySaveCancelButton()}
                 
             </Grid>
         )
     }
 
-    const BookmarkMenuActive = () => {
+    const _ShowAlert = () => {   
+        if(_HasAlert === "Success"){
+            return (
+                <Alert severity="success" onClose={_CloseAlert}>
+                    Account updated successfuly.
+                </Alert>
+            );
+        }  
+
+        if(_HasAlert === "Failed"){
+            return (
+                <Alert severity="error" onClose={_CloseAlert}>
+                    Something went wrong! Updating account failed.
+                </Alert>
+            );
+        }
+
+        return null;
+    }
+
+    const _CloseAlert = () => {
+        setHasAlert("");
+    }
+
+    const _BookmarkMenuActive = () => {
         return (
             <Box sx={{ display:'flex', justifyContent:'center', alignItems:'center' }}>
                 <Button onClick={() => { setPanelToShow("Bookmark"); }} variant="text" sx={{ fontFamily:'Montserrat Alternates', color:'#f3f4ed', height:'50px', borderRadius:'0px', padding:'0px 45px', borderBottom:'2px solid #c06115' }} elevation={0}>Bookmarks</Button>
@@ -518,7 +575,7 @@ export default function UserProfilePage(){
         )
     }
 
-    const SettingsMenuActive = () => {
+    const _SettingsMenuActive = () => {
         return (
             <Box sx={{ display:'flex', justifyContent:'center', alignItems:'center' }}>
                 <Button onClick={() => { setPanelToShow("Bookmark"); }} variant="text" sx={{ fontFamily:'Montserrat Alternates', color:'#f3f4ed', height:'50px', borderRadius:'0px', padding:'0px 45px' }} >Bookmarks</Button>
@@ -529,15 +586,15 @@ export default function UserProfilePage(){
     }
 
 
-    const RenderToUploadImagePreview = () => {
-        if(uploadedPhoto !== null){
-            return <img alt="User Cover" src={ URL.createObjectURL(uploadedPhoto) } height='100px'/>
+    const _RenderToUploadImagePreview = () => {
+        if(_uploadedPhoto !== null){
+            return <img alt="User Cover" src={ URL.createObjectURL(_uploadedPhoto) } height='100px'/>
         }else{
             return <img alt="User Cover" src={ '/static/images/avatar.png' } height='100px'/>
         }
     }
 
-    const RenderProfileImage = () => {
+    const _RenderProfileImage = () => {
         if(UserAccountImage){
             return <img alt="User Cover" src={ '/static'+ UserAccountImage } height='150px'/>
         }else{
@@ -561,7 +618,7 @@ export default function UserProfilePage(){
                         <Grid container justifyContent='center' sx={{ height:'120px', position:'relative', top:'-76px' }}>
                              <Grid item xs={12} sx={{ display:'flex', justifyContent:'center' }}>
                                 <Box sx={{  width:'150px', height:'150px', overflow:'hidden', borderRadius:'50%', border:'2px solid #c06115'}}>
-                                    {RenderProfileImage()}
+                                    {_RenderProfileImage()}
                                 </Box>
                              </Grid>
                         </Grid>                        
@@ -569,13 +626,13 @@ export default function UserProfilePage(){
                             <Grid container justifyContent='center'>
                                 <Grid item xs={12} sx={{ display:'flex', justifyContent:'center' }}>
                                     
-                                    { PanelToShow === "Bookmark" ? BookmarkMenuActive() : SettingsMenuActive() }
+                                    { _PanelToShow === "Bookmark" ? _BookmarkMenuActive() : _SettingsMenuActive() }
                                     
                                 </Grid>
                             </Grid> 
                         </CardActions>
                         <CardContent sx={{ padding:'0px', minHeight:'480px' }}>
-                            { PanelToShow === "Bookmark" ? BookmarkPanel() : SettingsPanel() }
+                            { _PanelToShow === "Bookmark" ? _BookmarkPanel() : _SettingsPanel() }
                         </CardContent>
                         
                     </Card>
