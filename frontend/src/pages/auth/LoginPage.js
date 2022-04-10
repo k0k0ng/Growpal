@@ -1,46 +1,61 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
 import AuthContext from '../../context/AuthContext';
 
 import FormControl from '@mui/material/FormControl';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
-import LoadingButton from '@mui/lab/LoadingButton';
 
 import SendIcon from '@mui/icons-material/Send';
-
-
 
 export default function LoginPage () {
     const navigate = useNavigate();
     const {setAuthTokens, setUser} = useContext(AuthContext);
 
-    const [logginIn, setLogginIn] = useState(() => { return false; });
-    const [alertInfo, setAlertInfo] = useState(() => { return (localStorage.getItem('SignUpSuccess') ? "Signing Up Success" : ""); });
-    const [email, setEmail] = useState(() => { return ""; });
-    const [password, setPassword] = useState(() => { return ""; });
+    const [_logginIn, setLogginIn] = useState(() => { return false; });
+    const [_alertInfo, setAlertInfo] = useState(() => { return ""; });
+    const [_email, setEmail] = useState(() => { return ""; });
+    const [_password, setPassword] = useState(() => { return ""; });
 
-    function _handleEmailChange(e) {
+    useEffect(() =>{
+        if(localStorage.getItem('SignUpSuccess')){
+            setAlertInfo("Signing Up Success")
+            return null;
+        }
+
+        if(localStorage.getItem('ActivateSuccess')){
+            setAlertInfo("Activating Success")
+            return null;
+        }
+
+        if(localStorage.getItem('ActivateFailed')){
+            setAlertInfo("Activating Failed")
+            return null;
+        }
+    },[])
+
+    function _HandleEmailChange(e) {
         setEmail( prevValue => prevValue = e.target.value);
     }
 
-    function _handlePasswordChange(e) {
+    function _HandlePasswordChange(e) {
         setPassword( prevValue => prevValue = e.target.value);
     }
 
-    const _handleSignInButtonPressed = async (e) => {
-        if(email === "") {
+    const _HandleSignInButtonPressed = async (e) => {
+        if(_email === "") {
             setAlertInfo("Empty Email");
             return null;
         }
 
-        if(password === "") {
+        if(_password === "") {
             setAlertInfo("Empty Password");
             return null;
         }
@@ -51,8 +66,8 @@ export default function LoginPage () {
                 'Content-Type':'application/json'
             },
             body:JSON.stringify({
-                email: email,
-                password: password,
+                email: _email,
+                password: _password,
             })
         }).catch((e)=>{
             setAlertInfo("Invalid Credentials");
@@ -72,17 +87,17 @@ export default function LoginPage () {
         
     }
 
-    const CloseAlert = () => {
+    const _CloseAlert = () => {
         setAlertInfo("");
     }
 
-    const ShowAlert = () => {   
-        if(alertInfo === "Signing Up Success"){
+    const _ShowAlert = () => {   
+        if(_alertInfo === "Signing Up Success"){
             localStorage.removeItem('SignUpSuccess');
             return (
                 <Alert 
                     severity="success"
-                    onClose={CloseAlert}
+                    onClose={_CloseAlert}
                     sx={{ width:'18.5%' }} 
                     className='register-fields'
                 >
@@ -91,11 +106,39 @@ export default function LoginPage () {
             );
         }  
 
-        if(alertInfo === "Invalid Credentials"){
+        if(_alertInfo === "Activating Success"){
+            localStorage.removeItem('ActivateSuccess');
+            return (
+                <Alert 
+                    severity="success"
+                    onClose={_CloseAlert}
+                    sx={{ width:'18.5%' }} 
+                    className='register-fields'
+                >
+                    Account activated successfuly.
+                </Alert>
+            );
+        } 
+
+        if(_alertInfo === "Activating Failed"){
+            localStorage.removeItem('ActivateFailed');
+            return (
+                <Alert 
+                    severity="warning"
+                    onClose={_CloseAlert}
+                    sx={{ width:'18.5%' }} 
+                    className='register-fields'
+                >
+                    Activating account failed. Account might be already activated. 
+                </Alert>
+            );
+        } 
+
+        if(_alertInfo === "Invalid Credentials"){
             return (
                 <Alert 
                     severity="error"
-                    onClose={CloseAlert}
+                    onClose={_CloseAlert}
                     sx={{ width:'18.5%' }} 
                     className='register-fields'
                 >
@@ -104,11 +147,11 @@ export default function LoginPage () {
             );
         }
 
-        if(alertInfo === "Empty Email"){
+        if(_alertInfo === "Empty Email"){
             return (
                 <Alert 
                     severity="error"
-                    onClose={CloseAlert}
+                    onClose={_CloseAlert}
                     sx={{ width:'18.5%' }} 
                     className='register-fields'
                 >
@@ -117,11 +160,11 @@ export default function LoginPage () {
             );
         }
 
-        if(alertInfo === "Empty Password"){
+        if(_alertInfo === "Empty Password"){
             return (
                 <Alert 
                     severity="error"
-                    onClose={CloseAlert}
+                    onClose={_CloseAlert}
                     sx={{ width:'18.5%' }} 
                     className='register-fields'
                 >
@@ -133,11 +176,11 @@ export default function LoginPage () {
         return null;
     }
 
-    const SignInButtonToShow = () => {
-        if(logginIn){
+    const _SignInButtonToShow = () => {
+        if(_logginIn){
             return (
                 <LoadingButton
-                    loading={logginIn}
+                    loading={_logginIn}
                     loadingPosition="end"
                     endIcon={<SendIcon />}
                     className='contact-us-right-container-send-button-loading'
@@ -152,7 +195,7 @@ export default function LoginPage () {
                     color="primary" 
                     className='contact-us-right-container-send-button'
                     sx={{ margin:'0px 1%' }}
-                    onClick={_handleSignInButtonPressed}
+                    onClick={_HandleSignInButtonPressed}
                 >
                     Sign In
                 </Button>
@@ -164,18 +207,25 @@ export default function LoginPage () {
         <Box component='div' sx={{ height:'100vh', display:'flex', alignItems:'center' }} >
             <Grid container spacing={1}>
                 <Grid item xs={12} align="center">
-                    <Typography compenent="h1" variant="h3" sx={{ fontFamily:'Arvo', color:'#546263' }}>
-                        Growpal
-                    </Typography>
+                    <Button 
+                        variant="text"
+                        sx={{ textTransform:'none' }}
+                        to="/" 
+                        component={Link}
+                    >
+                       <Typography compenent="h1" variant="h3" sx={{ fontFamily:'Arvo', color:'#546263' }}>
+                            Growpal
+                        </Typography>
+                    </Button>
                 </Grid>
                 <Grid item xs={12} align="center">
-                    <Typography compenent="h4" variant="h4" className='register-header' sx={{ margin:'2% 0px 1% 0px' }}>
+                    <Typography compenent="h4" variant="h4" className='register-header'>
                         Sign In
                     </Typography>
                 </Grid>
                 
                 <Grid item xs={12} align="center" sx={{ minHeight:'60px' }}>
-                    { ShowAlert() }
+                    { _ShowAlert() }
                 </Grid>
                 
 
@@ -185,13 +235,13 @@ export default function LoginPage () {
                             id="email" 
                             label="Email" 
                             name='email' 
-                            value={email || ''} 
+                            value={_email || ''} 
                             variant="outlined" 
                             autoComplete='off'
                             InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
                             InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
                             required 
-                            onChange={_handleEmailChange} 
+                            onChange={_HandleEmailChange} 
                         />
                     </FormControl>
                 </Grid>
@@ -207,35 +257,50 @@ export default function LoginPage () {
                             InputProps={{ style: { fontFamily:'Montserrat Alternates' } }}
                             InputLabelProps={{ style: { fontFamily:'Montserrat Alternates' }} }
                             required 
-                            onChange={_handlePasswordChange} 
+                            onChange={_HandlePasswordChange} 
                         />
                     </FormControl>
                 </Grid>
-                <Grid item xs={12} align="center" sx={{ margin:'0 0 2% 0px' }}>
+
+                <Grid item xs={12} align="center" >
+                    { _SignInButtonToShow() }
+                </Grid>
+
+                <Grid item xs={12} align="center" sx={{ margin:'2% 0 2% 0px' }}>
+                    <Button 
+                        variant="text"
+                        color="primary" 
+                        to="/register" 
+                        sx={{ 
+                            fontSize:'12px',
+                            fontFamily:'Montserrat Alternates', 
+                            textTransform:'none',
+                            color:'#c06115', 
+                            borderRadius: '25px',
+                            margin:'0px 25px'
+                        }}
+                        component={Link}
+                        className='custom-button-text'
+                    >
+                        Don't have an account? Sign Up
+                    </Button>
+
                     <Button 
                         variant="text"
                         color="primary" 
                         to="/forgot-password" 
-                        sx={{ fontFamily:'Montserrat Alternates', color:'#c06115', padding: '10px 45px', borderRadius: '25px' }}
+                        sx={{ 
+                            fontSize:'12px',
+                            fontFamily:'Montserrat Alternates', 
+                            textTransform:'none',
+                            color:'#c06115',  
+                            borderRadius: '25px',
+                            margin:'0px 25px'
+                        }}
                         component={Link}
                         className='custom-button-text'
                     >
-                        Forgot Password
-                    </Button>
-                </Grid>
-                <Grid item xs={12} align="center" >
-                    
-                    { SignInButtonToShow() }
-                    
-                    <Button 
-                        variant="contained" 
-                        color="secondary"
-                        className='contact-us-right-container-cancel-button' 
-                        sx={{ margin:'0px 1%' }}
-                        to="/" 
-                        component={Link}
-                    >
-                        Cancel
+                        Forgot Password?
                     </Button>
                 </Grid>
                 

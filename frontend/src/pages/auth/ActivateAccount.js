@@ -1,18 +1,22 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 
+import LoadingButton from '@mui/lab/LoadingButton';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
+import SendIcon from '@mui/icons-material/Send';
+
 export default function ActivateAccount () {
     const navigate = useNavigate();
     
     const { uid, token } = useParams();
-    
-    const activeClick = (e) => {
+    const [_activatingAccount, setActivatingAccount] = useState(() => { return false; });
+
+    const _ActiveButtonClicked = () => {
         Axios({
             method: 'POST',
             url:'/auth/users/activation/',
@@ -20,13 +24,46 @@ export default function ActivateAccount () {
             xsrfCookieName: 'csrftoken',
             xsrfHeaderName: 'X-CSRFTOKEN',
         }).then(() => {
-            navigate('/login')
+            setActivatingAccount(false);
+            localStorage.setItem('ActivateSuccess', true);
+            navigate('/login');
         })
         .catch(err => {
-            alert(err.response);
+            setActivatingAccount(false);
+            localStorage.setItem('ActivateFailed', true);
+            navigate('/login');
         });
+
+        setActivatingAccount(true);
     };
     
+    const _ActivateButtonToShow = () => {
+        if(_activatingAccount){
+            return (
+                <LoadingButton
+                    loading={_activatingAccount}
+                    loadingPosition="end"
+                    endIcon={<SendIcon />}
+                    className='contact-us-right-container-send-button-loading'
+                >
+                    Activate Account
+                </LoadingButton>
+            )
+        }else{
+            return (
+                <Button 
+                    variant="contained" 
+                    color="primary" 
+                    className='contact-us-right-container-send-button'
+                    sx={{ margin:'0px 1%' }}
+                    onClick={_ActiveButtonClicked}
+                >
+                    Activate Account
+                </Button>
+            )
+        }
+    }
+
     return (      
         <Box component='div' sx={{ height:'100vh', display:'flex', alignItems:'center' }} >
             <Grid container spacing={1}>
@@ -39,15 +76,7 @@ export default function ActivateAccount () {
                         Press to continue activate account.
                     </Typography>
 
-                    <Button 
-                        variant="contained" 
-                        color="primary" 
-                        className='contact-us-right-container-send-button'
-                        sx={{ margin:'0px 1%' }}
-                        onClick={activeClick}
-                    >
-                        Activate Account
-                    </Button>
+                    {_ActivateButtonToShow()}
                 </Grid>
                 
             </Grid>
