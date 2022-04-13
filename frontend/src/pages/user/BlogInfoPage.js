@@ -35,29 +35,27 @@ export default function BlogInfoPage() {
         axios.get(`http://localhost:8000/wp-json/wp/v2/posts/${blogID}`)
         .then((result) => {
             setBlogInfo(result.data);
-            console.log("============ ResultData =============")
-            console.log(result.data.author)
 
-            const getBlogFeaturedImage = axios.get(`http://localhost:8000/wp-json/wp/v2/media/${result.data.featured_media}`);
-            const getBlogAuthorName = axios.get(`http://localhost:8000/wp-json/wp/v2/users/${result.data.author}`);
+            axios.get(`http://localhost:8000/wp-json/wp/v2/users/${result.data.author}`).then(response => {
+                setAuthorName(response.data.name);
+            });
 
-            Promise.all([getBlogFeaturedImage, getBlogAuthorName]).then(response => {
-                setBlogFeaturedImageURL(response[0].data.media_details.sizes.full.source_url);
-                setAuthorName(response[1].data.name);
-            }).then(() =>{
+            if(result.data.featured_media === 0) {
                 setIsLoaded(true);
-            })
+                return null;
+            }
+            
+            axios.get(`http://localhost:8000/wp-json/wp/v2/media/${result.data.featured_media}`).then(response => {
+                setBlogFeaturedImageURL(response.data.media_details.sizes.full.source_url);
+                setIsLoaded(true);
+            });
+            
         }).catch(err => {
             console.log("============ Error =============")
             console.log(err);
             console.log("================================")
         });
     },[]);
-
-    useEffect(() => {
-        console.log("============ BlogInfo =============")
-        console.log(blogInfo);
-    },[blogInfo]);
 
     if(isLoaded) {
         return (

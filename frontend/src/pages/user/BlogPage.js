@@ -41,37 +41,33 @@ export default function BlogPage() {
     };
 
     const DisplayBlogs = () => {
-        try{
-            if(isLoaded){
-                return (
-                    blogs.slice(pagesVisited, pagesVisited + blogsPerPage).map((blog) => (
-                        <BlogItemComponent key={blog.id} blog={blog} />
-                    ))
-                );
-            }else{
-                return(
-                    <Card sx={{ padding:'3% 0px', marginBottom:'6%', width:'60%', minHeight:'50vh' }}>
-                        <Grid container>
-                            <Grid item xs={12} sx={{ display:'flex', justifyContent:'center', marginBottom:'25px' }}>
-                                <Box sx={{ width:'400px', height:'30px' }} className='skeleton' />
-                            </Grid>
-                            <Grid item xs={12} sx={{ display:'flex', justifyContent:'center', marginBottom:'25px' }}>
-                                <Box sx={{ width:'650px', height:'350px' }} className='skeleton' />
-                            </Grid>
-                            <Grid item xs={12} sx={{ justifyContent:'center', padding:'0px 6%' }}>
-                                <Box className='skeleton skeleton-text' />
-                                <Box className='skeleton skeleton-text' />
-                                <Box className='skeleton skeleton-text' />
-                                <Box className='skeleton skeleton-text' />
-                                <Box className='skeleton skeleton-text' />
-                            </Grid>
+        if(isLoaded){
+            return (
+                blogs.slice(pagesVisited, pagesVisited + blogsPerPage).map((blog) => (
+                    <BlogItemComponent key={blog.id} blog={blog} />
+                ))
+            );
+        }else{
+            return(
+                <Card sx={{ padding:'3% 0px', marginBottom:'6%', width:'60%', minHeight:'50vh' }}>
+                    <Grid container>
+                        <Grid item xs={12} sx={{ display:'flex', justifyContent:'center', marginBottom:'25px' }}>
+                            <Box sx={{ width:'400px', height:'30px' }} className='skeleton' />
                         </Grid>
-                    </Card>
-                )
-            }
-        }catch(e) {
-            console.log("Nadakapaaaaaaaaan");
-        };
+                        <Grid item xs={12} sx={{ display:'flex', justifyContent:'center', marginBottom:'25px' }}>
+                            <Box sx={{ width:'650px', height:'350px' }} className='skeleton' />
+                        </Grid>
+                        <Grid item xs={12} sx={{ justifyContent:'center', padding:'0px 6%' }}>
+                            <Box className='skeleton skeleton-text' />
+                            <Box className='skeleton skeleton-text' />
+                            <Box className='skeleton skeleton-text' />
+                            <Box className='skeleton skeleton-text' />
+                            <Box className='skeleton skeleton-text' />
+                        </Grid>
+                    </Grid>
+                </Card>
+            )
+        }
     }
 
     
