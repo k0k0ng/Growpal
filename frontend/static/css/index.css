@@ -588,6 +588,7 @@ select::-ms-expand {
   padding-top:2%; 
   margin-bottom:6%; 
   max-width:60%; 
+  background-color: #f3f4ed;
 }
 
 .blog-image {
