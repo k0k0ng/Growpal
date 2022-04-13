@@ -2,6 +2,12 @@ import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns'
 import axios from 'axios';
+import {
+    FacebookShareButton,
+    LinkedinShareButton,
+    PinterestShareButton,
+    TwitterShareButton
+  } from "react-share";
 
 import TopNavComponent from '../../components/TopNavComponent';
 import FooterComponent from '../../components/FooterComponent';
@@ -13,7 +19,6 @@ import {
     CardContent,
     CardActions,
     Divider,
-    IconButton
 } from '@mui/material';
 
 import CircleIcon from '@mui/icons-material/Circle';
@@ -89,6 +94,21 @@ export default function BlogInfoPage() {
         )
     }
 
+    const DisplayPinterestButton = () => {
+        if(blogFeaturedImageURL === "") return null;
+
+        return(
+            <PinterestShareButton 
+                media={blogFeaturedImageURL} 
+                url={blogInfo.link}
+                quote={blogInfo.title.rendered}
+                hashtag={'#wordpress_blog'}
+            >
+                <PinterestIcon className="blog-share-icons" />
+            </PinterestShareButton>
+        );
+    }
+
     if(isLoaded) {
         return (
             <Box>
@@ -121,18 +141,30 @@ export default function BlogInfoPage() {
                         </CardContent>
                         <Divider />
                         <CardActions sx={{ justifyContent:'end', bgcolor:'#546263' }}>
-                            <IconButton aria-label="share">
+                            <FacebookShareButton 
+                                url={blogInfo.link}
+                                quote={blogInfo.title.rendered}
+                                hashtag={'#wordpress_blog'}
+                            >
                                 <FacebookIcon className="blog-share-icons" />
-                            </IconButton>
-                            <IconButton aria-label="share">
+                            </FacebookShareButton>
+                            <TwitterShareButton 
+                                url={blogInfo.link}
+                                quote={blogInfo.title.rendered}
+                                hashtag={'#wordpress_blog'}
+                            >
                                 <TwitterIcon className="blog-share-icons" />
-                            </IconButton>
-                            <IconButton aria-label="share">
-                                <PinterestIcon className="blog-share-icons" />
-                            </IconButton>
-                            <IconButton aria-label="share">
+                            </TwitterShareButton>
+                            
+                            {DisplayPinterestButton()}
+
+                            <LinkedinShareButton 
+                                url={blogInfo.link}
+                                quote={blogInfo.title.rendered}
+                                hashtag={'#wordpress_blog'}
+                            >
                                 <LinkedInIcon className="blog-share-icons" />
-                            </IconButton>
+                            </LinkedinShareButton>
                     </CardActions>
                     </Card>
                 </Box>
