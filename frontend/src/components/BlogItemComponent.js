@@ -51,7 +51,6 @@ export default function BlogItemComponent({blog}) {
         if(blog.categories.length > 0){
             axios.get(`http://localhost:8000/wp-json/wp/v2/categories`)
             .then(response => {
-                console.log(response.data);
                 response.data.map((category_info) => {
                     if(blog.categories.includes(category_info.id)){
                         setCurrentCat(prevValue => [...prevValue, category_info.name]);
@@ -62,12 +61,7 @@ export default function BlogItemComponent({blog}) {
         }
     },[])
 
-    useEffect(()=>{
-        console.log(currentCat);
-    },[currentCat])
-
     const DisplayCategories = () => {
-        
         if(blog.categories.length === 0) return null;
         let first_item = true;
         return(
@@ -77,14 +71,13 @@ export default function BlogItemComponent({blog}) {
                     return cat;
                 }else{
                     return (
-                        <span>
+                        <span key={cat}>
                             , {cat}
                         </span>
                     )
                 }
             })
         )
-
     }
 
     if(isLoaded){
@@ -130,18 +123,18 @@ export default function BlogItemComponent({blog}) {
                     </Button>
                 </CardActions>
                 <Divider />
-                <CardActions sx={{ justifyContent:'end' }}>
+                <CardActions sx={{ justifyContent:'end', bgcolor:'#546263' }}>
                         <IconButton aria-label="share">
-                            <FacebookIcon />
+                            <FacebookIcon className="blog-share-icons" />
                         </IconButton>
                         <IconButton aria-label="share">
-                            <TwitterIcon />
+                            <TwitterIcon className="blog-share-icons" />
                         </IconButton>
                         <IconButton aria-label="share">
-                            <PinterestIcon />
+                            <PinterestIcon className="blog-share-icons" />
                         </IconButton>
                         <IconButton aria-label="share">
-                            <LinkedInIcon />
+                            <LinkedInIcon className="blog-share-icons" />
                         </IconButton>
                 </CardActions>
             </Card>

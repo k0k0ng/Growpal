@@ -213,7 +213,7 @@ const ToolsSection = () => {
     };
 
     const _HandleOrderChange = (event) => {
-        setOrder( prevValue => prevValue = event.target.value);
+        setActiveCategory( prevValue => prevValue = event.target.value);
     };
 
     const _SearchedKeyChange = (event) => {
@@ -355,7 +355,7 @@ const ToolsSection = () => {
                             />
                         </Paper>
                     </Grid>
-                    <Grid item xs='auto' sx={{ display:{md:'none'} }}>
+                    <Grid item sx={{ display:{xs:'auto', md:'none'} }}>
                         <div id="custom-select-parent">
                             <div id="custom-select">
                                 <select onChange={_HandleOrderChange}>

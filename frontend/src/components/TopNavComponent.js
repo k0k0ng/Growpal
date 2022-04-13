@@ -16,9 +16,6 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import Box from '@mui/material/Box';
 
-
-
-
 const pages = [
     {id:1, page_name:'Admin', page_url:'/admin-dashboard'},
     {id:2, page_name:'Create Tool', page_url:'/create-tool'},
@@ -83,6 +80,15 @@ export default function TopNavComponent () {
     function LoggedInButtons (){
         return(
             <Box sx={{ flexGrow: 0 }}>
+                <Button 
+                    variant='text' 
+                    to="/blog"
+                    component={Link}
+                    className="nav-button"
+                >
+                    Blogs
+                </Button>
+
                 <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                         {RenderProfileImage()}
@@ -202,7 +208,7 @@ export default function TopNavComponent () {
                         <MenuItem onClick={handleCloseNavMenu}>
                             <Button 
                                 variant='text' 
-                                to="/login"
+                                to="/blog"
                                 component={Link}
                                 className='FontMontserrat'
                             >

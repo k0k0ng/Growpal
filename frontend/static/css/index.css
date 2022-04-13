@@ -42,6 +42,15 @@ body {
   text-transform: none;
 }
 
+.nav-button {
+  font-family: "Montserrat Alternates";
+  color: #f3f4ed;
+  margin: auto 25px;
+}
+
+.nav-button:hover {
+  color: #ff9933;
+}
 
 /* =============================== Hero > Home Page =============================== */
 .hero-main-div {
@@ -682,6 +691,14 @@ select::-ms-expand {
 
 .blog-card-action-area:hover .blog-description {
   color: #f3f4ed;
+}
+
+.blog-share-icons {
+  color: #f3f4ed;
+}
+
+.blog-share-icons:hover {
+  color: #c06115;
 }
 
 .skeleton{
