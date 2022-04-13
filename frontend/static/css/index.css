@@ -44,12 +44,37 @@ body {
 
 .nav-button {
   font-family: "Montserrat Alternates";
+  text-transform: none;
   color: #f3f4ed;
-  margin: auto 25px;
 }
 
 .nav-button:hover {
   color: #ff9933;
+}
+
+.nav-sign-up-button {
+  color: #f3f4ed;;
+  border-radius: 25px;
+  background-color: #c06115;
+  padding: 7px 35px;
+  margin-right: 20px;
+  font-family: 'Montserrat Alternates';
+  text-transform: none;
+}
+
+.nav-sign-up-button:hover {
+  background-color: #DE6503;
+}
+
+.nav-menu-links {
+  padding:5px 30px; 
+  margin:0px 10px; 
+  border-radius:3px;
+}
+
+.nav-menu-links:hover {
+  color: #c06115;
+  background-color: #fff;
 }
 
 /* =============================== Hero > Home Page =============================== */
@@ -631,6 +656,12 @@ select::-ms-expand {
   padding-top: 100px;
 }
 
+.blog-car-container {
+  padding-top:2%; 
+  margin-bottom:6%; 
+  max-width:60%; 
+}
+
 .blog-card-action-area {
   transition: 0.5s;
   min-height: 350px; 
@@ -810,6 +841,13 @@ select::-ms-expand {
   .register-fields {
     width: 40%;
   }
+
+
+  .blog-car-container {
+    max-width:80%; 
+    padding-top: 4%; 
+    margin-bottom: 10%;
+  }
 }
 
 
@@ -925,5 +963,12 @@ select::-ms-expand {
 
   .register-fields {
     width: 80%;
+  }
+
+
+  .blog-car-container {
+    max-width: 90%; 
+    padding-top: 6%; 
+    margin-bottom: 15%; 
   }
 }

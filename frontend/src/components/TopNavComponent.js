@@ -85,14 +85,14 @@ export default function TopNavComponent () {
                     to="/blog"
                     component={Link}
                     className="nav-button"
+                    sx={{ marginRight:'25px'}}
                 >
-                    Blogs
+                    BLOGS
                 </Button>
 
                 <Tooltip title="Open settings">
-                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <IconButton onClick={handleOpenUserMenu}>
                         {RenderProfileImage()}
-                        
                     </IconButton>
                 </Tooltip>  
                 <Menu
@@ -112,14 +112,14 @@ export default function TopNavComponent () {
                     onClose={handleCloseUserMenu}
                 >
                     
-                    <MenuItem sx={{ padding:'5px 30px', margin:'0px 10px', borderRadius:'10px' }} onClick={handleGoToProfileBookmarks}>
+                    <MenuItem className="nav-menu-links" onClick={handleGoToProfileBookmarks}>
                         <Typography align="center">Bookmark</Typography>
                     </MenuItem>
-                    <MenuItem sx={{ padding:'5px 30px', margin:'0px 10px', borderRadius:'10px' }} onClick={handleGoToProfileSettings}>
+                    <MenuItem className="nav-menu-links" onClick={handleGoToProfileSettings}>
                         <Typography align="center">Settings</Typography>
                     </MenuItem>
                     <Divider />
-                    <MenuItem sx={{ padding:'5px 30px', margin:'0px 10px', borderRadius:'10px' }} onClick={handleLogoutUserMenu}>
+                    <MenuItem className="nav-menu-links" onClick={handleLogoutUserMenu}>
                         <Typography align="center">Logout</Typography>
                     </MenuItem>
                     
@@ -133,28 +133,17 @@ export default function TopNavComponent () {
             <div>
                 <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
                     <Button 
-                        style={{
-                            color: 'white',
-                            fontFamily: 'Montserrat Alternates',
-                            textTransform: "none"
-                        }} 
+                        className="nav-button" 
+                        sx={{ marginRight:'25px'}}
                         to="/blog" 
                         component={Link}
                         variant={'text'}
                     >
-                        Blogs
+                        BLOGS
                     </Button>
 
                     <Button 
-                        style={{
-                            color: 'white',
-                            borderRadius: 25,
-                            backgroundColor: "#c06115",
-                            padding: "7px 35px",
-                            marginRight: 20,
-                            fontFamily: 'Montserrat Alternates',
-                            textTransform: "none"
-                        }} 
+                        className="nav-sign-up-button"
                         to="/register" 
                         component={Link}
                     >
@@ -162,11 +151,7 @@ export default function TopNavComponent () {
                     </Button>
 
                     <Button 
-                        style={{
-                            color: 'white',
-                            fontFamily: 'Montserrat Alternates',
-                            textTransform: "none"
-                        }} 
+                        className="nav-button" 
                         to="/login" 
                         component={Link}
                         variant={'text'}
@@ -176,6 +161,16 @@ export default function TopNavComponent () {
                 </Box>
 
                 <Box sx={{ flexGrow: 0, display: { xs: 'flex', md: 'none' } }}>
+                    <Button 
+                        className="nav-button"
+                        sx={{ marginRight:'25px'}} 
+                        to="/blog" 
+                        component={Link}
+                        variant={'text'}
+                    >
+                        BLOGS
+                    </Button>
+
                     <IconButton
                         size='medium'
                         aria-label="account of current user"
@@ -205,17 +200,6 @@ export default function TopNavComponent () {
                             mt: '60px',
                         }}
                     >
-                        <MenuItem onClick={handleCloseNavMenu}>
-                            <Button 
-                                variant='text' 
-                                to="/blog"
-                                component={Link}
-                                className='FontMontserrat'
-                            >
-                                Blogs
-                            </Button>
-                        </MenuItem>
-
                         <MenuItem onClick={handleCloseNavMenu}>
                             <Button 
                                 variant='text' 

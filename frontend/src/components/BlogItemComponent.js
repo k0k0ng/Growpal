@@ -4,11 +4,9 @@ import { format } from 'date-fns'
 import axios from 'axios';
 
 import { 
-    Avatar,
     Box,
     Typography, 
     Card, 
-    CardHeader,
     CardActions, 
     CardContent, 
     Button, 
@@ -82,7 +80,7 @@ export default function BlogItemComponent({blog}) {
 
     if(isLoaded){
         return (
-            <Card sx={{ paddingTop:'2%', marginBottom:'6%', maxWidth:'60%' }}>
+            <Card className="blog-car-container">
 
                 <Typography variant='body2' sx={{ color:'#546263', fontFamily:'Montserrat Alternates', textAlign:'center' }}>
                     {DisplayCategories()}  
@@ -109,12 +107,7 @@ export default function BlogItemComponent({blog}) {
                 </CardContent>
                 <CardActions sx={{ justifyContent:'center', paddingBottom:'5%' }}>
                     <Button 
-                        sx={{
-                            color: '#f3f4ed',
-                            backgroundColor: '#c06115',
-                            fontFamily: 'Montserrat Alternates',
-                            textTransform: "none",
-                        }} 
+                        className='contact-us-right-container-send-button'
                         disableElevation
                         variant={'contained'}
                         onClick={() => {navigate("/blog/"+blog.id)}}
@@ -142,7 +135,7 @@ export default function BlogItemComponent({blog}) {
         )
     }else{
         return (
-            <Card sx={{ padding:'3% 0px', marginBottom:'6%', width:'60%', minHeight:'50vh' }}>
+            <Card className="blog-car-container">
                 <Grid container>
                     <Grid item xs={12} sx={{ display:'flex', justifyContent:'center', marginBottom:'25px' }}>
                         <Box sx={{ width:'400px', height:'30px' }} className='skeleton' />
