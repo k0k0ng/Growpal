@@ -205,7 +205,7 @@ export default function TopNavComponent () {
                                 variant='text' 
                                 to="/register"
                                 component={Link}
-                                className='FontMontserrat'
+                                className='nav-burger-links'
                             >
                                 Sign Up
                             </Button>
@@ -216,7 +216,7 @@ export default function TopNavComponent () {
                                 variant='text' 
                                 to="/login"
                                 component={Link}
-                                className='FontMontserrat'
+                                className='nav-burger-links'
                             >
                                 Login
                             </Button>

@@ -49,7 +49,7 @@ export default function BlogPage() {
             );
         }else{
             return(
-                <Card className="blog-car-container">
+                <Card className="blog-card-container">
                     <Grid container>
                         <Grid item xs={12} sx={{ display:'flex', justifyContent:'center', marginBottom:'25px' }}>
                             <Box sx={{ width:'400px', height:'30px' }} className='skeleton' />

@@ -30,6 +30,7 @@ export default function BlogInfoPage() {
     const [blogFeaturedImageURL, setBlogFeaturedImageURL] = useState(() => {return "";});
     const [authorName, setAuthorName] = useState(() => {return "";});
     const [isLoaded, setIsLoaded] = useState(() => {return false;});
+    const [currentCat, setCurrentCat] = useState(() => {return [];});
 
     useEffect(() => {
         axios.get(`http://localhost:8000/wp-json/wp/v2/posts/${blogID}`)
@@ -49,6 +50,18 @@ export default function BlogInfoPage() {
                 setBlogFeaturedImageURL(response.data.media_details.sizes.full.source_url);
                 setIsLoaded(true);
             });
+
+            if(result.data.categories.length > 0){
+                axios.get(`http://localhost:8000/wp-json/wp/v2/categories`)
+                .then(response => {
+                    response.data.map((category_info) => {
+                        if(result.data.categories.includes(category_info.id)){
+                            setCurrentCat(prevValue => [...prevValue, category_info.name]);
+                        }
+                    })
+                    setIsLoaded(true);
+                })
+            }
             
         }).catch(err => {
             console.log("============ Error =============")
@@ -57,15 +70,38 @@ export default function BlogInfoPage() {
         });
     },[]);
 
+    const DisplayCategories = () => {
+        if(currentCat.length === 0) return null;
+        let first_item = true;
+        return(
+            currentCat.map((cat) =>{
+                if(first_item){
+                    first_item = false;
+                    return cat;
+                }else{
+                    return (
+                        <span key={cat}>
+                            , {cat}
+                        </span>
+                    )
+                }
+            })
+        )
+    }
+
     if(isLoaded) {
         return (
             <Box>
                 <TopNavComponent />
                 
                 <Box sx={{ paddingTop:'100px', minHeight:'95vh', justifyContent:'center', display:'flex' }}>
-                    <Card sx={{ paddingTop:'1%', marginBottom:'6%', maxWidth:'60%' }}>
+                    <Card className="blog-card-container">
                         
-                        <Typography variant='h4' sx={{ color:'#434743', fontFamily:'Montserrat Alternates', textAlign:'center', margin:'2% 0px' }}>
+                        <Typography variant='body2' sx={{ color:'#546263', fontFamily:'Montserrat Alternates', textAlign:'center' }}>
+                            {DisplayCategories()}  
+                        </Typography> 
+                        
+                        <Typography variant='h4' sx={{ color:'#434743', fontFamily:'Montserrat Alternates', textAlign:'center', margin:'1% 0px 2% 0px' }}>
                             {blogInfo.title.rendered}
                         </Typography>
                         {blogFeaturedImageURL ==="" ? null : <img alt="Blog Image" src={ blogFeaturedImageURL } className='blog-image' /> }
@@ -84,20 +120,20 @@ export default function BlogInfoPage() {
                             />
                         </CardContent>
                         <Divider />
-                        <CardActions sx={{ justifyContent:'end' }}>
-                                <IconButton aria-label="share">
-                                    <FacebookIcon />
-                                </IconButton>
-                                <IconButton aria-label="share">
-                                    <TwitterIcon />
-                                </IconButton>
-                                <IconButton aria-label="share">
-                                    <PinterestIcon />
-                                </IconButton>
-                                <IconButton aria-label="share">
-                                    <LinkedInIcon />
-                                </IconButton>
-                        </CardActions>
+                        <CardActions sx={{ justifyContent:'end', bgcolor:'#546263' }}>
+                            <IconButton aria-label="share">
+                                <FacebookIcon className="blog-share-icons" />
+                            </IconButton>
+                            <IconButton aria-label="share">
+                                <TwitterIcon className="blog-share-icons" />
+                            </IconButton>
+                            <IconButton aria-label="share">
+                                <PinterestIcon className="blog-share-icons" />
+                            </IconButton>
+                            <IconButton aria-label="share">
+                                <LinkedInIcon className="blog-share-icons" />
+                            </IconButton>
+                    </CardActions>
                     </Card>
                 </Box>
             
